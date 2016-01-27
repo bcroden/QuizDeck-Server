@@ -15,3 +15,10 @@ class SimpleAlgorithm(Algorithm):
         print data,
         print data.getData()
         return True
+
+def can_find_xlsxwriter():
+    try:
+        import xlsxwriter
+        return True
+    except ImportError:
+        return False
