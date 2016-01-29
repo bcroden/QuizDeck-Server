@@ -1,6 +1,6 @@
 package com.analysis;
 
-import com.quizdeck.analysis.Algorithm;
+import com.quizdeck.analysis.QuizAlgorithm;
 import com.quizdeck.analysis.QuizAnalysisFactory;
 import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisException;
@@ -34,7 +34,7 @@ public class QuizAnalysisFactoryTest {
         factory.setQuizID("Q1");
         factory.setDeckID("D1");
         factory.setOwner(steve);
-        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(Algorithm.QUIZ_ACCURACY);
+        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
         analysis.performAnalysis();
         analysis.toExcel("path/to/output/dir");
 

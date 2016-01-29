@@ -14,10 +14,12 @@ import java.util.List;
 
 /**
  * Uses a modified Factory pattern to allow access to quiz level analysis algorithms.
+ *
+ * @author Alex
  */
 public class QuizAnalysisFactory {
     @SuppressWarnings("unchecked")
-    public Object getAnalysisUsing(Algorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
+    public Object getAnalysisUsing(QuizAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
         Class theClass = null;
         try
         {
