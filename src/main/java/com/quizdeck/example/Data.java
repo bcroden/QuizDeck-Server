@@ -1,4 +1,4 @@
-package com.example;
+package com.quizdeck.example;
 
 import java.util.HashMap;
 

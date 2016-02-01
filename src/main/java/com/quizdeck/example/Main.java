@@ -1,4 +1,4 @@
-package com.example;
+package com.quizdeck.example;
 
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
