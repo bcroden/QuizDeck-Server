@@ -11,11 +11,11 @@ import java.util.LinkedList;
  * @author Alex
  */
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Exercising Jython...");
-        exerciseJython();
-        testForXlsxwriter();
-    }
+//    public static void main(String[] args) {
+//        System.out.println("Exercising Jython...");
+//        exerciseJython();
+//        testForXlsxwriter();
+//    }
 
     private static void exerciseJython() {
         //create factory
@@ -25,7 +25,7 @@ public class Main {
         Algorithm simpleAlgo = af.getSimpleAlgorithm();
 
         //generate data to be processed by algorithm
-        LinkedList<String> strings = new LinkedList<>();
+        LinkedList<String> strings = new LinkedList<String>();
         strings.add("1st");
         strings.add("second");
         strings.add("3rd");

@@ -13,7 +13,7 @@ public class Data {
      * @return A HashMap with predetermined values.
      */
     public HashMap getData() {
-        HashMap<String, String> map = new HashMap<>();
+        HashMap<String, String> map = new HashMap<String, String>();
         map.put("first", "1st");
         map.put("second", "2nd");
         map.put("third", "3rd");

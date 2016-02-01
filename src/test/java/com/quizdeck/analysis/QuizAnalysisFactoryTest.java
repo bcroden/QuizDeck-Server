@@ -1,8 +1,5 @@
 package com.quizdeck.analysis;
 
-import com.quizdeck.analysis.QuizAlgorithm;
-import com.quizdeck.analysis.QuizAnalysisFactory;
-import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
@@ -18,13 +15,13 @@ import java.util.LinkedList;
 public class QuizAnalysisFactoryTest {
     @Test
     public void dummyTest() throws AnalysisException {
-        LinkedList<Question> questions = new LinkedList<>();
+        LinkedList<Question> questions = new LinkedList<Question>();
         questions.add(new MultipleChoiceQuestion(1, new MultipleChoiceSelection('0')));
         questions.add(new MultipleChoiceQuestion(2, new MultipleChoiceSelection('1')));
 
 
         Student steve = new Student();
-        LinkedList<Response> responses = new LinkedList<>();
+        LinkedList<Response> responses = new LinkedList<Response>();
         for(int i = 0; i < 50; i++)
             responses.add(new MultipleChoiceResponse(steve, new MultipleChoiceSelection(Integer.toString(i).charAt(0)), questions.get(0), i));
 
