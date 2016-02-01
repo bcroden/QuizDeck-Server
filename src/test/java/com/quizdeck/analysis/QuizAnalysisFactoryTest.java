@@ -1,4 +1,4 @@
-package com.analysis;
+package com.quizdeck.analysis;
 
 import com.quizdeck.analysis.QuizAlgorithm;
 import com.quizdeck.analysis.QuizAnalysisFactory;
