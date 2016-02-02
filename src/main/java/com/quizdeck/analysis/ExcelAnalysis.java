@@ -5,7 +5,7 @@ package com.quizdeck.analysis;
  *
  * @author Alex
  */
-public interface StaticAnalysis extends Analysis {
+public interface ExcelAnalysis extends Analysis {
     /**
      * Takes the resuts of the algorithm's analysis and places them in an Excel file.
      * The Excel file is placed in the directory the indicated directory.

@@ -10,18 +10,20 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 /**
- * Created by Alex on 1/28/2016.
+ * Test for the QuizAnalysisFactory
+ *
+ * @author Alex
  */
 public class QuizAnalysisFactoryTest {
     @Test
     public void dummyTest() throws AnalysisException {
-        LinkedList<Question> questions = new LinkedList<Question>();
+        LinkedList<Question> questions = new LinkedList<>();
         questions.add(new MultipleChoiceQuestion(1, new MultipleChoiceSelection('0')));
         questions.add(new MultipleChoiceQuestion(2, new MultipleChoiceSelection('1')));
 
 
         Student steve = new Student();
-        LinkedList<Response> responses = new LinkedList<Response>();
+        LinkedList<Response> responses = new LinkedList<>();
         for(int i = 0; i < 50; i++)
             responses.add(new MultipleChoiceResponse(steve, new MultipleChoiceSelection(Integer.toString(i).charAt(0)), questions.get(0), i));
 
@@ -31,7 +33,7 @@ public class QuizAnalysisFactoryTest {
         factory.setQuizID("Q1");
         factory.setDeckID("D1");
         factory.setOwner(steve);
-        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        ExcelAnalysis analysis = (ExcelAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
         analysis.performAnalysis();
         analysis.toExcel("path/to/output/dir");
 
