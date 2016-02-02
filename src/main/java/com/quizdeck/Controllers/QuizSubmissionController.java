@@ -1,7 +1,14 @@
 package com.quizdeck.Controllers;
 
-/**
- * Created by Cade on 1/31/2016.
- */
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/quizsubmission")
 public class QuizSubmissionController {
+
+        public QuizSubmissionController(){
+
+        }
+
 }
