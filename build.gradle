@@ -13,8 +13,11 @@ buildscript {
 
 plugins {
 	id "com.github.hierynomus.jython" version "0.3.0"
+	id "net.saliman.cobertura" version "2.3.0"
+	id "com.github.kt3k.coveralls" version "2.6.3"
 }
 
+cobertura.coverageFormats = ['html', 'xml']
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -57,3 +60,4 @@ eclipse {
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.9'
 }
+
