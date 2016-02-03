@@ -12,7 +12,6 @@ buildscript {
 }
 
 plugins {
-	id "com.github.hierynomus.jython" version "0.3.0"
     id "com.github.kt3k.coveralls" version "2.5.0"
 }
 
@@ -39,9 +38,7 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-actuator")
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-redis')
-	compile('org.python:jython-standalone:2.7.0')
 
-	jython ":XlsxWriter:0.8.4"
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 
 
