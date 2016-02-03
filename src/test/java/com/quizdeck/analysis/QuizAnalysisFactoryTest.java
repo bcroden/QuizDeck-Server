@@ -1,11 +1,15 @@
 package com.quizdeck.analysis;
 
+import com.quizdeck.Application.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.inputs.Selection;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.LinkedList;
 
@@ -14,6 +18,8 @@ import java.util.LinkedList;
  *
  * @author Alex
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 public class QuizAnalysisFactoryTest {
     @Test
     public void dummyTest() throws AnalysisException {

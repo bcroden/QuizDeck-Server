@@ -1,7 +1,7 @@
 
-from com.example import Algorithm
+from com.quizdeck.analysis.JythonConfigTest import JythonTestAlgorithm
 
-class SimpleAlgorithm(Algorithm):
+class SimpleAlgorithm(JythonTestAlgorithm):
     def __init__(self):
         pass
 
