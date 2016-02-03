@@ -1,9 +1,10 @@
 package com.quizdeck.analysis.algorithms;
 
-import com.quizdeck.analysis.ExcelAnalysis;
+import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
+import com.quizdeck.analysis.outputs.AnalysisResult;
 
 import java.util.List;
 
@@ -13,23 +14,18 @@ import java.util.List;
  *
  * @author Alex
  */
-class QuizAccuracyAlgorithm extends QuizAlgorithm implements ExcelAnalysis {
+class QuizAccuracyAlgorithm extends QuizAlgorithm implements StaticAnalysis {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner) {
         super(responses, questions, quizID, deckID, owner);
     }
 
     @Override
-    public boolean toExcel(String pathToDir) {
+    public AnalysisResult getResults() {
         //TODO: Implement this
-        return false;
+        return null;
     }
     @Override
     public boolean performAnalysis() {
-        //TODO: Implement this
-        return false;
-    }
-    @Override
-    public boolean hasPerformedAnalysis() {
         //TODO: Implement this
         return false;
     }

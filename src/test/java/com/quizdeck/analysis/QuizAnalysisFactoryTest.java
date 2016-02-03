@@ -6,6 +6,7 @@ import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.inputs.Selection;
+import com.quizdeck.analysis.outputs.AnalysisResult;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -39,9 +40,9 @@ public class QuizAnalysisFactoryTest {
         factory.setQuizID("Q1");
         factory.setDeckID("D1");
         factory.setOwner(steve);
-        ExcelAnalysis analysis = (ExcelAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysis.ACCURACY);
         analysis.performAnalysis();
-        analysis.toExcel("path/to/output/dir");
+        AnalysisResult result = analysis.getResults();
 
     }
 }

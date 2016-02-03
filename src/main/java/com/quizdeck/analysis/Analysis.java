@@ -1,5 +1,7 @@
 package com.quizdeck.analysis;
 
+import com.quizdeck.analysis.outputs.AnalysisResult;
+
 /**
  * Parent interface of all analysis routines.
  *
@@ -12,9 +14,5 @@ interface Analysis {
      */
     public boolean performAnalysis();
 
-    /**
-     * Indicates if the internal data set has already been analyzed.
-     * @return True if the internal data set has been analyzed, false otherwise.
-     */
-    public boolean hasPerformedAnalysis();
+    public AnalysisResult getResults();
 }
