@@ -13,21 +13,13 @@ buildscript {
 
 plugins {
 	id "com.github.hierynomus.jython" version "0.3.0"
-	id "jacoco"
-	id "com.github.kt3k.coveralls" version "2.5.0"
-}
-
-jacocoTestReport {
-	reports {
-		xml.enabled = true // coveralls plugin depends on xml format report
-		html.enabled = true
-	}
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'jacoco'
 
 jar {
 	baseName = 'quizdeck'
@@ -66,3 +58,10 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '2.9'
 }
 
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
