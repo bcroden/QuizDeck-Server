@@ -1,5 +1,6 @@
 package com.quizdeck.analysis;
 
+import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.outputs.AnalysisResult;
 
 /**
@@ -14,5 +15,5 @@ interface Analysis {
      */
     public boolean performAnalysis();
 
-    public AnalysisResult getResults();
+    public AnalysisResult getResults() throws AnalysisResultsUnavailableException;
 }

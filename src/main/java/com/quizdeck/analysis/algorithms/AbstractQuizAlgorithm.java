@@ -11,8 +11,8 @@ import java.util.List;
  *
  * @author Alex
  */
-class QuizAlgorithm {
-    protected QuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner)
+abstract class AbstractQuizAlgorithm {
+    protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner)
     {
         this.responses = responses;
         this.questions = questions;

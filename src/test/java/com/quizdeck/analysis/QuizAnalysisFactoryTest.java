@@ -2,11 +2,11 @@ package com.quizdeck.analysis;
 
 import com.quizdeck.Application.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
+import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.inputs.Selection;
-import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import java.util.LinkedList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 public class QuizAnalysisFactoryTest {
-    @Test
+    @Test(expected = AnalysisResultsUnavailableException.class)
     public void dummyTest() throws AnalysisException {
         LinkedList<Question> questions = new LinkedList<>();
         questions.add(new MultipleChoiceQuestion(1, new MultipleChoiceSelection('0')));
@@ -41,7 +41,7 @@ public class QuizAnalysisFactoryTest {
         factory.setQuizID("Q1");
         factory.setDeckID("D1");
         factory.setOwner(steve);
-        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysis.ACCURACY);
+        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
         analysis.performAnalysis();
         QuizAnalysisData result = (QuizAnalysisData) analysis.getResults();
     }

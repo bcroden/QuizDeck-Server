@@ -5,13 +5,13 @@ package com.quizdeck.analysis;
  *
  * @author Alex
  */
-public enum QuizAnalysis {
+public enum QuizAlgorithm {
     ACCURACY ("com.quizdeck.analysis.algorithms.QuizAccuracyAlgorithm");
 
     protected String getFullName() {
         return name;
     }
-    private QuizAnalysis(String name) {
+    private QuizAlgorithm(String name) {
         this.name = name;
     }
     private String name;
