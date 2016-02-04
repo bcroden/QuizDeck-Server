@@ -7,6 +7,7 @@ import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.inputs.Selection;
 import com.quizdeck.analysis.outputs.AnalysisResult;
+import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -42,8 +43,7 @@ public class QuizAnalysisFactoryTest {
         factory.setOwner(steve);
         StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysis.ACCURACY);
         analysis.performAnalysis();
-        AnalysisResult result = analysis.getResults();
-
+        QuizAnalysisData result = (QuizAnalysisData) analysis.getResults();
     }
 }
 
