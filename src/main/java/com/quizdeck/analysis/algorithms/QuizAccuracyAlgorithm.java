@@ -40,7 +40,10 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
 
         //Populate the quiz data list of participants
         getResponses().stream().forEach(response -> {
-            if(quizOutputData.getData().keySet().stream().noneMatch(member -> member.isSameAs(response.getParticipant())))
+            if(quizOutputData.getData()
+                    .keySet()
+                    .stream()
+                    .noneMatch(member -> member.isSameAs(response.getParticipant())))
                 quizOutputData.putData(response.getParticipant(), null);
         });
 
@@ -69,7 +72,11 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             QuizParticipantAnalysisData participantData = quizOutputData.getData().get(participant);
             int numCorrect = 0;
             for(Question question : getQuestions()) {
-                if(participantData.getData().get(question).stream().anyMatch(guess -> guess.getSelection().isSameAs(question.getAnswer())))
+                if(participantData.getData().get(question) != null && participantData
+                        .getData()
+                        .get(question)
+                        .stream()
+                        .anyMatch(guess -> guess.getSelection().isSameAs(question.getAnswer())))
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();

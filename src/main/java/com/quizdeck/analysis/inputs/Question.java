@@ -3,11 +3,9 @@ package com.quizdeck.analysis.inputs;
 /**
  * Represents a question within a quiz.
  *
- * // TODO: Depreciate isSameAs() and implement Comparable<>
- *
  * @author Alex
  */
-public interface Question {
+public interface Question extends Comparable<Question> {
     /**
      * Indicates the question's location within its quiz.
      * Each questions' number should be unique within a quiz.
@@ -28,5 +26,7 @@ public interface Question {
      * @param that The question to which this question is being compared
      * @return True if the questions are equivalent, false otherwise.
      */
-    public boolean isSameAs(Question that);
+    public default boolean isSameAs(Question that) {
+        return this.compareTo(that) == 0;
+    }
 }

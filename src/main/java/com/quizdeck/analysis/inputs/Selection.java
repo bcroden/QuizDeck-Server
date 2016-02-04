@@ -3,8 +3,6 @@ package com.quizdeck.analysis.inputs;
 /**
  * Represents one of the possible answers to a question.
  *
- * // TODO: Depreciate isSameAs() and implement Comparable<>
- *
  * @author Alex
  */
 public interface Selection {
