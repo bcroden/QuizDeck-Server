@@ -3,10 +3,7 @@ package com.quizdeck.analysis;
 import com.quizdeck.Application.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
-import com.quizdeck.analysis.inputs.Member;
-import com.quizdeck.analysis.inputs.Question;
-import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.inputs.Selection;
+import com.quizdeck.analysis.inputs.*;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,9 +71,8 @@ class MultipleChoiceResponse implements Response
 {
     public MultipleChoiceResponse(Member participant, Selection guess, Question question, long timeStamp) {
         this.participant = participant;
-        this.guess = guess;
+        this.guess = new Guess(guess, timeStamp);
         this.question = question;
-        this.timeStamp = timeStamp;
     }
 
     @Override
@@ -84,22 +80,17 @@ class MultipleChoiceResponse implements Response
         return participant;
     }
     @Override
-    public Selection getGuess() {
+    public Guess getGuess() {
         return guess;
     }
     @Override
     public Question getQuestion() {
         return question;
     }
-    @Override
-    public long getTimeStamp() {
-        return timeStamp;
-    }
 
     private Member participant;
-    private Selection guess;
+    private Guess guess;
     private Question question;
-    private long timeStamp;
 }
 
 class MultipleChoiceSelection implements Selection

@@ -1,7 +1,9 @@
 package com.quizdeck.analysis.exceptions;
 
 /**
- * Created by Alex on 2/3/2016.
+ * Thrown when the results of an analysis/algorithm are currently unavailable
+ *
+ * @author Alex
  */
 public class AnalysisResultsUnavailableException extends AnalysisException {
     public AnalysisResultsUnavailableException(String message) {

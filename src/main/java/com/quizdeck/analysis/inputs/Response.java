@@ -16,17 +16,11 @@ public interface Response {
      * Indicates the member's guess at the question's answer.
      * @return The member's guess at the question's answer
      */
-    public Selection getGuess();
+    public Guess getGuess();
 
     /**
      * Indicates the question to which the member has submitted a guess.
      * @return The question to which the member has submitted a guess
      */
     public Question getQuestion();
-
-    /**
-     * Indicates the time at which the member submitted its guess.
-     * @return The time at which the member submitted its guess
-     */
-    public long getTimeStamp();
 }

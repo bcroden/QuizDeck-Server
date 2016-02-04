@@ -1,5 +1,6 @@
 package com.quizdeck.analysis.outputs;
 
+import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  *
  * @author Alex
  */
-public class QuizParticipantAnalysisData implements AnalysisResult<Question, List<Selection>, String> {
+public class QuizParticipantAnalysisData implements AnalysisResult<Question, List<Guess>, String> {
 
     /**
      * Returns a reference to a mapping which uses questions in the quiz to retrieve the guess(es)
@@ -22,7 +23,7 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
      * @return A mapping from Questions to a list of the participant's Selections
      */
     @Override
-    public Map<Question, List<Selection>> getData() {
+    public Map<Question, List<Guess>> getData() {
         return sampleData;
     }
 
@@ -43,14 +44,14 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
      * @param question  The Question to which the guess was submitted
      * @param selection The Selection which the participant guessed
      */
-    public void addGuess(Question question, Selection selection) {
-        List<Selection> selections = null;
+    public void addGuess(Question question, Guess selection) {
+        List<Guess> guesses = null;
         if(sampleData.containsKey(question))
-            selections = sampleData.get(question);
+            guesses = sampleData.get(question);
         else
-            selections = new LinkedList<>();
-        selections.add(selection);
-        sampleData.put(question, selections);
+            guesses = new LinkedList<>();
+        guesses.add(selection);
+        sampleData.put(question, guesses);
     }
 
     /**
@@ -59,10 +60,10 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
      * @param key   Identifier of the statistic
      * @param value String representation of the statistic
      */
-    public void addStat(String key, String value) {
+    public void putStat(String key, String value) {
         stats.put(key, value);
     }
 
-    private Map<Question, List<Selection>> sampleData = new HashMap<>();
+    private Map<Question, List<Guess>> sampleData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
 }

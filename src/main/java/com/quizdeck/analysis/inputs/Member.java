@@ -3,6 +3,8 @@ package com.quizdeck.analysis.inputs;
 /**
  * Represents a user who is playing a role in a quiz as either a participant or the owner.
  *
+ * // TODO: Depreciate isSameAs() and implement Comparable<>
+ *
  * @author Alex
  */
 public interface Member {

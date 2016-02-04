@@ -41,7 +41,7 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
      * @param member    Member to which the data should be attached
      * @param data      Analysis data regarding the member
      */
-    public void setData(Member member, QuizParticipantAnalysisData data) {
+    public void putData(Member member, QuizParticipantAnalysisData data) {
         participantAnalysisData.put(member, data);
     }
 
@@ -51,7 +51,7 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
      * @param key   Identifier of the statistic
      * @param value String representation of the statistic
      */
-    public void setStat(String key, String value) {
+    public void putStat(String key, String value) {
         stats.put(key, value);
     }
 

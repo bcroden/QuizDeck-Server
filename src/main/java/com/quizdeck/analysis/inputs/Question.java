@@ -3,6 +3,8 @@ package com.quizdeck.analysis.inputs;
 /**
  * Represents a question within a quiz.
  *
+ * // TODO: Depreciate isSameAs() and implement Comparable<>
+ *
  * @author Alex
  */
 public interface Question {
