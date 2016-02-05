@@ -1,4 +1,4 @@
-package com.quizdeck.Application;
+package com.quizdeck;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
