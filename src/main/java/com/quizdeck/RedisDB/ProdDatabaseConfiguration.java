@@ -22,7 +22,7 @@ public class ProdDatabaseConfiguration {
 
             JedisConnectionFactory jedisConnFactory = new JedisConnectionFactory();
 
-            jedisConnFactory.setUsePool(true);
+            //jedisConnFactory.setUsePool(true);
             jedisConnFactory.setHostName(redistogoUri.getHost());
             jedisConnFactory.setPort(redistogoUri.getPort());
             jedisConnFactory.setTimeout(Protocol.DEFAULT_TIMEOUT);
