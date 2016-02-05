@@ -6,19 +6,13 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
 	}
-}
-
-plugins {
-    id "com.github.kt3k.coveralls" version "2.5.0"
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'spring-boot'
-apply plugin: 'jacoco'
+apply plugin: 'spring-boot' 
 
 jar {
 	baseName = 'quizdeck'
@@ -33,14 +27,9 @@ repositories {
 
 
 dependencies {
-	compile("org.springframework.boot:spring-boot-starter-web")
-	compile("org.springframework.boot:spring-boot-starter-actuator")
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-redis')
-
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-
-
+	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 
 
@@ -53,15 +42,4 @@ eclipse {
 
 task wrapper(type: Wrapper) {
 	gradleVersion = '2.9'
-}
-
-task stage{
-    dependsOn build
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
 }
