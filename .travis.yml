@@ -1,8 +1,15 @@
 language: java
 jdk:
- - oraclejdk8
+- oraclejdk8
 before_install:
- - chmod +x gradlew
-
+- chmod +x gradlew
 after_success:
- - ./gradlew jacocoTestReport coveralls
+- ./gradlew jacocoTestReport coveralls
+deploy:
+  provider: heroku
+  api_key:
+    secure: YpbCUek0u2zClaPUxy7SzQwxsXVrIojAWoxjvuEvY8kUbuyDLaX3MUuXkudetmKCoztHFUIzd0NPR0HCq+TINYNvKMljgl4NGiov6BnC2F8TL4VmGeKFsQFAjOdTQcTF2+dbEUl/iSXfiRkqx9547yprHBg2YhwMZOBRlHC5RUh1RfgTjucwrbzcIjwZN2QY52SQtSZ8TOEd96ygijZEq+kjTebwGuXSD7dOGh8jLkCzuXybNS/tBur3q7Tj87u5z1XibqezASpAWSEHhSlP7MH1AF9PLOsrY6XbD+jteMZ2U5XAIBS9gaAkvZNahnGiseIdVDvpuoTV1f/Mz4voBgpmZ5v3sfvaE4FmpkpXacb1lAAw6FzwAxKD4zbJ84zKcteOvs4hnNzuB5f9vi0BW+RPjQ1347DOuxOUkg0ivSr0sAD3TZ9fOUaa855/QnPh0cjMCagMFsPYRwsyzLfHupp929p7YqwG6X5GIxgjSZ4unQ+Q5BnOPyQ4hp1rzlA8LQmg+Vc5ERH+t0CoQtkkuECVY1vX0Ro/6mCKT4ejhn9p/t+FVJuTFgtT7wt3MrKD06Jf93BDFTLKuTgq3K0+fbGLZQpx/IKDmzJAktpks0HKPgBJssFYTaC1eaAW/lzeFiKkvfjL37dXgTST1Jp4zOf/f3NbQdgS5CKGrBtagiQ=
+  app: QuizDeckServer
+  on:
+    branch: master
+    repo: bcroden/QuizDeck-Server
