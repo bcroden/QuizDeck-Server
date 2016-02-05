@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
+@Profile('prod')
 public class ProdDatabaseConfiguration {
 
     @Bean
