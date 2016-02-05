@@ -15,7 +15,7 @@ public class ProdDatabaseConfiguration {
     public JedisConnectionFactory jedisConnFactory() {
 
         try {
-            String redistogoUrl = System.getenv("REDISTOGO_URL");
+            String redistogoUrl = System.getenv("REDISCLOUD_URI");
             URI redistogoUri = new URI(redistogoUrl);
 
             JedisConnectionFactory jedisConnFactory = new JedisConnectionFactory();
