@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.quizdeck.RequestResponseObjects.QuizSubmissionResponse;
 import com.quizdeck.RequestInputObjects.QuizSubmissionInput;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class QuizSubmissionController {
 
     public QuizSubmissionController(){
