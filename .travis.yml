@@ -13,3 +13,6 @@ deploy:
   on:
     branch: master
     repo: bcroden/QuizDeck-Server
+cache:
+  directories:
+  - $HOME/.gradle/caches/
