@@ -11,6 +11,7 @@ public class QuizDeckApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		assert(true);
 	}
 
 }
