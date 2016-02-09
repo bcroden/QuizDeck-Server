@@ -2,8 +2,7 @@ package com.quizdeck.analysis;
 
 import com.quizdeck.Application.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
-import com.quizdeck.analysis.inputs.*;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
+import com.quizdeck.analysis.exceptions.InsufficientDataException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -19,27 +18,21 @@ import java.util.LinkedList;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 public class QuizAnalysisFactoryTest {
-    @Test
-    public void dummyTest() throws AnalysisException {
-        LinkedList<Question> questions = new LinkedList<>();
-        questions.add(new MockQuestion(1, new MockSelection('0')));
-        questions.add(new MockQuestion(2, new MockSelection('1')));
-
-
-        MockMember steve = new MockMember();
-        LinkedList<Response> responses = new LinkedList<>();
-        for(int i = 0; i < 50; i++)
-            responses.add(new MockResponse(steve, new MockSelection(Integer.toString(i).charAt(0)), questions.get(0), i));
-
+    @Test(expected = InsufficientDataException.class)
+    public void insufficientDataTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setResponses(responses);
-        factory.setQuestions(questions);
-        factory.setQuizID("Q1");
-        factory.setDeckID("D1");
-        factory.setOwner(steve);
         StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
-        analysis.performAnalysis();
-        QuizAnalysisData result = (QuizAnalysisData) analysis.getResults();
+    }
+
+    @Test
+    public void constructEmptyAnalysis() throws AnalysisException {
+        QuizAnalysisFactory factory = new QuizAnalysisFactory();
+        factory.setOwner(new MockMember());
+        factory.setDeckID("DeckID");
+        factory.setQuizID("QuizID");
+        factory.setQuestions(new LinkedList<>());
+        factory.setResponses(new LinkedList<>());
+        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
     }
 }
 
