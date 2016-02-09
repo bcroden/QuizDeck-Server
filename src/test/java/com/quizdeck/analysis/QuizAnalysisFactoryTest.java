@@ -1,6 +1,6 @@
 package com.quizdeck.analysis;
 
-import com.quizdeck.Application.QuizDeckApplication;
+import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.exceptions.InsufficientDataException;
 import org.junit.Test;

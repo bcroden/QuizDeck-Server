@@ -1,4 +1,5 @@
-package com.quizdeck.Application;
+package com.quizdeck;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,4 +10,5 @@ public class QuizDeckApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(QuizDeckApplication.class, args);
 	}
+
 }
