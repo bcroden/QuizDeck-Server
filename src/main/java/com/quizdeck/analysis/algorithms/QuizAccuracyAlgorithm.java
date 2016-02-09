@@ -43,27 +43,35 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             if(quizOutputData.getData()
                     .keySet()
                     .stream()
-                    .noneMatch(member -> member.isSameAs(response.getParticipant())))
-                quizOutputData.putData(response.getParticipant(), null);
+                    .noneMatch(member -> member.isSameAs(response.getParticipant()))
+                    )
+                quizOutputData.putData(response.getParticipant(), new QuizParticipantAnalysisData());
         });
 
         //Place sample data into data object
         for(Member participant : quizOutputData.getData().keySet()) {
-            //Get the last responses for this participant
-            Response lastResponse = getResponses().stream()
-                    .filter(response -> participant.isSameAs(response.getParticipant()))    //responses by this participant
-                    .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
-                        if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
-                            return itr;
-                        return acc;
-                    });
+            for(Question question : getQuestions()) {
+                //Get the last responses for this participant
+                Response lastResponse = getResponses().stream()
+                        .filter(response -> participant.isSameAs(response.getParticipant()))    //responses by this participant
+                        .filter(response -> question.isSameAs(response.getQuestion()))
+                        .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
+                            if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
+                                return itr;
+                            return acc;
+                        });
 
-            if (lastResponse == null)
-                continue;
+                if(lastResponse == null)
+                    continue;
 
-            QuizParticipantAnalysisData data = new QuizParticipantAnalysisData();
-            data.addGuess(lastResponse.getQuestion(), lastResponse.getGuess());
-            quizOutputData.putData(participant, data);
+                QuizParticipantAnalysisData data = null;
+                if(quizOutputData.getData().get(participant) != null)
+                    data = quizOutputData.getData().get(participant);
+                else
+                    data = new QuizParticipantAnalysisData();
+                data.addGuess(lastResponse.getQuestion(), lastResponse.getGuess());
+                quizOutputData.putData(participant, data);
+            }
         }
 
         //Calculate participant statistics
@@ -80,7 +88,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();
-            participantData.putStat("Overall Grade", Double.toString(percentCorrect));
+            participantData.putStat("Accuracy Percentage", Double.toString(percentCorrect));
 
             totNumCorrect += numCorrect; //accumulator for calculating quiz level statistics
         }

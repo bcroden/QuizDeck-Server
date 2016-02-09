@@ -3,6 +3,8 @@ package com.quizdeck.analysis.inputs;
 /**
  * Represents a user who is playing a role in a quiz as either a participant or the owner.
  *
+ * Note: Classes which implement the Member interface should also override Object.equals()
+ *
  * @author Alex
  */
 public interface Member extends Comparable<Member> {

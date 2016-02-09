@@ -32,7 +32,6 @@ public class Guess {
         return timeStamp;
     }
 
-    private Question question;
     private Selection selection;
     private long timeStamp;
 }
