@@ -7,7 +7,7 @@ import com.quizdeck.analysis.inputs.Selection;
  *
  * @author Alex
  */
-class MockSelection implements Selection
+public class MockSelection implements Selection
 {
     public MockSelection(char selection)
     {

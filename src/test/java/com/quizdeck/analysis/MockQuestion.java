@@ -8,7 +8,7 @@ import com.quizdeck.analysis.inputs.Selection;
  *
  * @author Alex
  */
-class MockQuestion implements Question
+public class MockQuestion implements Question
 {
     public MockQuestion(int questionNumber, Selection answer) {
         this.questionNumber = questionNumber;
@@ -38,8 +38,7 @@ class MockQuestion implements Question
 
         MockQuestion that = (MockQuestion) o;
 
-        if (questionNumber != that.questionNumber) return false;
-        return ANSWER != null ? ANSWER.equals(that.ANSWER) : that.ANSWER == null;
+        return questionNumber == that.questionNumber && (ANSWER != null ? ANSWER.equals(that.ANSWER) : that.ANSWER == null);
 
     }
 

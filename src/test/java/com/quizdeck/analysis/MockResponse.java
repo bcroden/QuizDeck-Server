@@ -7,7 +7,7 @@ import com.quizdeck.analysis.inputs.*;
  *
  * @author Alex
  */
-class MockResponse implements Response
+public class MockResponse implements Response
 {
     public MockResponse(Member participant, Selection guess, Question question, long timeStamp) {
         this.participant = participant;
