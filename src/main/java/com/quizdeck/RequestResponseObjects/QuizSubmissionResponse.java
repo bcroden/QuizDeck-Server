@@ -5,7 +5,7 @@ public class QuizSubmissionResponse{
     private String status;
 
     public QuizSubmissionResponse(){
-        status = "good";
+        status = "lol";
     }
 
     public String getStatus() {
