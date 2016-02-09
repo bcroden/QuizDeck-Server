@@ -27,7 +27,7 @@ public class QuizAnalysisFactoryTest {
     @Test
     public void constructEmptyAnalysis() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setOwner(new MockMember());
+        factory.setOwner(new MockMember("Johnny Sock-o"));
         factory.setDeckID("DeckID");
         factory.setQuizID("QuizID");
         factory.setQuestions(new LinkedList<>());
