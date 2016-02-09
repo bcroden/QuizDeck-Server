@@ -7,7 +7,6 @@ import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 import org.junit.Before;
@@ -15,10 +14,10 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test for the Quiz Accuracy Algorithm
@@ -27,6 +26,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
  *          is not being brought in by the wildcard, so I am importing it explicitly
  *          for now.
  *
+ * //TODO: Test for clearing of values when after creating a new analysis
  * @author Alex
  */
 public class QuizAccuracyAlgorithmTest {
@@ -49,7 +49,7 @@ public class QuizAccuracyAlgorithmTest {
         responses.add(new MockResponse(mrHowell, new MockSelection('5'), questions.get(0), 1));
 
         //Gilligan guessed the question number for each question at t = 2
-        Member gilligan = new MockMember("Gilligan");
+        Member gilligan = GILLIGAN;
         for(int i = 1; i < 6; i++)
             responses.add(new MockResponse(gilligan, new MockSelection(Integer.toString(i).charAt(0)), questions.get(i-1), 2));
         factory.setResponses(responses);
@@ -63,12 +63,25 @@ public class QuizAccuracyAlgorithmTest {
     }
 
     @Test
-    public void test() throws AnalysisResultsUnavailableException {
+    public void testQuizLevelCalculations() throws AnalysisResultsUnavailableException {
         analysis.performAnalysis();
         QuizAnalysisData results = (QuizAnalysisData) analysis.getResults();
 
         assertThat("Incorrect number of participants", results.getData().keySet().size(), is(2));
     }
 
+    @Test
+    public void testFullyEngagedParticipant() throws AnalysisResultsUnavailableException {
+        //test analysis of participant who engaged in all questions
+        analysis.performAnalysis();
+        QuizAnalysisData results = (QuizAnalysisData) analysis.getResults();
+        QuizParticipantAnalysisData data = results.getData().get(GILLIGAN);
+        assertEquals(   "Accuracy grade should be 100",
+                        1.0,
+                        Double.parseDouble(data.getStats().get("Accuracy Percentage")),
+                        0.0001);
+    }
+
     private StaticAnalysis analysis;
+    private final Member GILLIGAN = new MockMember("Gilligan");
 }
