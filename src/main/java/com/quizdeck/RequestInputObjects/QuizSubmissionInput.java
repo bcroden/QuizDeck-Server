@@ -1,7 +1,7 @@
 package com.quizdeck.RequestInputObjects;
 
+
 import com.quizdeck.QuizObjects.Questions;
-import com.quizdeck.QuizObjects.QuizTakers;
 
 import java.util.Date;
 import java.util.List;
@@ -13,7 +13,8 @@ public class QuizSubmissionInput{
     private String quizId;
     private Date quizDate;
 
-    private List<QuizTakers> quizTakers;
+    //should be a list of usernames of uIDs
+    private List<String> quizTakers;
 
     private List<Questions> questions;
 
@@ -54,11 +55,11 @@ public class QuizSubmissionInput{
         this.quizDate = quizDate;
     }
 
-    public List<QuizTakers> getQuizTakers() {
+    public List<String> getQuizTakers() {
         return quizTakers;
     }
 
-    public void setQuizTakers(List<QuizTakers> quizTakers) {
+    public void setQuizTakers(List<String> quizTakers) {
         this.quizTakers = quizTakers;
     }
 
