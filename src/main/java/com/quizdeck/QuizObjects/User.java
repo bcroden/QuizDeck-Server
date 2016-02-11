@@ -9,7 +9,7 @@ public class User{
     @Id
     private String id;
 
-    private String username;
+    private String userName;
     private String password;
 
     private String email;
@@ -19,11 +19,11 @@ public class User{
     private Date signUp;
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
