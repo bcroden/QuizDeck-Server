@@ -1,4 +1,4 @@
-package com.quizdeck.Controllers;
+package com.quizdeck.controllers;
 
 
 import org.springframework.web.bind.annotation.RequestBody;
