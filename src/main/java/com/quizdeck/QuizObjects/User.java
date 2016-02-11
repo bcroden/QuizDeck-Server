@@ -18,8 +18,6 @@ public class User{
 
     private Date signUp;
 
-    public User(String)
-
     public String getUsername() {
         return username;
     }
