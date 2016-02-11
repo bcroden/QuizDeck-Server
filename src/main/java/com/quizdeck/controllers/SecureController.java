@@ -1,11 +1,10 @@
 package com.quizdeck.controllers;
 
-import com.quizdeck.filter.AuthFilter;
+import com.quizdeck.filters.AuthFilter;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +15,7 @@ import java.util.Date;
 /**
  * Created by Brandon on 2/10/2016.
  */
+@CrossOrigin
 @RestController
 public class SecureController {
 

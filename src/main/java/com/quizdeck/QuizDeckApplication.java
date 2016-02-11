@@ -1,7 +1,7 @@
 package com.quizdeck;
 
 
-import com.quizdeck.filter.AuthFilter;
+import com.quizdeck.filters.AuthFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -18,7 +18,7 @@ public class QuizDeckApplication {
 
 	@Bean(name = "secretKey")
 	public String secretKey() {
-		return "secret";
+		return System.getProperty("SECRET_KEY", "default_key");
 	}
 
 	@Bean

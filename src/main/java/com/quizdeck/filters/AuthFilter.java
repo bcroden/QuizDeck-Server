@@ -1,4 +1,4 @@
-package com.quizdeck.filter;
+package com.quizdeck.filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
