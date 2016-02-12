@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -40,9 +40,9 @@ public class QuizAccuracyAlgorithmTest {
     public void initializationTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
 
-        factory.setOwner(new MockMember("The Professor"));
-        factory.setDeckID("DeckID");
-        factory.setQuizID("QuizID");
+        factory.setOwner(OWNER);
+        factory.setDeckID(DECK_ID);
+        factory.setQuizID(QUIZ_ID);
 
         List<Question> questions = new LinkedList<>();
         for(int i = 1; i < 6; i++)
@@ -140,7 +140,33 @@ public class QuizAccuracyAlgorithmTest {
         }
     }
 
+    /**
+     * Make sure that the owner, quiz ID, and deck ID are preserved during the analysis.
+     */
+    @Test
+    public void testAnalysisID() throws AnalysisResultsUnavailableException {
+        analysis.performAnalysis();
+        QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
+        assertThat("Incorrect quiz owner", quizResults.getOwner(), is(OWNER));
+        assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
+        assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
+    }
+
+    /**
+     * Benchmark analysis time
+     */
+    @Test
+    public void benchmarkAnalysisTime() throws AnalysisResultsUnavailableException {
+        long startTime = System.currentTimeMillis();
+        analysis.performAnalysis();
+        long endTime = System.currentTimeMillis();
+        assertThat("Analysis took too long", (endTime - startTime), lessThan(Long.valueOf("2")));
+    }
+
     private StaticAnalysis analysis;
     private final Member GILLIGAN = new MockMember("Gilligan");
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
+    private final Member PROFESSOR = new MockMember("Professor");
+    private final Member OWNER = PROFESSOR;
+    private final String QUIZ_ID = "123", DECK_ID = "ABC";
 }

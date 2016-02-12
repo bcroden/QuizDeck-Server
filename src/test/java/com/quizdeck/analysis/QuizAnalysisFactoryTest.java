@@ -21,12 +21,18 @@ import java.util.List;
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 public class QuizAnalysisFactoryTest {
 
+    /**
+     * Ensure the correct exception is thrown when insufficient data is supplied
+     */
     @Test(expected = InsufficientDataException.class)
     public void insufficientDataTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
     }
 
+    /**
+     * Construct a simple analysis pipeline
+     */
     @Test
     public void constructEmptyAnalysis() throws AnalysisException {
         QuizAnalysisFactory factory = getFullFactory();

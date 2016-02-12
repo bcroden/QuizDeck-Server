@@ -28,12 +28,11 @@ import java.util.*;
 class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner) {
         super(responses, questions, quizID, deckID, owner);
+        quizOutputData = new QuizAnalysisData(getOwner(), getDeckID(), getQuizID());
     }
 
     @Override
     public boolean performAnalysis() {
-
-        quizOutputData = new QuizAnalysisData();
 
         //Populate the quiz data list of participants
         getResponses().stream().forEach(response -> {
