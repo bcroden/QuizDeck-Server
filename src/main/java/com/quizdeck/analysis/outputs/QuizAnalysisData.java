@@ -1,8 +1,12 @@
 package com.quizdeck.analysis.outputs;
 
 import com.quizdeck.analysis.inputs.Member;
+import com.quizdeck.analysis.inputs.Question;
+import com.quizdeck.analysis.inputs.Selection;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,6 +59,25 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
         stats.put(key, value);
     }
 
+    /**
+     * Set the list of questions associated with this quiz.
+     * @param questions The list of questions associated with this quiz
+     */
+    public void setQuestions(List<Question> questions) {
+        answerKey.clear();
+        for(Question question : questions)
+            answerKey.put(question, question.getAnswer());
+    }
+
+    /**
+     * Return a list of questions associated with this quiz.
+     * @return  The list of questions associated with this quiz
+     */
+    public Map<Question, Selection> getAnswerKey() {
+        return answerKey;
+    }
+
     private Map<Member, QuizParticipantAnalysisData> participantAnalysisData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
+    private Map<Question, Selection> answerKey = new HashMap<>();
 }

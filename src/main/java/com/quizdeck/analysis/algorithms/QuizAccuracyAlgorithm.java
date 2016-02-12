@@ -15,7 +15,7 @@ import java.util.*;
  * Algorithm for accessing the accuracy of quiz results.
  * The following outputs are returned through the AnalysisResults interface:
  * -> Final submission of each participant  //TODO: Needs to be tested
- * -> Final grade of each participant       //TODO: Needs to be tested
+ * -> Final grade of each participant
  * -> Percent of participants correct       //TODO: Needs to be tested (May not be correct)
  *
  * //TODO: Test algorithm speed
@@ -98,6 +98,8 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
 
         quizOutputData.putStat("Average Number of Correct Responses Per Participant", Double.toString(avNumCorrect));
         quizOutputData.putStat("Average Percentage of Accuracy Per Participant", Double.toString(avPercentCorrect));
+
+        quizOutputData.setQuestions(getQuestions());
 
         isAnalysisComplete = true;
 
