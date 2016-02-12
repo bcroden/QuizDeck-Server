@@ -39,7 +39,7 @@ public class QuizDeckApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry
-						.addMapping("/**")
+						.addMapping("/rest/**")
 						.allowedOrigins("*");
 			}
 		};
