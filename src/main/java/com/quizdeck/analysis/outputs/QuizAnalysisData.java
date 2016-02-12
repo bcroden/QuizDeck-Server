@@ -1,8 +1,12 @@
 package com.quizdeck.analysis.outputs;
 
 import com.quizdeck.analysis.inputs.Member;
+import com.quizdeck.analysis.inputs.Question;
+import com.quizdeck.analysis.inputs.Selection;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +16,20 @@ import java.util.Map;
  * @author Alex
  */
 public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantAnalysisData, String> {
+
+    /**
+     * Initializes this dat block with the member who owns the quiz and its results along with
+     * the quiz's identifier and the identifier of the deck to which it belongs
+     *
+     * @param owner     The member who owns the deck
+     * @param deckID    The identifier of the deck to which the quiz belongs
+     * @param quizID    The identifier of the quiz to which the analysis pertains
+     */
+    public QuizAnalysisData(Member owner, String deckID, String quizID) {
+        this.owner = owner;
+        this.deckID = deckID;
+        this.quizID = quizID;
+    }
 
     /**
      * Returns a reference to a mapping which uses Members to retrieve the sample data and
@@ -55,6 +73,52 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
         stats.put(key, value);
     }
 
+    /**
+     * Returns a reference to the member who owns this quiz and its analysis.
+     * @return  member who owns the quiz
+     */
+    public Member getOwner() {
+        return owner;
+    }
+
+    /**
+     * Returns a string which represents this quiz's identifier
+     * @return  this quiz's identifier
+     */
+    public String getQuizID() {
+        return quizID;
+    }
+
+    /**
+     * Returns a string which represents the identifier for the deck to which this quiz belongs
+     * @return  the identifier for the deck to which the quiz belongs
+     */
+    public String getDeckID() {
+        return deckID;
+    }
+
+    /**
+     * Set the list of questions associated with this quiz.
+     * @param questions The list of questions associated with this quiz
+     */
+    public void setQuestions(List<Question> questions) {
+        answerKey.clear();
+        for(Question question : questions)
+            answerKey.put(question, question.getAnswer());
+    }
+
+    /**
+     * Return a list of questions associated with this quiz.
+     * @return  The list of questions associated with this quiz
+     */
+    public Map<Question, Selection> getAnswerKey() {
+        return answerKey;
+    }
+
     private Map<Member, QuizParticipantAnalysisData> participantAnalysisData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
+    private Map<Question, Selection> answerKey = new HashMap<>();
+
+    private Member owner;
+    private String quizID, deckID;
 }
