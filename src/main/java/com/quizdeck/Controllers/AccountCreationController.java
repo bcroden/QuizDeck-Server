@@ -12,8 +12,8 @@ public class AccountCreationController {
 
     public AccountCreationController(){}
 
-    @RequestMapping(value="quiz/submission", method= RequestMethod.POST)
-    public AccountCreationResponse quizSubmissionResponse(@RequestBody AccountCreationInput input){
+    @RequestMapping(value="quizdeck/accountcreation", method= RequestMethod.POST)
+    public AccountCreationResponse accountCreateionResponse(@RequestBody AccountCreationInput input){
 
 
 

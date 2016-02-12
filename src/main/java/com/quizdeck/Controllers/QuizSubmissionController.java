@@ -17,7 +17,7 @@ public class QuizSubmissionController {
         //except for testing things
     }
 
-    @RequestMapping(value="quiz/submission", method= RequestMethod.POST)
+    @RequestMapping(value="quizdeck/quizsubmission", method= RequestMethod.POST)
     public QuizSubmissionResponse quizSubmissionResponse(@RequestBody QuizSubmissionInput input){
 
 
