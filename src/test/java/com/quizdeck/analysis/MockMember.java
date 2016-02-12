@@ -7,7 +7,7 @@ import com.quizdeck.analysis.inputs.Member;
  *
  * @author Alex
  */
-public class MockMember implements Member
+public class MockMember extends Member
 {
     public MockMember(String name) {
         USERNAME = name;
@@ -15,13 +15,6 @@ public class MockMember implements Member
     @Override
     public String getUsername() {
         return USERNAME;
-    }
-
-    @Override
-    public int compareTo(Member that) {
-        if(equals(that))
-            return 0;
-        return getUsername().compareTo(that.getUsername());
     }
 
     @Override
@@ -35,6 +28,11 @@ public class MockMember implements Member
         MockMember that = (MockMember) o;
 
         return getUsername().equals(that.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        return getUsername().hashCode();
     }
 
     private final String USERNAME;

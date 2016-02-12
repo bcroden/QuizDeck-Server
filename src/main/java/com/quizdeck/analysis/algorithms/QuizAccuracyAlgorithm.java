@@ -43,7 +43,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             if(quizOutputData.getData()
                     .keySet()
                     .stream()
-                    .noneMatch(member -> member.isSameAs(response.getParticipant()))
+                    .noneMatch(member -> member.equals(response.getParticipant()))
                     )
                 quizOutputData.putData(response.getParticipant(), new QuizParticipantAnalysisData());
         });
@@ -53,8 +53,8 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             for(Question question : getQuestions()) {
                 //Get the last responses for this participant
                 Response lastResponse = getResponses().stream()
-                        .filter(response -> participant.isSameAs(response.getParticipant()))    //responses by this participant
-                        .filter(response -> question.isSameAs(response.getQuestion()))
+                        .filter(response -> participant.equals(response.getParticipant()))    //responses by this participant
+                        .filter(response -> question.equals(response.getQuestion()))
                         .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
                             if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
                                 return itr;
@@ -84,7 +84,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                         .getData()
                         .get(question)
                         .stream()
-                        .anyMatch(guess -> guess.getSelection().isSameAs(question.getAnswer())))
+                        .anyMatch(guess -> guess.getSelection().equals(question.getAnswer())))
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();
