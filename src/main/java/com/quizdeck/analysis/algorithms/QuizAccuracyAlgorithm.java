@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Algorithm for accessing the accuracy of quiz results.
  * The following outputs are returned through the AnalysisResults interface:
- * -> Final submission of each participant  //TODO: Needs to be tested
+ * -> Final submission of each participant
  * -> Final grade of each participant
  * -> Percent of participants correct       //TODO: Needs to be tested (May not be correct)
  *
@@ -22,9 +22,6 @@ import java.util.*;
  *
  * Important Notes:
  *      -> For each question answered by a participant, only the response with the latest time stamp will be considered.
- *
- * Testing Notes:
- *      -> Test case when a participant answers some but not all of the questions.
  *
  * @author Alex
  */
