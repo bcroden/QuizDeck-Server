@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
  * Note: com.quizdeck.analysis.QuizAlgorithm must be explicitly imported. Right now it
  *          is not being brought in by the wildcard, so I am importing it explicitly
  *          for now.
- *
+ * TODO: Test to make sure that the quiz and deck ID come through
  * @author Alex
  */
 public class QuizAccuracyAlgorithmTest {
