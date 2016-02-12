@@ -16,7 +16,7 @@ import java.util.*;
  * The following outputs are returned through the AnalysisResults interface:
  * -> Final submission of each participant
  * -> Final grade of each participant
- * -> Percent of participants correct       //TODO: Needs to be tested (May not be correct)
+ * -> Percent of participants correct
  *
  * //TODO: Test algorithm speed
  *
@@ -90,11 +90,9 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             totNumCorrect += numCorrect; //accumulator for calculating quiz level statistics
         }
 
-        double avNumCorrect = totNumCorrect / (double) quizOutputData.getData().keySet().size();
-        double avPercentCorrect = avNumCorrect / (double) getQuestions().size();
+        double avNumCorrect = totNumCorrect / (double) (getQuestions().size() * quizOutputData.getData().keySet().size());
 
-        quizOutputData.putStat("Average Number of Correct Responses Per Participant", Double.toString(avNumCorrect));
-        quizOutputData.putStat("Average Percentage of Accuracy Per Participant", Double.toString(avPercentCorrect));
+        quizOutputData.putStat("Average Accuracy Per Participant", Double.toString(avNumCorrect));
 
         quizOutputData.setQuestions(getQuestions());
 

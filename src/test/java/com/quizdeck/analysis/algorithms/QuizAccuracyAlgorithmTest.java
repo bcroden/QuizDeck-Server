@@ -30,10 +30,12 @@ import static org.junit.Assert.assertEquals;
  *          is not being brought in by the wildcard, so I am importing it explicitly
  *          for now.
  *
- * //TODO: Test for clearing of values when after creating a new analysis
  * @author Alex
  */
 public class QuizAccuracyAlgorithmTest {
+    /**
+     * Use mock objects to simulate quiz results
+     */
     @Before
     public void initializationTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
@@ -61,23 +63,31 @@ public class QuizAccuracyAlgorithmTest {
         analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
     }
 
+    /**
+     * Ensure that the analysis throws the correct exception with necessary
+     */
     @Test(expected = AnalysisResultsUnavailableException.class)
     public void resultsNotReady() throws AnalysisResultsUnavailableException {
         analysis.getResults();
     }
 
+    /**
+     * Test statistics calculated at the quiz level
+     */
     @Test
     public void testQuizLevelCalculations() throws AnalysisResultsUnavailableException {
         analysis.performAnalysis();
         QuizAnalysisData results = (QuizAnalysisData) analysis.getResults();
 
         assertThat("Incorrect number of participants", results.getData().keySet().size(), is(2));
-
+        assertEquals("Incorrect average accuracy per participant",
+                0.6,
+                Double.parseDouble(results.getStats().get("Average Accuracy Per Participant")),
+                0.0001);
     }
 
     /**
      * Test analysis of participant who submitted a guess to all questions.
-     * @throws AnalysisResultsUnavailableException
      */
     @Test
     public void testFullyEngagedParticipant() throws AnalysisResultsUnavailableException {
@@ -103,6 +113,9 @@ public class QuizAccuracyAlgorithmTest {
         }
     }
 
+    /**
+     * Test analysis of participant who did not submit a guess to all of the questions.
+     */
     @Test
     public void testPartiallyEngagedParticipant() throws AnalysisResultsUnavailableException {
         //test analysis of participant who did not submit a response for all questions
