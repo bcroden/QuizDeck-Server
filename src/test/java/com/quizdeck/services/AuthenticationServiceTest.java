@@ -3,7 +3,6 @@ package com.quizdeck.services;
 import com.quizdeck.QuizDeckApplication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,10 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -30,25 +29,32 @@ public class AuthenticationServiceTest {
     private String secretKey;
 
     @Test
-    public void buildTokenSuccess() {
-        String serviceTtoken = authService.buildToken("testUser", "User");
+    public void buildUserTokenSuccess() {
+        String token = authService.buildToken("testUser", "User");
         Claims claims = Jwts
                 .parser()
                 .setSigningKey(this.secretKey)
-                .parseClaimsJws(serviceTtoken)
+                .parseClaimsJws(token)
                 .getBody();
 
+        assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
         assertThat(claims.get("role"), is(equalTo("User")));
+        assertNotNull(claims.getIssuedAt());
+    }
 
-        serviceTtoken = authService.buildToken("otherUser", "Admin");
-        claims = Jwts
+    @Test
+    public void buildAdminTokenSuccess() {
+        String token = authService.buildToken("otherUser", "Admin");
+        Claims claims = Jwts
                 .parser()
                 .setSigningKey(this.secretKey)
-                .parseClaimsJws(serviceTtoken)
+                .parseClaimsJws(token)
                 .getBody();
 
+        assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("otherUser")));
         assertThat(claims.get("role"), is(equalTo("Admin")));
+        assertNotNull(claims.getIssuedAt());
     }
 }
