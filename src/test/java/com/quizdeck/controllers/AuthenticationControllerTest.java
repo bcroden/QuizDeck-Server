@@ -82,6 +82,7 @@ public class AuthenticationControllerTest {
                 .parseClaimsJws(token)
                 .getBody();
 
+        assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
@@ -113,6 +114,7 @@ public class AuthenticationControllerTest {
                 .parseClaimsJws(token)
                 .getBody();
 
+        assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
