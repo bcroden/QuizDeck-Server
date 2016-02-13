@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 /**
+ * This controller manages account creation and user logins.
+ * Users post information to these endpoints and receive an authentication token in return.
+ * This token can be included as a header in future requests to secure endpoints and will confirm the users identity.
+ *
  * Created by Brandon on 2/10/2016.
  */
 @RestController
@@ -23,6 +27,14 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authService;
 
+    /**
+     * The endpoint for account creation.
+     *
+     * @param input The JSON request
+     * @param result The JSON binding results
+     * @return A JSON object containing a token fields.
+     * @throws InvalidJsonException If the JSON is malformed or missing important fields.
+     */
     @RequestMapping(value = "/createAccount", method = RequestMethod.POST)
     public AuthTokenResponse createAccount(@Valid @RequestBody CreateAccountInput input, BindingResult result) throws InvalidJsonException {
         if(result.hasErrors()) {
@@ -38,6 +50,14 @@ public class AuthenticationController {
         return new AuthTokenResponse(token);
     }
 
+    /**
+     * The endpoint for user logins.
+     *
+     * @param input The JSON request
+     * @param result The JSON binding results
+     * @return A JSON object containing a token fields.
+     * @throws InvalidJsonException If the JSON is malformed or missing important fields.
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public AuthTokenResponse login(@Valid @RequestBody LoginInput input, BindingResult result) throws InvalidJsonException {
         if(result.hasErrors()) {

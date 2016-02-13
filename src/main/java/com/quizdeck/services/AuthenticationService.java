@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
+ * A service designed to assist with the creation of auth tokens.
+ *
  * Created by Brandon on 2/12/2016.
  */
 @Service
@@ -15,6 +17,13 @@ public class AuthenticationService {
     @Resource(name = "secretKey")
     private String secretKey;
 
+    /**
+     * Creates a new auth token.
+     *
+     * @param username The username to be included in the token's claims.
+     * @param role The role to be included in the token's claims.
+     * @return A new auth token.
+     */
     public String buildToken(String username, String role) {
         return Jwts
                 .builder()

@@ -1,7 +1,7 @@
 package com.quizdeck;
 
 
-import com.quizdeck.filters.AuthFilter;
+import com.quizdeck.filters.AuthenticationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
@@ -27,7 +27,7 @@ public class QuizDeckApplication {
 	@Resource(name = "secretKey")
 	public FilterRegistrationBean authFilter(String secretKey) {
 		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(new AuthFilter(secretKey));
+		registration.setFilter(new AuthenticationFilter(secretKey));
 		registration.addUrlPatterns("/rest/secure/*");
 		return registration;
 	}

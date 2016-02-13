@@ -15,12 +15,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * This filter checks for a JWT token in the Authorization header of http requests.
+ * If it exists, it parses the claims and exposes them as an attribute on the request.
+ * If it does not exist / is invalid, it denies the request and returns an error message.
+ *
  * Created by Brandon on 2/10/2016.
  */
-public class AuthFilter implements Filter {
+public class AuthenticationFilter implements Filter {
     public static final String CLAIMS_ATTRIBUTE = "claims";
 
-    public AuthFilter(String secretKey) {
+    public AuthenticationFilter(String secretKey) {
         this.secretKey = secretKey;
     }
 
@@ -70,5 +74,5 @@ public class AuthFilter implements Filter {
     }
 
     private final String secretKey;
-    private static final Logger log = LoggerFactory.getLogger(AuthFilter.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 }

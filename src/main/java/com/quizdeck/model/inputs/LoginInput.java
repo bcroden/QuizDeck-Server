@@ -3,6 +3,8 @@ package com.quizdeck.model.inputs;
 import javax.validation.constraints.NotNull;
 
 /**
+ * DTO containing the information that a client sends to the server to log in.
+ *
  * Created by Brandon on 2/12/2016.
  */
 public class LoginInput {
