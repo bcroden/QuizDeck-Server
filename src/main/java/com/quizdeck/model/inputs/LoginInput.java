@@ -1,10 +1,15 @@
 package com.quizdeck.model.inputs;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by Brandon on 2/12/2016.
  */
 public class LoginInput {
+    @NotNull
     private String username;
+
+    @NotNull
     private String password;
 
     public LoginInput() {
