@@ -8,7 +8,7 @@ import com.quizdeck.analysis.inputs.Selection;
  *
  * @author Alex
  */
-public class MockQuestion implements Question
+public class MockQuestion extends Question
 {
     public MockQuestion(int questionNumber, Selection answer) {
         this.questionNumber = questionNumber;

@@ -7,7 +7,7 @@ import com.quizdeck.analysis.inputs.Selection;
  *
  * @author Alex
  */
-public class MockSelection implements Selection
+public class MockSelection extends Selection
 {
     public MockSelection(char selection)
     {
@@ -17,10 +17,6 @@ public class MockSelection implements Selection
     @Override
     public String toDisplayString() {
         return Character.toString(SELECTION);
-    }
-    @Override
-    public boolean isSameAs(Selection that) {
-        return toDisplayString().equals(that.toDisplayString());
     }
 
     @Override

@@ -10,13 +10,4 @@ public class InsufficientDataException extends AnalysisException {
     {
         super(message);
     }
-    public InsufficientDataException(Throwable throwable)
-    {
-        super(throwable);
-    }
-    public InsufficientDataException(String message, Throwable throwable)
-    {
-        super(message, throwable);
-    }
-
 }

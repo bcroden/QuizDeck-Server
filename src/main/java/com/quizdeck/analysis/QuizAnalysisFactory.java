@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class QuizAnalysisFactory {
     @SuppressWarnings("unchecked")
-    public Object getAnalysisUsing(QuizAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
+    public Analysis getAnalysisUsing(QuizAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
         Class theClass = null;
         try
         {
@@ -43,7 +43,9 @@ public class QuizAnalysisFactory {
         try
         {
             constructor.setAccessible(true);
-            return constructor.newInstance(responses, questions, quizID, deckID, owner);
+            Object o = constructor.newInstance(responses, questions, quizID, deckID, owner);
+            clear();
+            return (Analysis) o;
         }
         catch(InstantiationException | IllegalAccessException | InvocationTargetException e)
         {
@@ -65,6 +67,14 @@ public class QuizAnalysisFactory {
     }
     public void setResponses(List<Response> responses) {
         this.responses = responses;
+    }
+
+    public void clear() {
+        owner = null;
+        quizID = null;
+        deckID = null;
+        questions = null;
+        responses = null;
     }
 
     private Class[] getConstructorParameters() throws InsufficientDataException {

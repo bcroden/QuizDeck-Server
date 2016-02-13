@@ -14,36 +14,32 @@ import java.util.*;
 /**
  * Algorithm for accessing the accuracy of quiz results.
  * The following outputs are returned through the AnalysisResults interface:
- * -> Final submission of each participant  //TODO: Needs to be tested
- * -> Final grade of each participant       //TODO: Needs to be tested
- * -> Percent of participants correct       //TODO: Needs to be tested (May not be correct)
+ * -> Final submission of each participant
+ * -> Final grade of each participant
+ * -> Percent of participants correct
  *
  * //TODO: Test algorithm speed
  *
  * Important Notes:
  *      -> For each question answered by a participant, only the response with the latest time stamp will be considered.
  *
- * Testing Notes:
- *      -> Test case when a participant answers some but not all of the questions.
- *
  * @author Alex
  */
 class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner) {
         super(responses, questions, quizID, deckID, owner);
+        quizOutputData = new QuizAnalysisData(getOwner(), getDeckID(), getQuizID());
     }
 
     @Override
     public boolean performAnalysis() {
-
-        quizOutputData = new QuizAnalysisData();
 
         //Populate the quiz data list of participants
         getResponses().stream().forEach(response -> {
             if(quizOutputData.getData()
                     .keySet()
                     .stream()
-                    .noneMatch(member -> member.isSameAs(response.getParticipant()))
+                    .noneMatch(member -> member.equals(response.getParticipant()))
                     )
                 quizOutputData.putData(response.getParticipant(), new QuizParticipantAnalysisData());
         });
@@ -53,8 +49,8 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             for(Question question : getQuestions()) {
                 //Get the last responses for this participant
                 Response lastResponse = getResponses().stream()
-                        .filter(response -> participant.isSameAs(response.getParticipant()))    //responses by this participant
-                        .filter(response -> question.isSameAs(response.getQuestion()))
+                        .filter(response -> participant.equals(response.getParticipant()))    //responses by this participant
+                        .filter(response -> question.equals(response.getQuestion()))
                         .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
                             if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
                                 return itr;
@@ -84,7 +80,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                         .getData()
                         .get(question)
                         .stream()
-                        .anyMatch(guess -> guess.getSelection().isSameAs(question.getAnswer())))
+                        .anyMatch(guess -> guess.getSelection().equals(question.getAnswer())))
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();
@@ -93,11 +89,11 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             totNumCorrect += numCorrect; //accumulator for calculating quiz level statistics
         }
 
-        double avNumCorrect = totNumCorrect / (double) quizOutputData.getData().keySet().size();
-        double avPercentCorrect = avNumCorrect / (double) getQuestions().size();
+        double avNumCorrect = totNumCorrect / (double) (getQuestions().size() * quizOutputData.getData().keySet().size());
 
-        quizOutputData.putStat("Average Number of Correct Responses Per Participant", Double.toString(avNumCorrect));
-        quizOutputData.putStat("Average Percentage of Accuracy Per Participant", Double.toString(avPercentCorrect));
+        quizOutputData.putStat("Average Accuracy Per Participant", Double.toString(avNumCorrect));
+
+        quizOutputData.setQuestions(getQuestions());
 
         isAnalysisComplete = true;
 
