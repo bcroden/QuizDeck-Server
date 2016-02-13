@@ -1,13 +1,11 @@
 package com.quizdeck.controllers;
 
-import com.quizdeck.services.AuthenticationService;
 import io.jsonwebtoken.Claims;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * This is a temporary controller, designed to give access to some values while testing.
@@ -17,16 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/rest/secure/")
 public class TestController {
-    @Autowired
-    private AuthenticationService authService;
-
     @Resource(name = "secretKey")
     private String secretKey;
 
     @RequestMapping("/getClaims")
-    public Claims getClaims(HttpServletRequest request) {
-        Claims claims = authService.getClaims(request);
-
+    public Claims getClaims(@ModelAttribute("claims") Claims claims) {
         return claims;
     }
 

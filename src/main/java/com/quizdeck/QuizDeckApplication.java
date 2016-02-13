@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 
 @SpringBootApplication
 public class QuizDeckApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(QuizDeckApplication.class, args);
 	}

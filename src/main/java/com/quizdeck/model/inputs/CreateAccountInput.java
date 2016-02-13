@@ -8,6 +8,15 @@ public class CreateAccountInput {
     private String password;
     private String email;
 
+    public CreateAccountInput() {
+    }
+
+    public CreateAccountInput(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public String getEmail() {
         return email;
     }

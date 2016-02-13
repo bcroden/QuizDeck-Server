@@ -1,13 +1,10 @@
 package com.quizdeck.services;
 
-import com.quizdeck.filters.AuthFilter;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -27,9 +24,5 @@ public class AuthenticationService {
                 .setIssuedAt(new Date())
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
-
-    public Claims getClaims(HttpServletRequest request) {
-        return (Claims)request.getAttribute(AuthFilter.CLAIMS_ATTRIBUTE);
     }
 }

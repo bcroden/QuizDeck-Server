@@ -6,6 +6,9 @@ package com.quizdeck.model.responses;
 public class AuthTokenResponse {
     private String token;
 
+    public AuthTokenResponse() {
+    }
+
     public AuthTokenResponse(String token) {
         this.token = token;
     }

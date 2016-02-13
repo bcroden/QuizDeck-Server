@@ -7,6 +7,14 @@ public class LoginInput {
     private String username;
     private String password;
 
+    public LoginInput() {
+    }
+
+    public LoginInput(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public String getUsername() {
         return username;
     }
