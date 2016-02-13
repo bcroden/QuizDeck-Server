@@ -2,8 +2,6 @@ package com.quizdeck.filters;
 
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.services.AuthenticationService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +24,7 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by Brandon on 2/13/2016.
@@ -50,7 +49,7 @@ public class AuthenticationFilterTest {
 
         this.request = new MockHttpServletRequest();
         this.response = new MockHttpServletResponse();
-        this.chain = new MockFilterChain();
+        this.chain = mock(MockFilterChain.class);
     }
 
     @After
@@ -61,41 +60,39 @@ public class AuthenticationFilterTest {
     @Test
     public void addsClaims() throws IOException, ServletException {
         String token = authService.buildToken("testUser", "User");
-
-        request.setServletPath("/rest/secure/getClaims/");
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
         filter.doFilter(request, response, chain);
 
         assertNotNull(request.getAttribute(AuthenticationFilter.CLAIMS_ATTRIBUTE));
+        verify(chain, times(1)).doFilter(request, response);
     }
 
     @Test
     public void errorsWithBadHeader() throws IOException, ServletException {
-        request.setServletPath("/rest/secure/getClaims/");
         request.addHeader(HttpHeaders.AUTHORIZATION, "NotBearer");
 
         filter.doFilter(request, response, chain);
 
         assertThat(response.getStatus(), is(equalTo(HttpStatus.UNAUTHORIZED.value())));
+        verify(chain, never()).doFilter(request, response);
     }
 
     @Test
     public void errorsWithMalformedHeader() throws IOException, ServletException {
-        request.setServletPath("/rest/secure/getClaims/");
         request.addHeader(HttpHeaders.AUTHORIZATION, "Bearer abc.abc.abc");
 
         filter.doFilter(request, response, chain);
 
         assertThat(response.getStatus(), is(equalTo(HttpStatus.UNAUTHORIZED.value())));
+        verify(chain, never()).doFilter(request, response);
     }
 
     @Test
     public void errorsWithNoHeader() throws IOException, ServletException {
-        request.setServletPath("/rest/secure/getClaims/");
-
         filter.doFilter(request, response, chain);
 
         assertThat(response.getStatus(), is(equalTo(HttpStatus.UNAUTHORIZED.value())));
+        verify(chain, never()).doFilter(request, response);
     }
 }
