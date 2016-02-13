@@ -1,6 +1,9 @@
 package com.quizdeck.controllers;
 
+import com.quizdeck.exceptions.ForbiddenAccessException;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +27,13 @@ public class TestController {
     }
 
     @RequestMapping("/getKey")
-    public String getSecretKey() {
+    public String getSecretKey(@ModelAttribute("claims") Claims claims) throws ForbiddenAccessException {
+        if(!claims.get("role").equals("Admin")) {
+            log.warn("Unauthorized attempt to access: /rest/secure/getKey");
+            throw new ForbiddenAccessException();
+        }
         return secretKey;
     }
+
+    private Logger log = LoggerFactory.getLogger(TestController.class);
 }
