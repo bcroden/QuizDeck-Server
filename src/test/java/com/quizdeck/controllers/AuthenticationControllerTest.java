@@ -1,10 +1,11 @@
 package com.quizdeck.controllers;
 
+import com.jayway.jsonpath.JsonPath;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.model.inputs.CreateAccountInput;
 import com.quizdeck.model.inputs.LoginInput;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,11 +24,14 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -62,18 +66,25 @@ public class AuthenticationControllerTest {
 
     @Test
     public void createAccountSuccess() throws Exception {
-        mockMvc.perform(post("/rest/nonsecure/createAccount")
+        String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
             .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com")))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is2xxSuccessful())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(jsonPath("$.token", is(Jwts.builder()
-                    .setSubject("QuizDeck")
-                    .claim("user", "testUser")
-                    .claim("role", "User")
-                    .setIssuedAt(new Date())
-                    .signWith(SignatureAlgorithm.HS256, secretKey)
-                    .compact())));
+            .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String token = JsonPath.read(result, "$.token");
+        Claims claims = Jwts
+                .parser()
+                .setSigningKey(this.secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        assertThat(claims.get("user"), is(equalTo("testUser")));
+        assertThat(claims.get("role"), is(equalTo("User")));
+        assertNotNull(claims.getIssuedAt());
     }
 
     @Test
@@ -86,18 +97,25 @@ public class AuthenticationControllerTest {
 
     @Test
     public void loginSuccess() throws Exception {
-        mockMvc.perform(post("/rest/nonsecure/login")
+        String result = mockMvc.perform(post("/rest/nonsecure/login")
                 .content(this.json(new LoginInput("testUser", "password")))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.token", is(Jwts.builder()
-                        .setSubject("QuizDeck")
-                        .claim("user", "testUser")
-                        .claim("role", "User")
-                        .setIssuedAt(new Date())
-                        .signWith(SignatureAlgorithm.HS256, secretKey)
-                        .compact())));
+                .andReturn()
+                    .getResponse()
+                    .getContentAsString();
+
+        String token = JsonPath.read(result, "$.token");
+        Claims claims = Jwts
+                .parser()
+                .setSigningKey(this.secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        assertThat(claims.get("user"), is(equalTo("testUser")));
+        assertThat(claims.get("role"), is(equalTo("User")));
+        assertNotNull(claims.getIssuedAt());
     }
 
     @Test
