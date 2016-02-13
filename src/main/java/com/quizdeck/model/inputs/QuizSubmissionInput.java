@@ -1,7 +1,7 @@
-package com.quizdeck.RequestInputObjects;
+package com.quizdeck.model.inputs;
 
 
-import com.quizdeck.QuizObjects.Questions;
+import com.quizdeck.model.database.Questions;
 
 import java.util.Date;
 import java.util.List;

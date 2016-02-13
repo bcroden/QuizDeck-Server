@@ -1,4 +1,4 @@
-package com.quizdeck.QuizObjects;
+package com.quizdeck.model.database;
 
 import org.springframework.data.annotation.Id;
 
