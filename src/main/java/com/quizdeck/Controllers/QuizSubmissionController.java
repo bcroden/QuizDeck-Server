@@ -1,12 +1,11 @@
-package com.quizdeck.Controllers;
+package com.quizdeck.controllers;
 
 
+import com.quizdeck.model.inputs.QuizSubmissionInput;
+import com.quizdeck.model.responses.QuizSubmissionResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.quizdeck.RequestResponseObjects.QuizSubmissionResponse;
-import com.quizdeck.RequestInputObjects.QuizSubmissionInput;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController

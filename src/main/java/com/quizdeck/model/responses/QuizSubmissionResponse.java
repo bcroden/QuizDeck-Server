@@ -1,4 +1,4 @@
-package com.quizdeck.RequestResponseObjects;
+package com.quizdeck.model.responses;
 
 public class QuizSubmissionResponse{
 

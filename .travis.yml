@@ -16,3 +16,6 @@ deploy:
 cache:
   directories:
   - $HOME/.gradle/caches/
+services:
+  - mongodb
+  - redis-server
