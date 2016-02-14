@@ -22,6 +22,11 @@ public class User{
         return userName;
     }
 
+    @Override
+    public String toString(){
+        return String.format("User[id='%s', username='%s']", id, userName);
+    }
+
     public void setUsername(String userName) {
         this.userName = userName;
     }
