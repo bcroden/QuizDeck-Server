@@ -15,6 +15,7 @@ import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
+@WebAppConfiguration
 public class AuthenticationFilterTest {
     @Resource(name = "secretKey")
     private String secretKey;
