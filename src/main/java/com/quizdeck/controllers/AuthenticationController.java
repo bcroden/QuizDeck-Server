@@ -1,6 +1,7 @@
 package com.quizdeck.controllers;
 
-import Encryption.PassEncryption;
+import com.quizdeck.exceptions.UsernamePassException;
+import com.quizdeck.services.PassEncryption;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.exceptions.UserExistsException;
 import com.quizdeck.model.database.User;
@@ -35,6 +36,7 @@ public class AuthenticationController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private PassEncryption encrypt;
 
     /**
@@ -74,12 +76,26 @@ public class AuthenticationController {
      * @throws InvalidJsonException If the JSON is malformed or missing important fields.
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public AuthTokenResponse login(@Valid @RequestBody LoginInput input, BindingResult result) throws InvalidJsonException {
+    public AuthTokenResponse login(@Valid @RequestBody LoginInput input, BindingResult result) throws InvalidJsonException, UsernamePassException {
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
 
         // TODO: Check if input is valid
+//        User currUser = null;
+//
+//        currUser = userRepository.findByUserName(input.getUsername());
+//        if(currUser != null){
+//            if(encrypt.encryptUsingSaltSeed(input.getPassword(), currUser.getSaltSeed()).equals(currUser.getHashedPassword())){
+//                //logic for login
+//            }
+//            else{
+//                throw new UsernamePassException();
+//            }
+//        }
+//        else{
+//            throw new UsernamePassException();
+//        }
 
         // Return new token if login credentials are valid
         String token = authService.buildToken(input.getUsername(), "User");
