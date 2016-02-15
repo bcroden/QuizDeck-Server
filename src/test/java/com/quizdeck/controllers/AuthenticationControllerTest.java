@@ -24,6 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -67,7 +68,7 @@ public class AuthenticationControllerTest {
     @Test
     public void createAccountSuccess() throws Exception {
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
-            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com")))
+            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com", new Date())))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is2xxSuccessful())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
