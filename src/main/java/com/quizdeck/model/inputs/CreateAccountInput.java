@@ -1,6 +1,7 @@
 package com.quizdeck.model.inputs;
 
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * DTO containing the information that a client sends to the server to create a new account.
@@ -17,13 +18,17 @@ public class CreateAccountInput {
     @NotNull
     private String email;
 
+    @NotNull
+    private Date signUp;
+
     public CreateAccountInput() {
     }
 
-    public CreateAccountInput(String username, String password, String email) {
+    public CreateAccountInput(String username, String password, String email, Date signUp) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.signUp = signUp;
     }
 
     public String getEmail() {
@@ -48,5 +53,13 @@ public class CreateAccountInput {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getSignUp() {
+        return signUp;
+    }
+
+    public void setSignUp(Date signUp) {
+        this.signUp = signUp;
     }
 }

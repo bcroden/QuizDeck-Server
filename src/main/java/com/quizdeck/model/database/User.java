@@ -10,16 +10,19 @@ public class User{
     private String id;
 
     private String userName;
-    private String password;
+    private String hashedPassword;
+    private String saltSeed;
 
     private String email;
-    private String fName;
-    private String lName;
 
     private Date signUp;
 
-    public String getUsername() {
-        return userName;
+    public User(String username, String hashed, String saltSeed, String email, Date signUp) {
+        this.userName = username;
+        this.hashedPassword = hashed;
+        this.saltSeed = saltSeed;
+        this.email = email;
+        this.signUp = signUp;
     }
 
     @Override
@@ -27,41 +30,35 @@ public class User{
         return String.format("User[id='%s', username='%s']", id, userName);
     }
 
-    public void setUsername(String userName) {
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public String getSaltSeed() {
+        return saltSeed;
+    }
+
+    public void setSaltSeed(String saltSeed) {
+        this.saltSeed = saltSeed;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getfName() {
-        return fName;
-    }
-
-    public void setfName(String fName) {
-        this.fName = fName;
-    }
-
-    public String getlName() {
-        return lName;
-    }
-
-    public void setlName(String lName) {
-        this.lName = lName;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     public Date getSignUp() {
         return signUp;
