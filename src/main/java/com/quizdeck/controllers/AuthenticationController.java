@@ -1,15 +1,16 @@
 package com.quizdeck.controllers;
 
-import com.quizdeck.exceptions.UsernamePassException;
-import com.quizdeck.services.PassEncryption;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.exceptions.UserExistsException;
+import com.quizdeck.exceptions.UsernamePassException;
 import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.CreateAccountInput;
 import com.quizdeck.model.inputs.LoginInput;
 import com.quizdeck.model.responses.AuthTokenResponse;
 import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.AuthenticationService;
+import com.quizdeck.services.PassEncryption;
+import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 /**
  * This controller manages account creation and user logins.
@@ -57,8 +59,10 @@ public class AuthenticationController {
             throw new UserExistsException();
         }
         else{
-            String[] hashResult = encrypt.encryptAndSeed(input.getPassword());
-            userRepository.save(new User(input.getUsername(), hashResult[0], hashResult[1],input.getEmail(), input.getSignUp()));
+            ArrayList<byte[]> hashResult = encrypt.encryptAndSeed(input.getPassword());
+            String storedPass = new String(Base64.encode(hashResult.get(0)));
+            String storedSalt = new String(Base64.encode(hashResult.get(1)));
+            userRepository.save(new User(input.getUsername(), storedPass, storedSalt,input.getEmail(), input.getSignUp()));
             //entered new user with a hash of pass, salted with a key provided by hashResult[1]
         }
 
@@ -82,20 +86,21 @@ public class AuthenticationController {
         }
 
         // TODO: Check if input is valid
-//        User currUser = null;
-//
-//        currUser = userRepository.findByUserName(input.getUsername());
-//        if(currUser != null){
-//            if(encrypt.encryptUsingSaltSeed(input.getPassword(), currUser.getSaltSeed()).equals(currUser.getHashedPassword())){
-//                //logic for login
-//            }
-//            else{
-//                throw new UsernamePassException();
-//            }
-//        }
-//        else{
-//            throw new UsernamePassException();
-//        }
+        User currUser = null;
+
+        currUser = userRepository.findByUserName(input.getUsername());
+        if(currUser != null){
+            byte[] salt = Base64.decode(currUser.getSaltSeed());
+            if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(Base64.decode(currUser.getHashedPassword()))){
+                //logic for logging in
+            }
+            else{
+                throw new UsernamePassException();
+            }
+        }
+        else{
+            throw new UsernamePassException();
+        }
 
         // Return new token if login credentials are valid
         String token = authService.buildToken(input.getUsername(), "User");
