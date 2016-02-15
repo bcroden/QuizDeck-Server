@@ -152,17 +152,6 @@ public class QuizAccuracyAlgorithmTest {
         assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
     }
 
-    /**
-     * Benchmark analysis time
-     */
-    @Test
-    public void benchmarkAnalysisTime() throws AnalysisResultsUnavailableException {
-        long startTime = System.currentTimeMillis();
-        analysis.performAnalysis();
-        long endTime = System.currentTimeMillis();
-        assertThat("Analysis took too long", (endTime - startTime), lessThan(Long.valueOf("2")));
-    }
-
     private StaticAnalysis analysis;
     private final Member GILLIGAN = new MockMember("Gilligan");
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
