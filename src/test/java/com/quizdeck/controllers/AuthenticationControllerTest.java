@@ -68,7 +68,7 @@ public class AuthenticationControllerTest {
     @Test
     public void createAccountSuccess() throws Exception {
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
-            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com", new Date())))
+            .content(this.json(new CreateAccountInput("testUser5", "password", "testUser@email.com", new Date())))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is2xxSuccessful())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -84,7 +84,7 @@ public class AuthenticationControllerTest {
                 .getBody();
 
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
-        assertThat(claims.get("user"), is(equalTo("testUser")));
+        assertThat(claims.get("user"), is(equalTo("testUser5")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
     }
@@ -100,7 +100,7 @@ public class AuthenticationControllerTest {
     @Test
     public void loginSuccess() throws Exception {
         String result = mockMvc.perform(post("/rest/nonsecure/login")
-                .content(this.json(new LoginInput("testUser", "password")))
+                .content(this.json(new LoginInput("testUser5", "password")))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -116,7 +116,7 @@ public class AuthenticationControllerTest {
                 .getBody();
 
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
-        assertThat(claims.get("user"), is(equalTo("testUser")));
+        assertThat(claims.get("user"), is(equalTo("testUser5")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
     }

@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  */
 public class LoginInput {
     @NotNull
-    private String username;
+    private String userName;
 
     @NotNull
     private String password;
@@ -17,17 +17,17 @@ public class LoginInput {
     public LoginInput() {
     }
 
-    public LoginInput(String username, String password) {
-        this.username = username;
+    public LoginInput(String userName, String password) {
+        this.userName = userName;
         this.password = password;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {

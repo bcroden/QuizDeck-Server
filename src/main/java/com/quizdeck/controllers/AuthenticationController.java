@@ -10,7 +10,6 @@ import com.quizdeck.model.responses.AuthTokenResponse;
 import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.AuthenticationService;
 import com.quizdeck.services.PassEncryption;
-import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Base64;
 
 /**
  * This controller manages account creation and user logins.
@@ -60,8 +60,8 @@ public class AuthenticationController {
         }
         else{
             ArrayList<byte[]> hashResult = encrypt.encryptAndSeed(input.getPassword());
-            String storedPass = new String(Base64.encode(hashResult.get(0)));
-            String storedSalt = new String(Base64.encode(hashResult.get(1)));
+            String storedPass = Base64.getEncoder().encodeToString(hashResult.get(0));
+            String storedSalt = Base64.getEncoder().encodeToString(hashResult.get(1));
             userRepository.save(new User(input.getUsername(), storedPass, storedSalt,input.getEmail(), input.getSignUp()));
             //entered new user with a hash of pass, salted with a key provided by hashResult[1]
         }
@@ -90,8 +90,8 @@ public class AuthenticationController {
 
         currUser = userRepository.findByUserName(input.getUsername());
         if(currUser != null){
-            byte[] salt = Base64.decode(currUser.getSaltSeed());
-            if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(Base64.decode(currUser.getHashedPassword()))){
+            byte[] salt = Base64.getDecoder().decode(currUser.getSaltSeed());
+            if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(Base64.getDecoder().decode(currUser.getHashedPassword()))){
                 //logic for logging in
             }
             else{
