@@ -78,6 +78,9 @@ public class AuthenticationControllerTest {
 
     @Test
     public void createAccountSuccess() throws Exception {
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
+
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
             .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com")))
             .contentType(MediaType.APPLICATION_JSON))
@@ -93,9 +96,6 @@ public class AuthenticationControllerTest {
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
-
-        System.out.println("**************************Removing testUser***********************");
-        userRepository.removeByUserName("testUser");
 
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
