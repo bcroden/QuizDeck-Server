@@ -78,6 +78,8 @@ public class AuthenticationControllerTest {
 
     @Test
     public void createAccountSuccess() throws Exception {
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
             .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com")))
             .contentType(MediaType.APPLICATION_JSON))
@@ -93,6 +95,7 @@ public class AuthenticationControllerTest {
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
+
 
         System.out.println("**************************Removing testUser***********************");
         userRepository.removeByUserName("testUser");
@@ -116,6 +119,9 @@ public class AuthenticationControllerTest {
 
     @Test
     public void loginSuccess() throws Exception {
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
+
         ArrayList<byte[]> hashResult = encrypt.encryptAndSeed("password");
         String storedPass = Base64.getEncoder().encodeToString(hashResult.get(0));
         String storedSalt = Base64.getEncoder().encodeToString(hashResult.get(1));
