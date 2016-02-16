@@ -59,7 +59,7 @@ task wrapper(type: Wrapper) {
 }
 
 task stage {
-    dependsOn build
+    dependsOn assemble
 }
 
 jacocoTestReport {
