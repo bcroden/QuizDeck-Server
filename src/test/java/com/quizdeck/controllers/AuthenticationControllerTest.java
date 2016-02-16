@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.model.inputs.CreateAccountInput;
 import com.quizdeck.model.inputs.LoginInput;
+import com.quizdeck.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.Assert;
@@ -52,6 +53,9 @@ public class AuthenticationControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
                 .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
@@ -68,7 +72,7 @@ public class AuthenticationControllerTest {
     @Test
     public void createAccountSuccess() throws Exception {
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
-            .content(this.json(new CreateAccountInput("testUser5", "password", "testUser@email.com", new Date())))
+            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com", new Date())))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is2xxSuccessful())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -83,10 +87,14 @@ public class AuthenticationControllerTest {
                 .parseClaimsJws(token)
                 .getBody();
 
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
+
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser5")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
+
     }
 
     @Test
@@ -96,6 +104,8 @@ public class AuthenticationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
+
+
 
     @Test
     public void loginSuccess() throws Exception {
@@ -114,6 +124,9 @@ public class AuthenticationControllerTest {
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
+
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
 
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser5")));

@@ -6,4 +6,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends MongoRepository<User, String> {
     User findByUserName(@Param("userName") String userName);
+
+    User removeByUserName(@Param("userName") String userName);
 }

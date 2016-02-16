@@ -93,6 +93,8 @@ public class AuthenticationController {
             byte[] salt = Base64.getDecoder().decode(currUser.getSaltSeed());
             if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(Base64.getDecoder().decode(currUser.getHashedPassword()))){
                 //logic for logging in
+                String token = authService.buildToken(input.getUsername(), "User");
+                return new AuthTokenResponse(token);
             }
             else{
                 throw new UsernamePassException();
@@ -101,9 +103,5 @@ public class AuthenticationController {
         else{
             throw new UsernamePassException();
         }
-
-        // Return new token if login credentials are valid
-        String token = authService.buildToken(input.getUsername(), "User");
-        return new AuthTokenResponse(token);
     }
 }
