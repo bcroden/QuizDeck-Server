@@ -17,9 +17,9 @@ public class User{
 
     private Date signUp;
 
-    public User(String username, String hashed, String saltSeed, String email, Date signUp) {
-        this.userName = username;
-        this.hashedPassword = hashed;
+    public User(String userName, String hashedPassword, String saltSeed, String email, Date signUp) {
+        this.userName = userName;
+        this.hashedPassword = hashedPassword;
         this.saltSeed = saltSeed;
         this.email = email;
         this.signUp = signUp;

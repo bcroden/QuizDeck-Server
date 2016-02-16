@@ -4,6 +4,8 @@ import org.bouncycastle.crypto.generators.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.Base64;
 
 /**
  * Created by Cade on 2/14/2016.
@@ -11,20 +13,22 @@ import java.security.SecureRandom;
 @Service
 public class PassEncryption {
 
-    public String[] encryptAndSeed(String str){
+    public ArrayList<byte[]> encryptAndSeed(String str){
         byte[] generatedPass = null;
         byte[] salt =  SecureRandom.getSeed(16);
         byte[] bytePass = str.getBytes();
-        generatedPass = BCrypt.generate(bytePass, salt, 17);
+        generatedPass = BCrypt.generate(bytePass, salt, 15);
 
-        String[] result = {generatedPass.toString(), salt.toString()};
+        ArrayList<byte[]> result = new ArrayList();
+        result.add(generatedPass);
+        result.add(salt);
         return result;
     }
 
-    public String encryptUsingSaltSeed(String pass, String seed){
-        byte[] generatedPass = BCrypt.generate(pass.getBytes(), seed.getBytes(), 17);
+    public String encryptUsingSaltSeed(byte[] pass, byte[] salt){
+        byte[] generatedPass = BCrypt.generate(pass, salt, 15);
 
-        return generatedPass.toString();
+        return Base64.getEncoder().encodeToString(generatedPass);
     }
 
 }

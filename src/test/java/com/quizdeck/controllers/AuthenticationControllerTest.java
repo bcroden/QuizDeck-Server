@@ -2,8 +2,11 @@ package com.quizdeck.controllers;
 
 import com.jayway.jsonpath.JsonPath;
 import com.quizdeck.QuizDeckApplication;
+import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.CreateAccountInput;
 import com.quizdeck.model.inputs.LoginInput;
+import com.quizdeck.repositories.UserRepository;
+import com.quizdeck.services.PassEncryption;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.Assert;
@@ -23,7 +26,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 
 import static org.hamcrest.core.Is.is;
@@ -52,6 +57,12 @@ public class AuthenticationControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PassEncryption encrypt;
+
+    @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
                 .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
@@ -68,7 +79,7 @@ public class AuthenticationControllerTest {
     @Test
     public void createAccountSuccess() throws Exception {
         String result = mockMvc.perform(post("/rest/nonsecure/createAccount")
-            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com", new Date())))
+            .content(this.json(new CreateAccountInput("testUser", "password", "testUser@email.com")))
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().is2xxSuccessful())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
@@ -83,10 +94,14 @@ public class AuthenticationControllerTest {
                 .parseClaimsJws(token)
                 .getBody();
 
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
+
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
+
     }
 
     @Test
@@ -97,8 +112,15 @@ public class AuthenticationControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
+
+
     @Test
     public void loginSuccess() throws Exception {
+        ArrayList<byte[]> hashResult = encrypt.encryptAndSeed("password");
+        String storedPass = Base64.getEncoder().encodeToString(hashResult.get(0));
+        String storedSalt = Base64.getEncoder().encodeToString(hashResult.get(1));
+        userRepository.save(new User("testUser", storedPass, storedSalt, "testUser@email.com", new Date()));
+
         String result = mockMvc.perform(post("/rest/nonsecure/login")
                 .content(this.json(new LoginInput("testUser", "password")))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -114,6 +136,9 @@ public class AuthenticationControllerTest {
                 .setSigningKey(this.secretKey)
                 .parseClaimsJws(token)
                 .getBody();
+
+        System.out.println("**************************Removing testUser***********************");
+        userRepository.removeByUserName("testUser");
 
         assertThat(claims.getSubject(), is(equalTo("QuizDeck")));
         assertThat(claims.get("user"), is(equalTo("testUser")));
