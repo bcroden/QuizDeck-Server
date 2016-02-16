@@ -87,7 +87,7 @@ public class AuthenticationController {
         }
 
         // TODO: Check if input is valid
-        User currUser = currUser = userRepository.findByUserName(input.getUsername());
+        User currUser = userRepository.findByUserName(input.getUsername());
 
         if(currUser != null){
             byte[] salt = Base64.getDecoder().decode(currUser.getSaltSeed());
