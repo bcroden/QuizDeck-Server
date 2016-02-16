@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 
 /**
  * This controller manages account creation and user logins.
@@ -62,7 +63,7 @@ public class AuthenticationController {
             ArrayList<byte[]> hashResult = encrypt.encryptAndSeed(input.getPassword());
             String storedPass = Base64.getEncoder().encodeToString(hashResult.get(0));
             String storedSalt = Base64.getEncoder().encodeToString(hashResult.get(1));
-            userRepository.save(new User(input.getUsername(), storedPass, storedSalt,input.getEmail(), input.getSignUp()));
+            userRepository.save(new User(input.getUsername(), storedPass, storedSalt,input.getEmail(), new Date()));
             //entered new user with a hash of pass, salted with a key provided by hashResult[1]
         }
 
@@ -86,12 +87,12 @@ public class AuthenticationController {
         }
 
         // TODO: Check if input is valid
-        User currUser = null;
+        User currUser = currUser = userRepository.findByUserName(input.getUsername());
 
-        currUser = userRepository.findByUserName(input.getUsername());
         if(currUser != null){
             byte[] salt = Base64.getDecoder().decode(currUser.getSaltSeed());
-            if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(Base64.getDecoder().decode(currUser.getHashedPassword()))){
+
+            if(encrypt.encryptUsingSaltSeed(input.getPassword().getBytes(), salt).equals(currUser.getHashedPassword())){
                 //logic for logging in
                 String token = authService.buildToken(input.getUsername(), "User");
                 return new AuthTokenResponse(token);
