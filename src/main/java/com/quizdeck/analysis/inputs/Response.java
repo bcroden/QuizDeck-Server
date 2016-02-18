@@ -12,7 +12,7 @@ public interface Response {
      * Indicates the member who submitted this response.
      * @return The member who submitted this response
      */
-    public List<String> getParticipant();
+    public String getUserName();
 
     /**
      * Indicates the member's guess at the question's answer.

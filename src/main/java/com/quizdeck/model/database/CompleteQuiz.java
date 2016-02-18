@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Cade on 2/16/2016.
  */
-public class CompleteQuiz implements Response{
+public class CompleteQuiz {
 
     @Id
     private String id;
@@ -24,31 +24,43 @@ public class CompleteQuiz implements Response{
 
     private List<submission> submissions;
 
-
-    @Override
-    public List<String> getParticipant() {
-        List<String> participants = new ArrayList<>();
-
-        for(submission sub : submissions){
-            participants.add(sub.getUserName());
-        }
-
-        return participants;
+    public String getId() {
+        return id;
     }
 
-    @Override
-    public List<Guess> getGuess() {
-        List<Guess> answers = new ArrayList<>();
-
-        for(submission sub : submissions){
-            answers.addAll(sub.getChoosenAnswers());
-        }
-
-        return answers;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    @Override
-    public Question getQuestion() {
-        return null;
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getStop() {
+        return stop;
+    }
+
+    public void setStop(Date stop) {
+        this.stop = stop;
+    }
+
+    public List<submission> getSubmissions() {
+        return submissions;
+    }
+
+    public void setSubmissions(List<submission> submissions) {
+        this.submissions = submissions;
     }
 }

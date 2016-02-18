@@ -32,16 +32,16 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
     }
 
     @Override
-    public boolean performAnalysis() {
-/*
+    public boolean performAnalysis() {/*
+
         //Populate the quiz data list of participants
         getResponses().stream().forEach(response -> {
             if(quizOutputData.getData()
                     .keySet()
                     .stream()
-                    .noneMatch(member -> member.equals(response.getParticipant()))
+                    .noneMatch(member -> member.equals(response.getUserName()))
                     )
-                quizOutputData.putData(response.getParticipant(), new QuizParticipantAnalysisData());
+                quizOutputData.putData(response.getUserName(), new QuizParticipantAnalysisData());
         });
 
         //Place sample data into data object
@@ -49,7 +49,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             for(Question question : getQuestions()) {
                 //Get the last responses for this participant
                 Response lastResponse = getResponses().stream()
-                        .filter(response -> participant.equals(response.getParticipant()))    //responses by this participant
+                        .filter(response -> participant.equals(response.getUserName()))    //responses by this participant
                         .filter(response -> question.equals(response.getQuestion()))
                         .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
                             if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
@@ -80,7 +80,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                         .getData()
                         .get(question)
                         .stream()
-                        .anyMatch(guess -> guess.getSelection().equals(question.getAnswer())))
+                        .anyMatch(guess -> guess.getSelection().equals(question.getCorrectAnswer())))
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();
@@ -96,8 +96,8 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
         quizOutputData.setQuestions(getQuestions());
 
         isAnalysisComplete = true;
-
-    */    return true;
+*/
+        return true;
     }
 
     @Override

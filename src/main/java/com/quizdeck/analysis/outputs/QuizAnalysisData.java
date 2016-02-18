@@ -5,7 +5,6 @@ import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -104,7 +103,7 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
     public void setQuestions(List<Question> questions) {
         answerKey.clear();
         for(Question question : questions)
-            answerKey.put(question, question.getAnswer());
+            answerKey.put(question, question.getCorrectAnswer());
     }
 
     /**

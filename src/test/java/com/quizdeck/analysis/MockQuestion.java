@@ -15,18 +15,18 @@ public class MockQuestion extends Question
         ANSWER = answer;
     }
     @Override
-    public int getQuestionNumber() {
+    public int getQuestionNum() {
         return questionNumber;
     }
     @Override
-    public Selection getAnswer() {
+    public Selection getCorrectAnswer() {
         return ANSWER;
     }
     @Override
     public int compareTo(Question that) {
         if(equals(that))
             return 0;
-        if(getQuestionNumber() < that.getQuestionNumber())
+        if(getQuestionNum() < that.getQuestionNum())
             return -1;
         return 1;
     }

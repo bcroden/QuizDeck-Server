@@ -14,13 +14,13 @@ public class MockResponse implements Response
 {
     public MockResponse(Member participant, Selection guess, Question question, long timeStamp) {
         this.participant = participant;
-        this.guess = new Guess(guess, timeStamp, question.getQuestionNumber());
+        this.guess = new Guess(guess, timeStamp, question.getQuestionNum());
         this.question = question;
     }
 
     @Override
-    public List<String> getParticipant() {
-        return Arrays.asList(new String[]{participant.getUsername()});
+    public String getUserName() {
+        return participant.getUsername();
     }
     @Override
     public List<Guess> getGuess() {
