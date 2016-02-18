@@ -39,7 +39,7 @@ public class AnalysisController {
          *
          * this returns a list of all quizzes of a particular title for a user
          */
-        List<CompleteQuiz> quizForAnalysis = completedQuizRepository.findByTitleAndOwner(input.getTitle(), input.getOwner());
+        CompleteQuiz quizForAnalysis = completedQuizRepository.findByTitleAndOwner(input.getTitle(), input.getOwner());
 
 
 
