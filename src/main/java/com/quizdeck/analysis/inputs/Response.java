@@ -1,5 +1,7 @@
 package com.quizdeck.analysis.inputs;
 
+import java.util.List;
+
 /**
  * Represents a submission given by a participant to a particular quiz.
  *
@@ -10,13 +12,13 @@ public interface Response {
      * Indicates the member who submitted this response.
      * @return The member who submitted this response
      */
-    public Member getParticipant();
+    public List<String> getParticipant();
 
     /**
      * Indicates the member's guess at the question's answer.
      * @return The member's guess at the question's answer
      */
-    public Guess getGuess();
+    public List<Guess> getGuess();
 
     /**
      * Indicates the question to which the member has submitted a guess.

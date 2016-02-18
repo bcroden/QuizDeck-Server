@@ -11,9 +11,10 @@ public class Guess {
      * @param selection The selection guessed by the participant
      * @param timeStamp The time at which the guess was submitted
      */
-    public Guess(Selection selection, long timeStamp) {
+    public Guess(Selection selection, long timeStamp, int questionNum) {
         this.selection = selection;
         this.timeStamp = timeStamp;
+        this.questionNum = questionNum;
     }
 
     /**
@@ -34,4 +35,5 @@ public class Guess {
 
     private Selection selection;
     private long timeStamp;
+    private int questionNum;
 }

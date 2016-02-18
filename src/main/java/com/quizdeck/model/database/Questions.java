@@ -7,7 +7,17 @@ public class Questions {
     private String question;
     private String questionFormat;
 
-    private List<String> answers;
+    private List<Answers> answers;
+
+    private int questionNum;
+
+    public int getQuestionNum() {
+        return questionNum;
+    }
+
+    public void setQuestionNum(int questionNum) {
+        this.questionNum = questionNum;
+    }
 
     public String getQuestion() {
         return question;
@@ -25,11 +35,11 @@ public class Questions {
         this.questionFormat = questionFormat;
     }
 
-    public List<String> getAnswers() {
+    public List<Answers> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<String> answers) {
+    public void setAnswers(List<Answers> answers) {
         this.answers = answers;
     }
 }
