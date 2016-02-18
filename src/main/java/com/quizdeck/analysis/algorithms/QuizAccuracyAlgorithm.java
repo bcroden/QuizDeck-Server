@@ -33,7 +33,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
 
     @Override
     public boolean performAnalysis() {
-
+/*
         //Populate the quiz data list of participants
         getResponses().stream().forEach(response -> {
             if(quizOutputData.getData()
@@ -97,7 +97,7 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
 
         isAnalysisComplete = true;
 
-        return true;
+    */    return true;
     }
 
     @Override
