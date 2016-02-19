@@ -22,6 +22,17 @@ public class CompleteQuiz {
     private Date start;
     private Date stop;
 
+    private String title;
+    private String owner;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private List<submission> submissions;
 
     public String getId() {
