@@ -29,7 +29,6 @@ import static org.junit.Assert.assertEquals;
  *
  * @author Alex
  */
-@Ignore("Silence the Analysis tests until the interface has been finalized")
 public class QuizAccuracyAlgorithmTest {
     /**
      * Use mock objects to simulate quiz results
