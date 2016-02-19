@@ -92,7 +92,7 @@ public class QuizAccuracyAlgorithmTest {
         //Perform analysis and acquire results
         analysis.performAnalysis();
         QuizAnalysisData quizData = (QuizAnalysisData) analysis.getResults();
-        QuizParticipantAnalysisData gilliganData = quizData.getData().get(GILLIGAN);
+        QuizParticipantAnalysisData gilliganData = quizData.getData().get(GILLIGAN.getUsername());
 
         //Test accuracy
         assertEquals(   "Accuracy grade should be 100%",
@@ -119,7 +119,7 @@ public class QuizAccuracyAlgorithmTest {
         //test analysis of participant who did not submit a response for all questions
         analysis.performAnalysis();
         QuizAnalysisData quizData = (QuizAnalysisData) analysis.getResults();
-        QuizParticipantAnalysisData howellData = quizData.getData().get(MR_HOWELL);
+        QuizParticipantAnalysisData howellData = quizData.getData().get(MR_HOWELL.getUsername());
         assertEquals(   "Accuracy should be 20%",
                         0.2,
                         Double.parseDouble(howellData.getStats().get("Accuracy Percentage")),

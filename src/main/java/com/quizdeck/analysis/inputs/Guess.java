@@ -33,6 +33,14 @@ public class Guess {
         return timeStamp;
     }
 
+    /**
+     * Indicates the question number to which the guess was registered
+     * @return The question number to which the guess was registered
+     */
+    public int getQuestionNum() {
+        return questionNum;
+    }
+
     private Selection selection;
     private long timeStamp;
     private int questionNum;

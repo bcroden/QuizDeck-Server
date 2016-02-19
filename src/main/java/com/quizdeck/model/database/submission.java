@@ -33,7 +33,7 @@ public class submission implements Response {
     }
 
     @Override
-    public List<Guess> getGuess() {
+    public List<Guess> getGuesses() {
         return choosenAnswers;
     }
 
