@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Alex
  */
-public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantAnalysisData, String> {
+public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantAnalysisData, String> {
 
     /**
      * Initializes this dat block with the member who owns the quiz and its results along with
@@ -37,7 +37,7 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
      * @return A mapping from a Member to a QuizParticipantAnalysisData object
      */
     @Override
-    public Map<Member, QuizParticipantAnalysisData> getData() {
+    public Map<String, QuizParticipantAnalysisData> getData() {
         return participantAnalysisData;
     }
 
@@ -55,11 +55,11 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
     /**
      * Associates the provided QuizParticipantAnalysisData object with the given Member
      *
-     * @param member    Member to which the data should be attached
-     * @param data      Analysis data regarding the member
+     * @param username    Username to which the data should be attached
+     * @param data      Analysis data regarding the username
      */
-    public void putData(Member member, QuizParticipantAnalysisData data) {
-        participantAnalysisData.put(member, data);
+    public void putData(String username, QuizParticipantAnalysisData data) {
+        participantAnalysisData.put(username, data);
     }
 
     /**
@@ -114,7 +114,7 @@ public class QuizAnalysisData implements AnalysisResult<Member, QuizParticipantA
         return answerKey;
     }
 
-    private Map<Member, QuizParticipantAnalysisData> participantAnalysisData = new HashMap<>();
+    private Map<String, QuizParticipantAnalysisData> participantAnalysisData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
     private Map<Question, Selection> answerKey = new HashMap<>();
 

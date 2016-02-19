@@ -9,16 +9,16 @@ import java.util.List;
  */
 public interface Response {
     /**
-     * Indicates the member who submitted this response.
-     * @return The member who submitted this response
+     * Indicates the user name of the participant who submitted this response.
+     * @return The user name of the participant who submitted this response
      */
     public String getUserName();
 
     /**
-     * Indicates the member's guess at the question's answer.
-     * @return The member's guess at the question's answer
+     * Provides a list containing all of member's guesses to a question.
+     * @return A list member's guess to the question
      */
-    public List<Guess> getGuess();
+    public List<Guess> getGuesses();
 
     /**
      * Indicates the question to which the member has submitted a guess.

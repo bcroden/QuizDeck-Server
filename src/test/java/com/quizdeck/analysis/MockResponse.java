@@ -22,8 +22,9 @@ public class MockResponse implements Response
     public String getUserName() {
         return participant.getUsername();
     }
+
     @Override
-    public List<Guess> getGuess() {
+    public List<Guess> getGuesses() {
         return Arrays.asList(new Guess[]{guess});
     }
     @Override
