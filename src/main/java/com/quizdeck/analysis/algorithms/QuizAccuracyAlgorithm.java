@@ -2,6 +2,7 @@ package com.quizdeck.analysis.algorithms;
 
 import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
+import com.quizdeck.analysis.inputs.GuessArrivalComparator;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
@@ -17,8 +18,6 @@ import java.util.*;
  * -> Final submission of each participant
  * -> Final grade of each participant
  * -> Percent of participants correct
- *
- * //TODO: Test algorithm speed
  *
  * Important Notes:
  *      -> For each question answered by a participant, only the response with the latest time stamp will be considered.
@@ -39,20 +38,21 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             if(quizOutputData.getData()
                     .keySet()
                     .stream()
-                    .noneMatch(member -> member.equals(response.getParticipant()))
+                    .noneMatch(username -> username.equals(response.getUserName()))
                     )
-                quizOutputData.putData(response.getParticipant(), new QuizParticipantAnalysisData());
+                quizOutputData.putData(response.getUserName(), new QuizParticipantAnalysisData());
         });
 
         //Place sample data into data object
-        for(Member participant : quizOutputData.getData().keySet()) {
+        for(String username : quizOutputData.getData().keySet()) {
             for(Question question : getQuestions()) {
-                //Get the last responses for this participant
+                //Get the last responses for this username
                 Response lastResponse = getResponses().stream()
-                        .filter(response -> participant.equals(response.getParticipant()))    //responses by this participant
+                        .filter(response -> username.equals(response.getUserName()))    //responses by this username
                         .filter(response -> question.equals(response.getQuestion()))
                         .reduce(null, (acc, itr) -> {   //get the response with the latest time stamp
-                            if (acc == null || acc.getGuess().getTimeStamp() < itr.getGuess().getTimeStamp())
+                            Collections.sort(itr.getGuesses(), new GuessArrivalComparator(false));
+                            if (acc == null || acc.getGuesses().get(0).getTimeStamp() < itr.getGuesses().get(0).getTimeStamp())
                                 return itr;
                             return acc;
                         });
@@ -61,26 +61,26 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                     continue;
 
                 QuizParticipantAnalysisData data = null;
-                if(quizOutputData.getData().get(participant) != null)
-                    data = quizOutputData.getData().get(participant);
+                if(quizOutputData.getData().get(username) != null)
+                    data = quizOutputData.getData().get(username);
                 else
                     data = new QuizParticipantAnalysisData();
-                data.addGuess(lastResponse.getQuestion(), lastResponse.getGuess());
-                quizOutputData.putData(participant, data);
+                data.addGuess(lastResponse.getQuestion(), lastResponse.getGuesses().get(0));
+                quizOutputData.putData(username, data);
             }
         }
 
         //Calculate participant statistics
         int totNumCorrect = 0;
-        for(Member participant : quizOutputData.getData().keySet()) {
-            QuizParticipantAnalysisData participantData = quizOutputData.getData().get(participant);
+        for(String username : quizOutputData.getData().keySet()) {
+            QuizParticipantAnalysisData participantData = quizOutputData.getData().get(username);
             int numCorrect = 0;
             for(Question question : getQuestions()) {
                 if(participantData.getData().get(question) != null && participantData
                         .getData()
                         .get(question)
                         .stream()
-                        .anyMatch(guess -> guess.getSelection().equals(question.getAnswer())))
+                        .anyMatch(guess -> guess.getSelection().equals(question.getCorrectAnswer())))
                     numCorrect++;
             }
             double percentCorrect = numCorrect / (double) getQuestions().size();
