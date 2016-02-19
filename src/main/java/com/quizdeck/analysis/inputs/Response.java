@@ -18,7 +18,7 @@ public interface Response {
      * Provides a list containing all of member's guesses to a question.
      * @return A list member's guess to the question
      */
-    public List<Guess> getGuess();
+    public List<Guess> getGuesses();
 
     /**
      * Indicates the question to which the member has submitted a guess.
