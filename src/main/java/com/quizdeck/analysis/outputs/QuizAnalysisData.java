@@ -1,6 +1,5 @@
 package com.quizdeck.analysis.outputs;
 
-import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 

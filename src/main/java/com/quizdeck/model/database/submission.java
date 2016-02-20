@@ -15,6 +15,8 @@ public class submission implements Response {
 
     private List<Guess> choosenAnswers;
 
+    private Questions question;
+
     @Override
     public String getUserName() {
         return userName;
@@ -39,7 +41,10 @@ public class submission implements Response {
 
     @Override
     public Question getQuestion() {
-        //TODO: Implement this
-        return null;
+        return question;
+    }
+
+    public void setQuestion(Questions question) {
+        this.question = question;
     }
 }

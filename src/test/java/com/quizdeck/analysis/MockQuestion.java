@@ -18,7 +18,6 @@ public class MockQuestion extends Question
     public int getQuestionNum() {
         return questionNumber;
     }
-    @Override
     public Selection getCorrectAnswer() {
         return ANSWER;
     }

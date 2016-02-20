@@ -10,7 +10,7 @@ public class Questions extends Question {
     private String question;
     private String questionFormat;
 
-    private String correctAnswer;
+    private String correctAnswerID;
 
     private List<Answers> answers;
 
@@ -48,9 +48,12 @@ public class Questions extends Question {
         this.answers = answers;
     }
 
-    @Override
+    public void setCorrectAnswerID(String correctAnswerID) {
+        this.correctAnswerID = correctAnswerID;
+    }
+
     public Selection getCorrectAnswer() {
-        return answers.stream().filter((answer) -> answer.getId().equals(correctAnswer)).findFirst().get();
+        return answers.stream().filter((answer) -> answer.getId().equals(correctAnswerID)).findFirst().get();
     }
 
     @Override
