@@ -1,11 +1,11 @@
-package com.quizdeck.RequestResponseObjects;
+package com.quizdeck.model.responses;
 
 public class QuizSubmissionResponse{
 
     private String status;
 
     public QuizSubmissionResponse(){
-        status = "lol";
+        status = "good";
     }
 
     public String getStatus() {

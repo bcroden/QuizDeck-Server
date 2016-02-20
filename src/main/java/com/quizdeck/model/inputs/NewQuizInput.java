@@ -1,30 +1,25 @@
-package com.quizdeck.RequestInputObjects;
+package com.quizdeck.model.inputs;
 
-import com.quizdeck.QuizObjects.Questions;
-import com.quizdeck.QuizObjects.QuizTakers;
 
-import java.util.Date;
+import com.quizdeck.model.database.Questions;
+
 import java.util.List;
 
-public class QuizSubmissionInput{
+public class NewQuizInput {
 
     private String owner;
     private String title;
     private String quizId;
-    private Date quizDate;
-
-    private List<QuizTakers> quizTakers;
 
     private List<Questions> questions;
-
-
-    public QuizSubmissionInput(){
-    }
-
 
     public String getOwner() {
         return owner;
     }
+
+
+    //don't know what information is needed to recreate the page from json
+
 
     public void setOwner(String owner) {
         this.owner = owner;
@@ -44,22 +39,6 @@ public class QuizSubmissionInput{
 
     public void setQuizId(String quizId) {
         this.quizId = quizId;
-    }
-
-    public Date getQuizDate() {
-        return quizDate;
-    }
-
-    public void setQuizDate(Date quizDate) {
-        this.quizDate = quizDate;
-    }
-
-    public List<QuizTakers> getQuizTakers() {
-        return quizTakers;
-    }
-
-    public void setQuizTakers(List<QuizTakers> quizTakers) {
-        this.quizTakers = quizTakers;
     }
 
     public List<Questions> getQuestions() {
