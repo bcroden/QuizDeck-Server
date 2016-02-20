@@ -20,12 +20,12 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
      * Initializes this dat block with the member who owns the quiz and its results along with
      * the quiz's identifier and the identifier of the deck to which it belongs
      *
-     * @param owner     The member who owns the deck
+     * @param ownerID     The member who owns the deck
      * @param deckID    The identifier of the deck to which the quiz belongs
      * @param quizID    The identifier of the quiz to which the analysis pertains
      */
-    public QuizAnalysisData(Member owner, String deckID, String quizID) {
-        this.owner = owner;
+    public QuizAnalysisData(String ownerID, String deckID, String quizID) {
+        this.ownerID = ownerID;
         this.deckID = deckID;
         this.quizID = quizID;
     }
@@ -76,8 +76,8 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
      * Returns a reference to the member who owns this quiz and its analysis.
      * @return  member who owns the quiz
      */
-    public Member getOwner() {
-        return owner;
+    public String getOwnerID() {
+        return ownerID;
     }
 
     /**
@@ -118,6 +118,6 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
     private Map<String, String> stats = new HashMap<>();
     private Map<Question, Selection> answerKey = new HashMap<>();
 
-    private Member owner;
+    private String ownerID;
     private String quizID, deckID;
 }

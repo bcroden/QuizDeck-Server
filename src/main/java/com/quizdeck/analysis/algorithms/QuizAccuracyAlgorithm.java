@@ -25,9 +25,9 @@ import java.util.*;
  * @author Alex
  */
 class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
-    protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner) {
+    protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String owner) {
         super(responses, questions, quizID, deckID, owner);
-        quizOutputData = new QuizAnalysisData(getOwner(), getDeckID(), getQuizID());
+        quizOutputData = new QuizAnalysisData(getOwnerID(), getDeckID(), getQuizID());
     }
 
     @Override

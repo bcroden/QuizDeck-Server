@@ -10,7 +10,6 @@ import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -37,7 +36,7 @@ public class QuizAccuracyAlgorithmTest {
     public void initializationTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
 
-        factory.setOwner(OWNER);
+        factory.setOwnerID(OWNER);
         factory.setDeckID(DECK_ID);
         factory.setQuizID(QUIZ_ID);
 
@@ -144,7 +143,7 @@ public class QuizAccuracyAlgorithmTest {
     public void testAnalysisID() throws AnalysisResultsUnavailableException {
         analysis.performAnalysis();
         QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
-        assertThat("Incorrect quiz owner", quizResults.getOwner(), is(OWNER));
+        assertThat("Incorrect quiz owner", quizResults.getOwnerID(), is(OWNER));
         assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
         assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
     }
@@ -153,6 +152,6 @@ public class QuizAccuracyAlgorithmTest {
     private final Member GILLIGAN = new MockMember("Gilligan");
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
     private final Member PROFESSOR = new MockMember("Professor");
-    private final Member OWNER = PROFESSOR;
+    private final String OWNER = PROFESSOR.getUsername();
     private final String QUIZ_ID = "123", DECK_ID = "ABC";
 }

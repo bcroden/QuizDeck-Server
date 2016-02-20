@@ -3,7 +3,6 @@ package com.quizdeck.analysis;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.exceptions.InsufficientDataException;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -62,7 +61,7 @@ public class QuizAnalysisFactoryTest {
 
     private QuizAnalysisFactory getFullFactory() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setOwner(new MockMember("Johnny Sock-o"));
+        factory.setOwnerID("Johnny Sock-o");
         factory.setDeckID("DeckID");
         factory.setQuizID("QuizID");
         factory.setQuestions(new LinkedList<>());
