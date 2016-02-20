@@ -17,7 +17,6 @@ import java.util.LinkedList;
  *
  * @author Alex
  */
-@Ignore("Silence the Analysis tests until the interface has been finalized")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 @WebAppConfiguration
