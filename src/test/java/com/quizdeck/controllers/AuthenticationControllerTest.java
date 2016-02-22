@@ -6,7 +6,7 @@ import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.CreateAccountInput;
 import com.quizdeck.model.inputs.LoginInput;
 import com.quizdeck.repositories.UserRepository;
-import com.quizdeck.services.PassEncryption;
+import com.quizdeck.services.PasswordHashingService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.Assert;
@@ -60,7 +60,7 @@ public class AuthenticationControllerTest {
     private UserRepository userRepository;
 
     @Autowired
-    private PassEncryption encrypt;
+    private PasswordHashingService encrypt;
 
     @Autowired
     void setConverters(HttpMessageConverter<?>[] converters) {
