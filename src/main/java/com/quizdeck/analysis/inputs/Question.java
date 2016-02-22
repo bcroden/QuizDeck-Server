@@ -12,13 +12,13 @@ public abstract class Question implements Comparable<Question> {
      * This number will be used in any reports if needed.
      * @return A non-negative number representing the question's place in the quiz.
      */
-    public abstract int getQuestionNumber();
+    public abstract int getQuestionNum();
 
     /**
      * Indicates the correct answer for this question.
      * @return The correct answer for the question
      */
-    public abstract Selection getAnswer();
+    public abstract Selection getCorrectAnswer();
 
     public abstract boolean equals(Object o);
     public abstract int hashCode();

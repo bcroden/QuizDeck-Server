@@ -11,7 +11,7 @@ public abstract class Selection {
      * to display answers/guesses in reports.
      * @return A string representation of the selection.
      */
-    public abstract String toDisplayString();
+    public abstract String getContent();
 
     public abstract boolean equals(Object o);
     public abstract int hashCode();

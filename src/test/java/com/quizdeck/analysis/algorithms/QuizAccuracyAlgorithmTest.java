@@ -7,20 +7,17 @@ import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.inputs.Selection;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.lessThan;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -94,7 +91,7 @@ public class QuizAccuracyAlgorithmTest {
         //Perform analysis and acquire results
         analysis.performAnalysis();
         QuizAnalysisData quizData = (QuizAnalysisData) analysis.getResults();
-        QuizParticipantAnalysisData gilliganData = quizData.getData().get(GILLIGAN);
+        QuizParticipantAnalysisData gilliganData = quizData.getData().get(GILLIGAN.getUsername());
 
         //Test accuracy
         assertEquals(   "Accuracy grade should be 100%",
@@ -107,7 +104,7 @@ public class QuizAccuracyAlgorithmTest {
             assertThat("Only one response per question", gilliganData.getData().get(question).size(), is(1));
 
             //Ensure that the grade of 100% is deserved
-            assertThat("Incorrect final submission for " + GILLIGAN.getUsername() + " on #" + question.getQuestionNumber(),
+            assertThat("Incorrect final submission for " + GILLIGAN.getUsername() + " on #" + question.getQuestionNum(),
                     gilliganData.getData().get(question).get(0).getSelection(),
                     is(quizData.getAnswerKey().get(question)));
         }
@@ -121,7 +118,7 @@ public class QuizAccuracyAlgorithmTest {
         //test analysis of participant who did not submit a response for all questions
         analysis.performAnalysis();
         QuizAnalysisData quizData = (QuizAnalysisData) analysis.getResults();
-        QuizParticipantAnalysisData howellData = quizData.getData().get(MR_HOWELL);
+        QuizParticipantAnalysisData howellData = quizData.getData().get(MR_HOWELL.getUsername());
         assertEquals(   "Accuracy should be 20%",
                         0.2,
                         Double.parseDouble(howellData.getStats().get("Accuracy Percentage")),
@@ -129,12 +126,12 @@ public class QuizAccuracyAlgorithmTest {
 
         for(Question question : howellData.getData().keySet()) {
             //only one selection should be in the data
-            assertThat("More than one response by " + MR_HOWELL.getUsername() + " on # " + question.getQuestionNumber(),
+            assertThat("More than one response by " + MR_HOWELL.getUsername() + " on # " + question.getQuestionNum(),
                     howellData.getData().get(question).size(),
                     is(1));
 
             //Ensure that the grade of 100% is deserved
-            assertThat("Incorrect final submission for " + MR_HOWELL.getUsername() + " on #" + question.getQuestionNumber(),
+            assertThat("Incorrect final submission for " + MR_HOWELL.getUsername() + " on #" + question.getQuestionNum(),
                     howellData.getData().get(question).get(0).getSelection(),
                     is(quizData.getAnswerKey().get(question)));
         }
