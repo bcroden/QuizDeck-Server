@@ -23,7 +23,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@RequestMapping("/rest/anaylsis/")
+@RequestMapping("/rest/analysis/")
 public class AnalysisController {
 
     @Autowired
