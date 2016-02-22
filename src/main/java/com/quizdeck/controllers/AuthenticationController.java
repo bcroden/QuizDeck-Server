@@ -40,7 +40,7 @@ public class AuthenticationController {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordHashingService encrypt;
+    private PasswordHashingService hashingService;
 
     /**
      * The endpoint for account creation.
@@ -60,7 +60,7 @@ public class AuthenticationController {
             throw new UserExistsException();
         }
         else{
-            String hashedPassword = encrypt.hashPassword(input.getPassword());
+            String hashedPassword = hashingService.hashPassword(input.getPassword());
             userRepository.save(new User(input.getUsername(), hashedPassword, input.getEmail(), new Date()));
         }
 
@@ -87,7 +87,7 @@ public class AuthenticationController {
 
         User currUser = userRepository.findByUserName(input.getUsername());
 
-        if(currUser == null || !encrypt.checkPassword(input.getPassword(), currUser.getHashedPassword())) {
+        if(currUser == null || !hashingService.checkPassword(input.getPassword(), currUser.getHashedPassword())) {
             throw new UsernamePassException();
         }
 
