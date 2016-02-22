@@ -98,14 +98,16 @@ public class QuizAccuracyAlgorithmTest {
                         Double.parseDouble(gilliganData.getStats().get("Accuracy Percentage")),
                         0.0001);
 
-        for(Question question : gilliganData.getData().keySet()) {
+        for(int questionNum : gilliganData.getData().keySet()) {
+            Question question = quizData.getQuestions().stream().filter(q -> q.getQuestionNum() == questionNum).findFirst().get();
             //only one selection should be in the data
-            assertThat("Only one response per question", gilliganData.getData().get(question).size(), is(1));
+            assertThat("Only one response per question", gilliganData.getData().get(question.getQuestionNum()).size(), is(1));
 
             //Ensure that the grade of 100% is deserved
+            int dataQuestionIndex = quizData.getQuestions().indexOf(question);
             assertThat("Incorrect final submission for " + GILLIGAN.getUsername() + " on #" + question.getQuestionNum(),
-                    gilliganData.getData().get(question).get(0).getSelection(),
-                    is(quizData.getAnswerKey().get(question)));
+                    gilliganData.getData().get(question.getQuestionNum()).get(0).getSelection(),
+                    is(quizData.getQuestions().get(dataQuestionIndex).getCorrectAnswer()));
         }
     }
 
@@ -123,16 +125,18 @@ public class QuizAccuracyAlgorithmTest {
                         Double.parseDouble(howellData.getStats().get("Accuracy Percentage")),
                         0.0001);
 
-        for(Question question : howellData.getData().keySet()) {
+        for(int questionNum : howellData.getData().keySet()) {
+            Question question = quizData.getQuestions().stream().filter(q -> q.getQuestionNum() == questionNum).findFirst().get();
             //only one selection should be in the data
             assertThat("More than one response by " + MR_HOWELL.getUsername() + " on # " + question.getQuestionNum(),
-                    howellData.getData().get(question).size(),
+                    howellData.getData().get(question.getQuestionNum()).size(),
                     is(1));
 
             //Ensure that the grade of 100% is deserved
+            int dataQuestionIndex = quizData.getQuestions().indexOf(question);
             assertThat("Incorrect final submission for " + MR_HOWELL.getUsername() + " on #" + question.getQuestionNum(),
-                    howellData.getData().get(question).get(0).getSelection(),
-                    is(quizData.getAnswerKey().get(question)));
+                    howellData.getData().get(question.getQuestionNum()).get(0).getSelection(),
+                    is(quizData.getQuestions().get(dataQuestionIndex).getCorrectAnswer()));
         }
     }
 

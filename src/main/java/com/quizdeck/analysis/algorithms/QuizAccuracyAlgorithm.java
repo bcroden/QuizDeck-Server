@@ -75,9 +75,9 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             QuizParticipantAnalysisData participantData = quizOutputData.getData().get(username);
             int numCorrect = 0;
             for(Question question : getQuestions()) {
-                if(participantData.getData().get(question) != null && participantData
+                if(participantData.getData().get(question.getQuestionNum()) != null && participantData
                         .getData()
-                        .get(question)
+                        .get(question.getQuestionNum())
                         .stream()
                         .anyMatch(guess -> guess.getSelection().equals(question.getCorrectAnswer())))
                     numCorrect++;

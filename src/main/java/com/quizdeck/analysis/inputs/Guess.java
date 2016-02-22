@@ -6,6 +6,7 @@ package com.quizdeck.analysis.inputs;
  * @author Alex
  */
 public class Guess {
+    public Guess() {}
     /**
      * Initializes this Guess's selection and time stamp
      * @param selection The selection guessed by the participant

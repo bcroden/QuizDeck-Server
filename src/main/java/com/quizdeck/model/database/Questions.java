@@ -1,5 +1,6 @@
 package com.quizdeck.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 
@@ -52,6 +53,7 @@ public class Questions extends Question {
         this.correctAnswerID = correctAnswerID;
     }
 
+    @JsonIgnore
     public Selection getCorrectAnswer() {
         return answers.stream().filter((answer) -> answer.getId().equals(correctAnswerID)).findFirst().get();
     }

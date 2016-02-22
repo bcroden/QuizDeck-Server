@@ -1,11 +1,8 @@
 package com.quizdeck.analysis.outputs;
 
 import com.quizdeck.analysis.inputs.Question;
-import com.quizdeck.analysis.inputs.Selection;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Contains all of the sample data and calculated statistics from each of the participants
@@ -15,6 +12,7 @@ import java.util.Map;
  */
 public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantAnalysisData, String> {
 
+    public QuizAnalysisData() {}
     /**
      * Initializes this dat block with the member who owns the quiz and its results along with
      * the quiz's identifier and the identifier of the deck to which it belongs
@@ -100,22 +98,21 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
      * @param questions The list of questions associated with this quiz
      */
     public void setQuestions(List<Question> questions) {
-        answerKey.clear();
-        for(Question question : questions)
-            answerKey.put(question, question.getCorrectAnswer());
+        this.questions.clear();
+        this.questions.addAll(questions);
     }
 
     /**
      * Return a list of questions associated with this quiz.
      * @return  The list of questions associated with this quiz
      */
-    public Map<Question, Selection> getAnswerKey() {
-        return answerKey;
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     private Map<String, QuizParticipantAnalysisData> participantAnalysisData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
-    private Map<Question, Selection> answerKey = new HashMap<>();
+    private List<Question> questions = new LinkedList<>();
 
     private String ownerID;
     private String quizID, deckID;

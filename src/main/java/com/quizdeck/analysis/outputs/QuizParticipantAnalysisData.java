@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Alex
  */
-public class QuizParticipantAnalysisData implements AnalysisResult<Question, List<Guess>, String> {
+public class QuizParticipantAnalysisData implements AnalysisResult<Integer, List<Guess>, String> {
 
     /**
      * Returns a reference to a mapping which uses questions in the quiz to retrieve the guess(es)
@@ -23,7 +23,7 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
      * @return A mapping from Questions to a list of the participant's Selections
      */
     @Override
-    public Map<Question, List<Guess>> getData() {
+    public Map<Integer, List<Guess>> getData() {
         return sampleData;
     }
 
@@ -46,12 +46,12 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
      */
     public void addGuess(Question question, Guess selection) {
         List<Guess> guesses = null;
-        if(sampleData.containsKey(question))
-            guesses = sampleData.get(question);
+        if(sampleData.containsKey(question.getQuestionNum()))
+            guesses = sampleData.get(question.getQuestionNum());
         else
             guesses = new LinkedList<>();
         guesses.add(selection);
-        sampleData.put(question, guesses);
+        sampleData.put(question.getQuestionNum(), guesses);
     }
 
     /**
@@ -64,6 +64,6 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Question, Lis
         stats.put(key, value);
     }
 
-    private Map<Question, List<Guess>> sampleData = new HashMap<>();
+    private Map<Integer, List<Guess>> sampleData = new HashMap<>();
     private Map<String, String> stats = new HashMap<>();
 }
