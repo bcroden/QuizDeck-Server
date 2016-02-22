@@ -97,7 +97,6 @@ public class AnalysisControllerTest {
 
     @Test
     public void testQuizAccuracyResults() throws Exception {
-        //TODO: Verify the results of the quiz accuracy algorithm on the seeded data
         String result = mockMvc.perform(post("/rest/anaylsis/accuracy/").content(this.json(accuracyInput))
                                                 .contentType(MediaType.APPLICATION_JSON)
                                         ).andExpect(status().is2xxSuccessful())
@@ -213,47 +212,4 @@ public class AnalysisControllerTest {
 
     private MockMvc mockMvc;
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
-
-    @Resource(name = "secretKey")
-    private String secretKey;
-}
-
-class CamelCaseNamingStrategy extends PropertyNamingStrategy {
-    @Override
-    public String nameForGetterMethod(MapperConfig<?> config,
-                                      AnnotatedMethod method, String defaultName)
-    {
-        return translate(defaultName);
-    }
-
-    @Override
-    public String nameForSetterMethod(MapperConfig<?> config,
-                                      AnnotatedMethod method, String defaultName)
-    {
-        return translate(defaultName);
-    }
-
-    @Override
-    public String nameForField(MapperConfig<?> config,
-                               AnnotatedField field, String defaultName)
-    {
-        return translate(defaultName);
-    }
-
-    private String translate(String defaultName)
-    {
-        char[] nameChars = defaultName.toCharArray();
-        StringBuilder nameTranslated =
-                new StringBuilder(nameChars.length * 2);
-        for (char c : nameChars)
-        {
-            if (Character.isUpperCase(c))
-            {
-                nameTranslated.append("_");
-                c = Character.toLowerCase(c);
-            }
-            nameTranslated.append(c);
-        }
-        return nameTranslated.toString();
-    }
 }

@@ -2,7 +2,6 @@ package com.quizdeck.analysis.outputs;
 
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Question;
-import com.quizdeck.analysis.inputs.Selection;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,10 +16,10 @@ import java.util.Map;
 public class QuizParticipantAnalysisData implements AnalysisResult<Integer, List<Guess>, String> {
 
     /**
-     * Returns a reference to a mapping which uses questions in the quiz to retrieve the guess(es)
+     * Returns a reference to a mapping which uses question numbers to retrieve the guess(es)
      * submitted by the participant to that particular question
      *
-     * @return A mapping from Questions to a list of the participant's Selections
+     * @return A mapping from question numbers to a list of the participant's Selections
      */
     @Override
     public Map<Integer, List<Guess>> getData() {

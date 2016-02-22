@@ -3,16 +3,11 @@ package com.quizdeck.controllers;
 import com.quizdeck.analysis.Analysis;
 import com.quizdeck.analysis.QuizAlgorithm;
 import com.quizdeck.analysis.QuizAnalysisFactory;
-import com.quizdeck.analysis.StaticAnalysis;
-import com.quizdeck.analysis.exceptions.AnalysisClassException;
-import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
 import com.quizdeck.analysis.exceptions.AnalysisException;
-import com.quizdeck.analysis.exceptions.InsufficientDataException;
 import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.CompleteQuiz;
 import com.quizdeck.model.inputs.AccuracyInput;
-import com.quizdeck.model.responses.AccuracyResponse;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -59,7 +54,6 @@ public class AnalysisController {
         Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
         analysis.performAnalysis();
         return analysis.getResults();
-        //return new AccuracyResponse();
     }
 
     //other controllers can be created for different accuracy types

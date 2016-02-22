@@ -28,8 +28,8 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
     }
 
     /**
-     * Returns a reference to a mapping which uses Members to retrieve the sample data and
-     * calculated statistics which that participant submitted for this quiz.
+     * Returns a reference to a mapping which uses usernames to retrieve the sample data and
+     * calculated statistics that participant submitted for this quiz.
      *
      * @return A mapping from a Member to a QuizParticipantAnalysisData object
      */
@@ -50,7 +50,7 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
     }
 
     /**
-     * Associates the provided QuizParticipantAnalysisData object with the given Member
+     * Associates the provided QuizParticipantAnalysisData object with the given username
      *
      * @param username    Username to which the data should be attached
      * @param data      Analysis data regarding the username
