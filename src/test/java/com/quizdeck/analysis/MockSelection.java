@@ -15,7 +15,7 @@ public class MockSelection extends Selection
     }
 
     @Override
-    public String toDisplayString() {
+    public String getContent() {
         return Character.toString(SELECTION);
     }
 

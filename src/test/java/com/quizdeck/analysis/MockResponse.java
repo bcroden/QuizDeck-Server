@@ -2,6 +2,9 @@ package com.quizdeck.analysis;
 
 import com.quizdeck.analysis.inputs.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Mock Response class for testing
  *
@@ -11,17 +14,18 @@ public class MockResponse implements Response
 {
     public MockResponse(Member participant, Selection guess, Question question, long timeStamp) {
         this.participant = participant;
-        this.guess = new Guess(guess, timeStamp);
+        this.guess = new Guess(guess, timeStamp, question.getQuestionNum());
         this.question = question;
     }
 
     @Override
-    public Member getParticipant() {
-        return participant;
+    public String getUserName() {
+        return participant.getUsername();
     }
+
     @Override
-    public Guess getGuess() {
-        return guess;
+    public List<Guess> getGuesses() {
+        return Arrays.asList(new Guess[]{guess});
     }
     @Override
     public Question getQuestion() {
