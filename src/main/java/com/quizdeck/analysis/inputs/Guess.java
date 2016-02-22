@@ -7,6 +7,13 @@ package com.quizdeck.analysis.inputs;
  */
 public class Guess {
     /**
+     * Default constructor to allow Jackson to deserialize Guess objects for unit tests
+     */
+    public Guess() {
+
+    }
+
+    /**
      * Initializes this Guess's selection and time stamp
      * @param selection The selection guessed by the participant
      * @param timeStamp The time at which the guess was submitted

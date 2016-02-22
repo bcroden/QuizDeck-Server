@@ -12,18 +12,18 @@ import java.util.List;
  * @author Alex
  */
 abstract class AbstractQuizAlgorithm {
-    protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner)
+    protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String ownerID)
     {
         this.responses = responses;
         this.questions = questions;
         this.quizID = quizID;
         this.deckID = deckID;
-        this.owner = owner;
+        this.ownerID = ownerID;
     }
 
-    public Member getOwner()
+    public String getOwnerID()
     {
-        return owner;
+        return ownerID;
     }
     public String getQuizID()
     {
@@ -42,7 +42,7 @@ abstract class AbstractQuizAlgorithm {
         return responses;
     }
 
-    private Member owner;
+    private String ownerID;
     private String quizID, deckID;
     private List<Question> questions;
     private List<Response> responses;

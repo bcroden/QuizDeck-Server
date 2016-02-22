@@ -1,11 +1,7 @@
 package com.quizdeck.model.database;
 
-import com.quizdeck.analysis.inputs.Guess;
-import com.quizdeck.analysis.inputs.Question;
-import com.quizdeck.analysis.inputs.Response;
 import org.springframework.data.annotation.Id;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,5 +69,13 @@ public class CompleteQuiz {
 
     public void setSubmissions(List<submission> submissions) {
         this.submissions = submissions;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

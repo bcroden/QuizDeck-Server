@@ -10,7 +10,6 @@ import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -37,7 +36,7 @@ public class QuizAccuracyAlgorithmTest {
     public void initializationTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
 
-        factory.setOwner(OWNER);
+        factory.setOwnerID(OWNER);
         factory.setDeckID(DECK_ID);
         factory.setQuizID(QUIZ_ID);
 
@@ -99,14 +98,16 @@ public class QuizAccuracyAlgorithmTest {
                         Double.parseDouble(gilliganData.getStats().get("Accuracy Percentage")),
                         0.0001);
 
-        for(Question question : gilliganData.getData().keySet()) {
+        for(int questionNum : gilliganData.getData().keySet()) {
+            Question question = quizData.getQuestions().stream().filter(q -> q.getQuestionNum() == questionNum).findFirst().get();
             //only one selection should be in the data
-            assertThat("Only one response per question", gilliganData.getData().get(question).size(), is(1));
+            assertThat("Only one response per question", gilliganData.getData().get(question.getQuestionNum()).size(), is(1));
 
             //Ensure that the grade of 100% is deserved
+            int dataQuestionIndex = quizData.getQuestions().indexOf(question);
             assertThat("Incorrect final submission for " + GILLIGAN.getUsername() + " on #" + question.getQuestionNum(),
-                    gilliganData.getData().get(question).get(0).getSelection(),
-                    is(quizData.getAnswerKey().get(question)));
+                    gilliganData.getData().get(question.getQuestionNum()).get(0).getSelection(),
+                    is(quizData.getQuestions().get(dataQuestionIndex).getCorrectAnswer()));
         }
     }
 
@@ -124,16 +125,18 @@ public class QuizAccuracyAlgorithmTest {
                         Double.parseDouble(howellData.getStats().get("Accuracy Percentage")),
                         0.0001);
 
-        for(Question question : howellData.getData().keySet()) {
+        for(int questionNum : howellData.getData().keySet()) {
+            Question question = quizData.getQuestions().stream().filter(q -> q.getQuestionNum() == questionNum).findFirst().get();
             //only one selection should be in the data
             assertThat("More than one response by " + MR_HOWELL.getUsername() + " on # " + question.getQuestionNum(),
-                    howellData.getData().get(question).size(),
+                    howellData.getData().get(question.getQuestionNum()).size(),
                     is(1));
 
             //Ensure that the grade of 100% is deserved
+            int dataQuestionIndex = quizData.getQuestions().indexOf(question);
             assertThat("Incorrect final submission for " + MR_HOWELL.getUsername() + " on #" + question.getQuestionNum(),
-                    howellData.getData().get(question).get(0).getSelection(),
-                    is(quizData.getAnswerKey().get(question)));
+                    howellData.getData().get(question.getQuestionNum()).get(0).getSelection(),
+                    is(quizData.getQuestions().get(dataQuestionIndex).getCorrectAnswer()));
         }
     }
 
@@ -144,7 +147,7 @@ public class QuizAccuracyAlgorithmTest {
     public void testAnalysisID() throws AnalysisResultsUnavailableException {
         analysis.performAnalysis();
         QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
-        assertThat("Incorrect quiz owner", quizResults.getOwner(), is(OWNER));
+        assertThat("Incorrect quiz owner", quizResults.getOwnerID(), is(OWNER));
         assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
         assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
     }
@@ -153,6 +156,6 @@ public class QuizAccuracyAlgorithmTest {
     private final Member GILLIGAN = new MockMember("Gilligan");
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
     private final Member PROFESSOR = new MockMember("Professor");
-    private final Member OWNER = PROFESSOR;
+    private final String OWNER = PROFESSOR.getUsername();
     private final String QUIZ_ID = "123", DECK_ID = "ABC";
 }

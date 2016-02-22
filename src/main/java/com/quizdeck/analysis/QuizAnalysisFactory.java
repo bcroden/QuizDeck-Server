@@ -43,7 +43,7 @@ public class QuizAnalysisFactory {
         try
         {
             constructor.setAccessible(true);
-            Object o = constructor.newInstance(responses, questions, quizID, deckID, owner);
+            Object o = constructor.newInstance(responses, questions, quizID, deckID, ownerID);
             clear();
             return (Analysis) o;
         }
@@ -53,8 +53,8 @@ public class QuizAnalysisFactory {
         }
     }
 
-    public void setOwner(Member m) {
-        owner = m;
+    public void setOwnerID(String id) {
+        ownerID = id;
     }
     public void setQuizID(String quizID) {
         this.quizID = quizID;
@@ -62,15 +62,15 @@ public class QuizAnalysisFactory {
     public void setDeckID(String deckID) {
         this.deckID = deckID;
     }
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<? extends Question> questions) {
         this.questions = questions;
     }
-    public void setResponses(List<Response> responses) {
+    public void setResponses(List<?extends Response> responses) {
         this.responses = responses;
     }
 
     public void clear() {
-        owner = null;
+        ownerID = null;
         quizID = null;
         deckID = null;
         questions = null;
@@ -79,7 +79,7 @@ public class QuizAnalysisFactory {
 
     private Class[] getConstructorParameters() throws InsufficientDataException {
         LinkedList<String> missing = new LinkedList<>();
-        if(owner == null)
+        if(ownerID == null)
             missing.addLast("Owner");
         if(quizID == null)
             missing.addLast("QuizID");
@@ -102,11 +102,11 @@ public class QuizAnalysisFactory {
             throw new InsufficientDataException(sb.toString());
         }
 
-        return new Class[]{List.class, List.class, String.class, String.class, Member.class};
+        return new Class[]{List.class, List.class, String.class, String.class, String.class};
     }
 
-    private Member owner;
+    private String ownerID;
     private String quizID, deckID;
-    private List<Question> questions;
-    private List<Response> responses;
+    private List<? extends Question> questions;
+    private List<? extends Response> responses;
 }
