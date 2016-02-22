@@ -101,7 +101,6 @@ public class AuthenticationControllerTest {
         assertThat(claims.get("user"), is(equalTo("testUser")));
         assertThat(claims.get("role"), is(equalTo("User")));
         assertNotNull(claims.getIssuedAt());
-
     }
 
     @Test
@@ -111,8 +110,6 @@ public class AuthenticationControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is4xxClientError());
     }
-
-
 
     @Test
     public void loginSuccess() throws Exception {
@@ -153,7 +150,7 @@ public class AuthenticationControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
-    protected String json(Object o) throws IOException {
+    private String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
         return mockHttpOutputMessage.getBodyAsString();
