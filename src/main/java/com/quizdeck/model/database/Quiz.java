@@ -20,6 +20,9 @@ public class Quiz {
 
     private List<Questions> questions;
 
+    public Quiz() {
+    }
+
     public Quiz(String id, String owner, String title, String quizId, List<Questions> questions) {
         this.id = id;
         this.owner = owner;
