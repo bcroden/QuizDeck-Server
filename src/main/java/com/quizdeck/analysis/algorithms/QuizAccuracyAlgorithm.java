@@ -3,7 +3,6 @@ package com.quizdeck.analysis.algorithms;
 import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.GuessArrivalComparator;
-import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.outputs.AnalysisResult;
@@ -25,9 +24,9 @@ import java.util.*;
  * @author Alex
  */
 class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
-    protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, Member owner) {
+    protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String owner) {
         super(responses, questions, quizID, deckID, owner);
-        quizOutputData = new QuizAnalysisData(getOwner(), getDeckID(), getQuizID());
+        quizOutputData = new QuizAnalysisData(getOwnerID(), getDeckID(), getQuizID());
     }
 
     @Override
@@ -76,9 +75,9 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             QuizParticipantAnalysisData participantData = quizOutputData.getData().get(username);
             int numCorrect = 0;
             for(Question question : getQuestions()) {
-                if(participantData.getData().get(question) != null && participantData
+                if(participantData.getData().get(question.getQuestionNum()) != null && participantData
                         .getData()
-                        .get(question)
+                        .get(question.getQuestionNum())
                         .stream()
                         .anyMatch(guess -> guess.getSelection().equals(question.getCorrectAnswer())))
                     numCorrect++;

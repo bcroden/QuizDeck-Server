@@ -1,5 +1,6 @@
 package com.quizdeck.model.database;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 
@@ -10,7 +11,7 @@ public class Questions extends Question {
     private String question;
     private String questionFormat;
 
-    private String correctAnswer;
+    private String correctAnswerID;
 
     private List<Answers> answers;
 
@@ -48,9 +49,13 @@ public class Questions extends Question {
         this.answers = answers;
     }
 
-    @Override
+    public void setCorrectAnswerID(String correctAnswerID) {
+        this.correctAnswerID = correctAnswerID;
+    }
+
+    @JsonIgnore
     public Selection getCorrectAnswer() {
-        return answers.stream().filter((answer) -> answer.getId().equals(correctAnswer)).findFirst().get();
+        return answers.stream().filter((answer) -> answer.getId().equals(correctAnswerID)).findFirst().get();
     }
 
     @Override
