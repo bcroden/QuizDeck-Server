@@ -97,7 +97,7 @@ public class AnalysisControllerTest {
 
     @Test
     public void testQuizAccuracyResults() throws Exception {
-        String result = mockMvc.perform(post("/rest/anaylsis/accuracy/").content(this.json(accuracyInput))
+        String result = mockMvc.perform(post("/rest/analysis/accuracy/").content(this.json(accuracyInput))
                                                 .contentType(MediaType.APPLICATION_JSON)
                                         ).andExpect(status().is2xxSuccessful())
                                         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))

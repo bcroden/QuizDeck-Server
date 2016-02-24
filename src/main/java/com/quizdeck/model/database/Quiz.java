@@ -20,8 +20,15 @@ public class Quiz {
 
     private List<Questions> questions;
 
-    public String getOwner() {
-        return owner;
+    public Quiz() {
+    }
+
+    public Quiz(String id, String owner, String title, String quizId, List<Questions> questions) {
+        this.id = id;
+        this.owner = owner;
+        this.title = title;
+        this.quizId = quizId;
+        this.questions = questions;
     }
 
     public String getId() {
@@ -30,6 +37,14 @@ public class Quiz {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getTitle() {
