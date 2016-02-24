@@ -42,12 +42,16 @@ public class AnalysisController {
          *
          * this returns a list of all quizzes of a particular title for a user
          */
-        CompleteQuiz quizForAnalysis = completedQuizRepository.findByTitleAndOwner(input.getTitle(), input.getOwner());
+
+        //findByTitleAndOwner would return a list because a completed quiz can be re-administered
+        //id will eventually become a concat of original quiz id and some determining factor
+        //TODO: decide what that is
+        CompleteQuiz quizForAnalysis = completedQuizRepository.findByQuizId(input.getId());
 
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setOwnerID(input.getOwner());
+        factory.setOwnerID(quizForAnalysis.getOwner());
         factory.setDeckID("Unknown deck ID");
-        factory.setQuizID(quizForAnalysis.getQuiz().getQuizId());
+        factory.setQuizID(quizForAnalysis.getQuiz().getId());
         factory.setResponses(quizForAnalysis.getSubmissions());
         factory.setQuestions(quizForAnalysis.getQuiz().getQuestions());
 

@@ -1,9 +1,13 @@
 package com.quizdeck.model.database;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
+@Document
 public class User{
 
     @Id
@@ -17,6 +21,9 @@ public class User{
 
     private Date signUp;
 
+    private List<String> labels;
+
+    @PersistenceConstructor
     public User(String userName, String hashedPassword, String saltSeed, String email, Date signUp) {
         this.userName = userName;
         this.hashedPassword = hashedPassword;
@@ -66,5 +73,15 @@ public class User{
 
     public void setSignUp(Date signUp) {
         this.signUp = signUp;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) { this.labels = labels; }
+
+    public String getId() {
+        return id;
     }
 }

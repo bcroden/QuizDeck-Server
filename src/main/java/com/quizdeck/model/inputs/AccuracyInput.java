@@ -5,22 +5,13 @@ package com.quizdeck.model.inputs;
  */
 public class AccuracyInput {
 
-    private String title;
-    private String owner;
+    private String id;
 
-    public String getTitle() {
-        return title;
+    public String getId() {
+        return id;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
+    public void setId(String id) {
+        this.id = id;
     }
 }
