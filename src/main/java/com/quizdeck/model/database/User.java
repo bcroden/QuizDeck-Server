@@ -4,29 +4,26 @@ import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
-public class User{
+public class User {
 
     @Id
     private String id;
 
     private String userName;
     private String hashedPassword;
-    private String saltSeed;
-
     private String email;
 
     private Date signUp;
 
-    public User(String userName, String hashedPassword, String saltSeed, String email, Date signUp) {
+    public User(String userName, String hashedPassword, String email, Date signUp) {
         this.userName = userName;
         this.hashedPassword = hashedPassword;
-        this.saltSeed = saltSeed;
         this.email = email;
         this.signUp = signUp;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("User[id='%s', username='%s']", id, userName);
     }
 
@@ -46,19 +43,13 @@ public class User{
         this.hashedPassword = hashedPassword;
     }
 
-    public String getSaltSeed() {
-        return saltSeed;
-    }
-
-    public void setSaltSeed(String saltSeed) {
-        this.saltSeed = saltSeed;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public Date getSignUp() {
         return signUp;
