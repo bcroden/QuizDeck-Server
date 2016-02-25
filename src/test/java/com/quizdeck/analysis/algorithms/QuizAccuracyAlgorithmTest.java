@@ -152,6 +152,20 @@ public class QuizAccuracyAlgorithmTest {
         assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
     }
 
+    /**
+     * Ensure only the last guess submitted by the participant is included
+     */
+    @Test
+    public void testNumResponses() throws AnalysisResultsUnavailableException {
+        analysis.performAnalysis();
+        QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
+        quizResults.getData().values().stream().forEach(qpad -> {
+            qpad.getData().values().forEach(guesses -> {
+                assertThat("Too many responses were returned", guesses.size(), is(1));
+            });
+        });
+    }
+
     private StaticAnalysis analysis;
     private final Member GILLIGAN = new MockMember("Gilligan");
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
