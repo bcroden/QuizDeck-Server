@@ -8,6 +8,7 @@ import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ abstract class AbstractQuizAlgorithm implements Analysis {
     protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String ownerID)
     {
         this.responses = responses;
+        Collections.sort(questions);
         this.questions = questions;
         this.quizID = quizID;
         this.deckID = deckID;
