@@ -24,13 +24,14 @@ public class User{
     private List<String> labels;
 
     @PersistenceConstructor
-    public User(String userName, String hashedPassword, String saltSeed, String email, Date signUp) {
+    public User(String userName, String hashedPassword, String email, Date signUp) {
         this.userName = userName;
         this.hashedPassword = hashedPassword;
-        this.saltSeed = saltSeed;
         this.email = email;
         this.signUp = signUp;
     }
+
+
 
     @Override
     public String toString(){
