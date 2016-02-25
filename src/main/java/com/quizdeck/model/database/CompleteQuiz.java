@@ -36,6 +36,9 @@ public class CompleteQuiz {
         this.submissions = submissions;
     }
 
+    @Deprecated
+    public CompleteQuiz(){};
+
     public String getQuizId() {
         return quizId;
     }

@@ -1,23 +1,13 @@
 package com.quizdeck.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
-import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.jayway.jsonpath.JsonPath;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 import com.quizdeck.model.database.*;
 import com.quizdeck.model.inputs.AccuracyInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,22 +23,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.annotation.Resource;
-
-import static org.junit.Assert.fail;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-
-
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * Test the analysis controller
@@ -69,12 +57,11 @@ public class AnalysisControllerTest {
     public void seedCompletedQuizRepository() {
         Quiz quiz = new Quiz();
         quiz.setId("Quiz DB ID");
-        quiz.setQuizId("Quiz ID");
         quiz.setTitle("Quiz Title");
         quiz.setQuestions(getQuestions());
 
         completeQuiz = new CompleteQuiz();
-        completeQuiz.setId("Complete Quiz DB ID");
+        completeQuiz.setQuizId("Complete Quiz DB ID");
         completeQuiz.setOwner("Owner ID");
         completeQuiz.setQuiz(quiz);
         completeQuiz.setStart(new Date());
@@ -92,7 +79,7 @@ public class AnalysisControllerTest {
 
     @After
     public void cleanCompletedQuizRepository() {
-        completedQuizRepository.removeById(completeQuiz.getId());
+        completedQuizRepository.removeById(completeQuiz.getQuizId());
     }
 
     @Test
@@ -127,7 +114,7 @@ public class AnalysisControllerTest {
 
     private void checkQuizInfo(QuizAnalysisData data){
         assertThat("Bad quiz owner ID", data.getOwnerID(), is(completeQuiz.getOwner()));
-        assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuiz().getQuizId()));
+        assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuiz().getId()));
     }
 
     private void checkQuizStats(QuizAnalysisData data) {

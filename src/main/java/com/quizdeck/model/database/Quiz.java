@@ -32,6 +32,9 @@ public class Quiz {
         this.labels = labels;
     }
 
+    @Deprecated
+    public Quiz(){};
+
     public void setOwner(String owner) {this.owner = owner;}
 
     public String getOwner() {
@@ -42,9 +45,12 @@ public class Quiz {
         return id;
     }
 
-    public String getTitle() {
-        return title;
+    @Deprecated
+    public void setId(String id) {
+        this.id = id;
     }
+
+    public String getTitle() { return title; }
 
     public void setTitle(String title) {
         this.title = title;
