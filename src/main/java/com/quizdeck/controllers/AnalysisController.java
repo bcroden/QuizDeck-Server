@@ -60,6 +60,27 @@ public class AnalysisController {
         return analysis.getResults();
     }
 
-    //other controllers can be created for different accuracy types
+    @RequestMapping(value="indecisiveness/", method = RequestMethod.POST)
+    public AnalysisResult indecisivenessResponse (@Valid @RequestBody AccuracyInput input, BindingResult result) throws InvalidJsonException, AnalysisException {
+        if (result.hasErrors()) {
+            throw new InvalidJsonException();
+        }
 
+        QuizAnalysisFactory factory = getFullFactory(input.getId());
+        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.INDECISIVENESS);
+        analysis.performAnalysis();
+        return analysis.getResults();
+    }
+
+    private QuizAnalysisFactory getFullFactory(String id) {
+        CompleteQuiz completeQuiz = completedQuizRepository.findByQuizId(id);
+
+        QuizAnalysisFactory factory = new QuizAnalysisFactory();
+        factory.setOwnerID(completeQuiz.getOwner());
+        factory.setDeckID("Unknown deck ID");
+        factory.setQuizID(completeQuiz.getQuizId());
+        factory.setResponses(completeQuiz.getSubmissions());
+        factory.setQuestions(completeQuiz.getQuiz().getQuestions());
+        return factory;
+    }
 }
