@@ -75,6 +75,7 @@ public class AnalysisControllerTest {
         accuracyInput = new AccuracyInput();
         accuracyInput.setOwner(completeQuiz.getOwner());
         accuracyInput.setTitle(completeQuiz.getTitle());
+        accuracyInput.setId(completeQuiz.getQuizId());
     }
 
     @After
