@@ -1,6 +1,8 @@
 package com.quizdeck.model.database;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  *
  * Created by Cade on 2/14/2016.
  */
+@Document
 public class Quiz {
 
     @Id
@@ -16,51 +19,41 @@ public class Quiz {
 
     private String owner;
     private String title;
-    private String quizId;
 
     private List<Questions> questions;
 
-    public Quiz() {
-    }
+    private List<String> labels;
 
-    public Quiz(String id, String owner, String title, String quizId, List<Questions> questions) {
-        this.id = id;
+    @PersistenceConstructor
+    public Quiz(String owner, String title, List<Questions> questions, List<String> labels) {
         this.owner = owner;
         this.title = title;
-        this.quizId = quizId;
         this.questions = questions;
+        this.labels = labels;
+    }
+
+    @Deprecated
+    public Quiz(){};
+
+    public void setOwner(String owner) {this.owner = owner;}
+
+    public String getOwner() {
+        return owner;
     }
 
     public String getId() {
         return id;
     }
 
+    @Deprecated
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(String quizId) {
-        this.quizId = quizId;
     }
 
     public List<Questions> getQuestions() {
@@ -70,4 +63,8 @@ public class Quiz {
     public void setQuestions(List<Questions> questions) {
         this.questions = questions;
     }
+
+    public List<String> getLabels() {return labels;}
+
+    public void setLabels(List<String> labels) {this.labels = labels;}
 }

@@ -1,20 +1,29 @@
 package com.quizdeck.model.database;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
-public class User {
+@Document
+public class User{
 
     @Id
     private String id;
 
     private String userName;
     private String hashedPassword;
+    private String saltSeed;
+
     private String email;
 
     private Date signUp;
 
+    private List<String> labels;
+
+    @PersistenceConstructor
     public User(String userName, String hashedPassword, String email, Date signUp) {
         this.userName = userName;
         this.hashedPassword = hashedPassword;
@@ -22,8 +31,10 @@ public class User {
         this.signUp = signUp;
     }
 
+
+
     @Override
-    public String toString() {
+    public String toString(){
         return String.format("User[id='%s', username='%s']", id, userName);
     }
 
@@ -43,13 +54,19 @@ public class User {
         this.hashedPassword = hashedPassword;
     }
 
+    public String getSaltSeed() {
+        return saltSeed;
+    }
+
+    public void setSaltSeed(String saltSeed) {
+        this.saltSeed = saltSeed;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setEmail(String email) { this.email = email; }
 
     public Date getSignUp() {
         return signUp;
@@ -57,5 +74,15 @@ public class User {
 
     public void setSignUp(Date signUp) {
         this.signUp = signUp;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<String> labels) { this.labels = labels; }
+
+    public String getId() {
+        return id;
     }
 }
