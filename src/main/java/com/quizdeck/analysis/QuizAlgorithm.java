@@ -6,7 +6,8 @@ package com.quizdeck.analysis;
  * @author Alex
  */
 public enum QuizAlgorithm {
-    ACCURACY ("com.quizdeck.analysis.algorithms.QuizAccuracyAlgorithm");
+    ACCURACY ("com.quizdeck.analysis.algorithms.QuizAccuracyAlgorithm"),
+    INDECISIVENESS ("com.quizdeck.analysis.algorithms.QuizIndecisivenessAlgorithm");
 
     protected String getFullName() {
         return name;
