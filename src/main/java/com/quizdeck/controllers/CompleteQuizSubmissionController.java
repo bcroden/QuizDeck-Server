@@ -18,7 +18,7 @@ import javax.validation.Valid;
  */
 
 @RestController
-@RequestMapping("/rest/quiz/")
+@RequestMapping("/rest/secure/quiz/")
 public class CompleteQuizSubmissionController {
 
     @Autowired

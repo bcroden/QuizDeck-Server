@@ -13,13 +13,11 @@ public class NewQuizInput {
 
     private List<Questions> questions;
 
+    private List<String> labels;
+
     public String getOwner() {
         return owner;
     }
-
-
-    //don't know what information is needed to recreate the page from json
-
 
     public void setOwner(String owner) {
         this.owner = owner;
@@ -33,14 +31,6 @@ public class NewQuizInput {
         this.title = title;
     }
 
-    public String getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(String quizId) {
-        this.quizId = quizId;
-    }
-
     public List<Questions> getQuestions() {
         return questions;
     }
@@ -48,4 +38,8 @@ public class NewQuizInput {
     public void setQuestions(List<Questions> questions) {
         this.questions = questions;
     }
+
+    public List<String> getLabels() {return labels;}
+
+    public void setLabels(List<String> labels) {this.labels = labels;}
 }
