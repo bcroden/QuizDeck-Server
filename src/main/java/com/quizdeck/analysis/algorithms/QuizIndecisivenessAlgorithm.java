@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  *
  * @author Alex
  */
-public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
+class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
     protected QuizIndecisivenessAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String ownerID) {
         super(responses, questions, quizID, deckID, ownerID);
 
