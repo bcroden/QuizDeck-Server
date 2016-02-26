@@ -35,29 +35,7 @@ public class QuizAccuracyAnalysisControllerTest extends AbstractQuizAnalysisCont
         ObjectMapper mapper = new ObjectMapper();
         QuizAnalysisData data = mapper.readValue(result, QuizAnalysisData.class);
 
-        checkAnswerKey(data.getQuestions());
-        checkQuizInfo(data);
-        checkQuizStats(data);
-    }
-
-    private void checkAnswerKey(List<Question> questions) {
-        assertThat(questions.toString(), questions.size(), is(completeQuiz.getQuiz().getQuestions().size()));
-
-        int numHits = 0;
-        for(Question question : questions) {
-            if(completeQuiz.getQuiz().getQuestions().contains(question))
-                numHits++;
-        }
-
-        assertThat("Incorrect questions in answer key", numHits, is(completeQuiz.getQuiz().getQuestions().size()));
-    }
-
-    private void checkQuizInfo(QuizAnalysisData data){
         assertThat("Bad quiz owner ID", data.getOwnerID(), is(completeQuiz.getOwner()));
         assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuizId()));
-    }
-
-    private void checkQuizStats(QuizAnalysisData data) {
-        assertThat("Bad \'Average Accuracy Per Participant\'", data.getStats().get("Average Accuracy Per Participant"), is("0.3"));
     }
 }
