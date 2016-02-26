@@ -55,19 +55,21 @@ public class AnalysisControllerTest {
 
     @Before
     public void seedCompletedQuizRepository() {
-        Quiz quiz = new Quiz();
-        quiz.setId("Quiz DB ID");
-        quiz.setTitle("Quiz Title");
-        quiz.setQuestions(getQuestions());
+        //Quiz quiz = new Quiz();
+        Quiz quiz = new Quiz("Owner ID", "Quiz Title", getQuestions(), new LinkedList<String>());
+        //quiz.setId("Quiz DB ID");
+        //quiz.setTitle("Quiz Title");
+        //quiz.setQuestions(getQuestions());
 
-        completeQuiz = new CompleteQuiz();
-        completeQuiz.setQuizId("Complete Quiz DB ID");
-        completeQuiz.setOwner("Owner ID");
-        completeQuiz.setQuiz(quiz);
-        completeQuiz.setStart(new Date());
-        completeQuiz.setStop(new Date());
-        completeQuiz.setTitle("Complete Quiz Title");
-        completeQuiz.setSubmissions(getSubmissionsFor(quiz));
+        //completeQuiz = new CompleteQuiz();
+        completeQuiz = new CompleteQuiz(quiz, new Date(), new Date(), quiz.getTitle(), quiz.getOwner(), getSubmissionsFor(quiz));
+//        completeQuiz.setQuizId("Complete Quiz DB ID");
+//        completeQuiz.setOwner("Owner ID");
+//        completeQuiz.setQuiz(quiz);
+//        completeQuiz.setStart(new Date());
+//        completeQuiz.setStop(new Date());
+//        completeQuiz.setTitle("Complete Quiz Title");
+//        completeQuiz.setSubmissions(getSubmissionsFor(quiz));
 
         completedQuizRepository.save(completeQuiz);
 
@@ -115,7 +117,7 @@ public class AnalysisControllerTest {
 
     private void checkQuizInfo(QuizAnalysisData data){
         assertThat("Bad quiz owner ID", data.getOwnerID(), is(completeQuiz.getOwner()));
-        assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuiz().getId()));
+        assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuizId()));
     }
 
     private void checkQuizStats(QuizAnalysisData data) {

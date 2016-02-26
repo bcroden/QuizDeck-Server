@@ -51,7 +51,7 @@ public class AnalysisController {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         factory.setOwnerID(quizForAnalysis.getOwner());
         factory.setDeckID("Unknown deck ID");
-        factory.setQuizID(quizForAnalysis.getQuiz().getId());
+        factory.setQuizID(quizForAnalysis.getQuizId());
         factory.setResponses(quizForAnalysis.getSubmissions());
         factory.setQuestions(quizForAnalysis.getQuiz().getQuestions());
 
