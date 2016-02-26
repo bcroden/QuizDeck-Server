@@ -55,8 +55,8 @@ public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implement
                 //get all of the guesses that the user submitted to this question
                 List<Guess> guesses = allResponses.stream().filter(response -> response.getQuestion().equals(question))
                                                             .map(response -> response.getGuesses())
-                                                            .reduce((acc, itr) -> { acc.addAll(itr); return acc; })
-                                                            .get();
+                                                            .flatMap(List::stream).collect(Collectors.toList());
+                                                            //.reduce((acc, itr) -> { acc.addAll(itr); return acc; }).get();
                 //TODO: Test for the sample data
                 //save all of the guesses
                 getQuizAnalysisData().getData().get(username).addGuesses(question, guesses);
