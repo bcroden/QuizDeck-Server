@@ -54,10 +54,9 @@ public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implement
             getQuestions().stream().forEach(question -> {
                 //get all of the guesses that the user submitted to this question
                 List<Guess> guesses = allResponses.stream().filter(response -> response.getQuestion().equals(question))
-                                                            .map(response -> response.getGuesses())
-                                                            .flatMap(List::stream).collect(Collectors.toList());
-                                                            //.reduce((acc, itr) -> { acc.addAll(itr); return acc; }).get();
-                //TODO: Test for the sample data
+                                                            .map(Response::getGuesses)
+                                                            .flatMap(List::stream)
+                                                            .collect(Collectors.toList());
                 //save all of the guesses
                 getQuizAnalysisData().getData().get(username).addGuesses(question, guesses);
             });
@@ -69,17 +68,15 @@ public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implement
             //find the total number of guesses the participant submitted
             int totNumGuesses = getQuestions().stream().mapToInt(question -> {
                                     int numGuesses = qpad.getData().get(question.getQuestionNum()).size();
-                                    //TODO: Test this stat
-                                    //TODO: Should this be the number of guesses or indecisiveness?
-                                    //save the number of guesses the user submitted to this question
-                                    qpad.putStat(NUMBER_OF_GUESSES_PER_QUESTION_TAG + question.getQuestionNum(), Integer.toString(numGuesses));
+                                    //save the indecisiveness score for the user for this question
+                                    qpad.putStat(QUESTION_INDECISIVENESS_SCORE_TAG + question.getQuestionNum(), Integer.toString(numGuesses-1));
                                     return numGuesses;
                                 })
                                 .sum();
 
             int indecisiveScore = totNumGuesses - getQuestions().size();
-            qpad.putStat(TOTAL_NUMBER_OF_GUESSES_TAG, Integer.toString(totNumGuesses)); //TODO: Test this stat
-            qpad.putStat(INDECISIVENESS_SCORE_TAG, Integer.toString(indecisiveScore));  //TODO: Test this stat
+            qpad.putStat(TOTAL_NUMBER_OF_GUESSES_TAG, Integer.toString(totNumGuesses));
+            qpad.putStat(INDECISIVENESS_SCORE_TAG, Integer.toString(indecisiveScore));
         });
 
         /* Calculate quiz level statistics */
@@ -116,8 +113,7 @@ public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implement
     }
 
     private boolean hasPerformedAnalysis;
-    
-    private final String NUMBER_OF_GUESSES_PER_QUESTION_TAG = "Num Guesses for Q";
+
     private final String TOTAL_NUMBER_OF_GUESSES_TAG = "Total Num Guesses";
     private final String INDECISIVENESS_SCORE_TAG = "Indecisiveness Score";
     private final String QUESTION_INDECISIVENESS_SCORE_TAG = "Indecisiveness Score for Q";
