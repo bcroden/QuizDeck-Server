@@ -87,7 +87,6 @@ public class QuizIndecisivenessAlgorithm extends AbstractQuizAlgorithm implement
                                             return qpad.getData().get(question.getQuestionNum()).size();
                                         }).sum();
 
-            //TODO: Test this stat
             //No question level indecisiveness will result in the number
             //of guesses being equal to the number of participants
             int numParticipants = getQuizAnalysisData().getData().keySet().size();

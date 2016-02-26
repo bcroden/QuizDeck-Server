@@ -7,7 +7,6 @@ import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
-import com.quizdeck.model.database.Quiz;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,11 +20,13 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 
 /**
- * Created by Alex on 2/25/2016.
+ * Test for Quiz Indecisiveness Algorithm
+ *
+ * @author Alex
  */
 public class QuizIndecisivenessAlgorithmTest {
     /**
-     * Use mock objects to simuate quiz results
+     * Use mock objects to simulate quiz results
      */
     @BeforeClass
     public static void setup() throws AnalysisException {
@@ -57,6 +58,9 @@ public class QuizIndecisivenessAlgorithmTest {
         quizAnalysisData = (QuizAnalysisData) analysis.getResults();
     }
 
+    /**
+     * Test metadata attached to the quiz.
+     */
     @Test
     public void testMetaData() {
         assertThat("Data should not be null", quizAnalysisData, notNullValue());
@@ -65,13 +69,19 @@ public class QuizIndecisivenessAlgorithmTest {
         assertThat("Incorrect quiz ID", quizAnalysisData.getQuizID(), is(QUIZ_ID));
     }
 
+    /**
+     * Test the answer key (a.k.a. the list of questions) attached to the quiz.
+     */
     @Test
     public void testAnswerKey() {
         assertThat("Incorrect answer key", quizAnalysisData.getQuestions(), is(questions));
     }
 
+    /**
+     * Ensure that the number of guesses registered by each participant to a given question is correct.
+     */
     @Test
-    public void testNumGuessesPerParticipant() {
+    public void testNumGuessesPerQuestionPerParticipant() {
         QuizParticipantAnalysisData gingerData = quizAnalysisData.getData().get(GINGER.getUsername());
         gingerData.getData().values().forEach(guesses -> assertThat("Ginger only submitted one guess per question", guesses.size(), is(1)));
 
@@ -83,6 +93,9 @@ public class QuizIndecisivenessAlgorithmTest {
         );
     }
 
+    /**
+     * Ensure that the indecisiveness score for each participant is correct.
+     */
     @Test
     public void testParticipantIndecisivenessPerQuestion() {
         QuizParticipantAnalysisData gingerData = quizAnalysisData.getData().get(GINGER.getUsername());
@@ -110,6 +123,9 @@ public class QuizIndecisivenessAlgorithmTest {
         });
     }
 
+    /**
+     * Ensure that the overall number of guesses submitted by a participant is correct.
+     */
     @Test
     public void testTotalGuessesPerParticipant() {
         QuizParticipantAnalysisData gingerData = quizAnalysisData.getData().get(GINGER.getUsername());
@@ -125,6 +141,9 @@ public class QuizIndecisivenessAlgorithmTest {
         assertThat("Incorrect number of guesses for Mary Ann", numGuesses, is(6));
     }
 
+    /**
+     * Ensure that the overall indecisiveness score for each participant is correct.
+     */
     @Test
     public void testIndecisivenessPerParticipant() {
         QuizParticipantAnalysisData gingerData = quizAnalysisData.getData().get(GINGER.getUsername());
@@ -138,6 +157,33 @@ public class QuizIndecisivenessAlgorithmTest {
         assertThat("Missing overall indecisiveness stat for Mary Ann", stat, notNullValue());
         numGuesses = Integer.parseInt(stat);
         assertThat("Incorrect overall indecisiveness for Mary Ann", numGuesses, is(3));
+    }
+
+    /**
+     * Ensure the overall (quiz level) indecisiveness score for each question is correct.
+     */
+    @Test
+    public void testOverallQuestionIndecisiveness() {
+        int[] overallIndecisivenessPerQuestion = new int[]{0, 1, 2};
+        questions.forEach(question -> {
+            String stat = quizAnalysisData.getStats().get("Indecisiveness Score for Q" + question.getQuestionNum());
+            assertThat("Missing overall indecisiveness score for question #" + question.getQuestionNum(),
+                        stat,
+                        notNullValue());
+            assertThat("Incorrect overall indecisiveness score for question #" + question.getQuestionNum(),
+                        Integer.parseInt(stat),
+                        is(overallIndecisivenessPerQuestion[question.getQuestionNum()-1]));
+        });
+    }
+
+    /**
+     * Ensure the overall indecisiveness score for the quiz is correct
+     */
+    @Test
+    public void testOverallIndecisiveness() {
+        String stat = quizAnalysisData.getStats().get("Indecisiveness Score");
+        assertThat("Missing overall indecisiveness score for the quiz", stat, notNullValue());
+        assertThat("Incorrect overall indecisiveness score for the quiz", Integer.parseInt(stat), is(3));
     }
 
     private static QuizAnalysisData quizAnalysisData;
