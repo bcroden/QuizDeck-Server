@@ -54,6 +54,22 @@ public class QuizParticipantAnalysisData implements AnalysisResult<Integer, List
     }
 
     /**
+     * Add a list of new guesses the list of guesses to a particular question by a participant
+     *
+     * @param question  The Question to which the guess was submitted
+     * @param guesses The Selection which the participant guessed
+     */
+    public void addGuesses(Question question, List<Guess> guesses) {
+        List<Guess> allGuesses = null;
+        if(sampleData.containsKey(question.getQuestionNum()))
+            allGuesses = sampleData.get(question.getQuestionNum());
+        else
+            allGuesses = new LinkedList<>();
+        allGuesses.addAll(guesses);
+        sampleData.put(question.getQuestionNum(), allGuesses);
+    }
+
+    /**
      * Add a calculated statistic
      *
      * @param key   Identifier of the statistic

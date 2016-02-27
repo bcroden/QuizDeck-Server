@@ -1,16 +1,12 @@
 package com.quizdeck.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.inputs.Guess;
-import com.quizdeck.analysis.inputs.Question;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
 import com.quizdeck.model.database.*;
 import com.quizdeck.model.inputs.AccuracyInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -33,9 +29,6 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
@@ -46,7 +39,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = QuizDeckApplication.class)
 @WebAppConfiguration
-public class AnalysisControllerTest {
+public abstract class AbstractQuizAnalysisControllerTest {
 
     @Before
     public void setup() {
@@ -55,19 +48,9 @@ public class AnalysisControllerTest {
 
     @Before
     public void seedCompletedQuizRepository() {
-        Quiz quiz = new Quiz();
-        quiz.setId("Quiz DB ID");
-        quiz.setTitle("Quiz Title");
-        quiz.setQuestions(getQuestions());
+        Quiz quiz = new Quiz("Owner ID", "Quiz Title", getQuestions(), new LinkedList<>());
 
-        completeQuiz = new CompleteQuiz();
-        completeQuiz.setQuizId("Complete Quiz DB ID");
-        completeQuiz.setOwner("Owner ID");
-        completeQuiz.setQuiz(quiz);
-        completeQuiz.setStart(new Date());
-        completeQuiz.setStop(new Date());
-        completeQuiz.setTitle("Complete Quiz Title");
-        completeQuiz.setSubmissions(getSubmissionsFor(quiz));
+        completeQuiz = new CompleteQuiz(quiz, new Date(), new Date(), quiz.getTitle(), quiz.getOwner(), getSubmissionsFor(quiz));
 
         completedQuizRepository.save(completeQuiz);
 
@@ -83,44 +66,6 @@ public class AnalysisControllerTest {
         completedQuizRepository.removeById(completeQuiz.getQuizId());
     }
 
-    @Test
-    public void testQuizAccuracyResults() throws Exception {
-        String result = mockMvc.perform(get("/rest/secure/analysis/accuracy/").content(this.json(accuracyInput))
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                        ).andExpect(status().is2xxSuccessful())
-                                        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                                        .andReturn()
-                                        .getResponse()
-                                        .getContentAsString();
-
-        ObjectMapper mapper = new ObjectMapper();
-        QuizAnalysisData data = mapper.readValue(result, QuizAnalysisData.class);
-
-        checkAnswerKey(data.getQuestions());
-        checkQuizInfo(data);
-        checkQuizStats(data);
-    }
-
-    private void checkAnswerKey(List<Question> questions) {
-        assertThat(questions.toString(), questions.size(), is(completeQuiz.getQuiz().getQuestions().size()));
-
-        int numHits = 0;
-        for(Question question : questions) {
-            if(completeQuiz.getQuiz().getQuestions().contains(question))
-                numHits++;
-        }
-
-        assertThat("Incorrect questions in answer key", numHits, is(completeQuiz.getQuiz().getQuestions().size()));
-    }
-
-    private void checkQuizInfo(QuizAnalysisData data){
-        assertThat("Bad quiz owner ID", data.getOwnerID(), is(completeQuiz.getOwner()));
-        assertThat("Bad quiz ID", data.getQuizID(), is(completeQuiz.getQuiz().getId()));
-    }
-
-    private void checkQuizStats(QuizAnalysisData data) {
-        assertThat("Bad \'Average Accuracy Per Participant\'", data.getStats().get("Average Accuracy Per Participant"), is("0.3"));
-    }
 
     private List<submission> getSubmissionsFor(Quiz quiz) {
         List<submission> submissions = new LinkedList<>();
@@ -172,8 +117,8 @@ public class AnalysisControllerTest {
         return answers;
     }
 
-    private CompleteQuiz completeQuiz;
-    private AccuracyInput accuracyInput;
+    protected CompleteQuiz completeQuiz;
+    protected AccuracyInput accuracyInput;
 
     /*** Mocking out the controller ***/
 
@@ -192,12 +137,12 @@ public class AnalysisControllerTest {
         assertThat("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter, is(notNullValue()));
     }
 
-    private String json(Object o) throws Exception {
+    protected String json(Object o) throws Exception {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
         mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
         return mockHttpOutputMessage.getBodyAsString();
     }
 
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
     private HttpMessageConverter mappingJackson2HttpMessageConverter;
 }

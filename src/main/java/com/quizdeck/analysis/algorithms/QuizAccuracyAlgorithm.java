@@ -26,24 +26,15 @@ import java.util.*;
 class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String owner) {
         super(responses, questions, quizID, deckID, owner);
-        quizOutputData = new QuizAnalysisData(getOwnerID(), getDeckID(), getQuizID());
+
+        isAnalysisComplete = false;
     }
 
     @Override
     public boolean performAnalysis() {
 
-        //Populate the quiz data list of participants
-        getResponses().stream().forEach(response -> {
-            if(quizOutputData.getData()
-                    .keySet()
-                    .stream()
-                    .noneMatch(username -> username.equals(response.getUserName()))
-                    )
-                quizOutputData.putData(response.getUserName(), new QuizParticipantAnalysisData());
-        });
-
         //Place sample data into data object
-        for(String username : quizOutputData.getData().keySet()) {
+        for(String username : getQuizAnalysisData().getData().keySet()) {
             for(Question question : getQuestions()) {
                 //Get the last responses for this username
                 Response lastResponse = getResponses().stream()
@@ -60,19 +51,19 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
                     continue;
 
                 QuizParticipantAnalysisData data = null;
-                if(quizOutputData.getData().get(username) != null)
-                    data = quizOutputData.getData().get(username);
+                if(getQuizAnalysisData().getData().get(username) != null)
+                    data = getQuizAnalysisData().getData().get(username);
                 else
                     data = new QuizParticipantAnalysisData();
                 data.addGuess(lastResponse.getQuestion(), lastResponse.getGuesses().get(0));
-                quizOutputData.putData(username, data);
+                getQuizAnalysisData().putData(username, data);
             }
         }
 
         //Calculate participant statistics
         int totNumCorrect = 0;
-        for(String username : quizOutputData.getData().keySet()) {
-            QuizParticipantAnalysisData participantData = quizOutputData.getData().get(username);
+        for(String username : getQuizAnalysisData().getData().keySet()) {
+            QuizParticipantAnalysisData participantData = getQuizAnalysisData().getData().get(username);
             int numCorrect = 0;
             for(Question question : getQuestions()) {
                 if(participantData.getData().get(question.getQuestionNum()) != null && participantData
@@ -88,11 +79,9 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
             totNumCorrect += numCorrect; //accumulator for calculating quiz level statistics
         }
 
-        double avNumCorrect = totNumCorrect / (double) (getQuestions().size() * quizOutputData.getData().keySet().size());
+        double avNumCorrect = totNumCorrect / (double) (getQuestions().size() * getQuizAnalysisData().getData().keySet().size());
 
-        quizOutputData.putStat("Average Accuracy Per Participant", Double.toString(avNumCorrect));
-
-        quizOutputData.setQuestions(getQuestions());
+        getQuizAnalysisData().putStat("Average Accuracy Per Participant", Double.toString(avNumCorrect));
 
         isAnalysisComplete = true;
 
@@ -100,13 +89,9 @@ class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnaly
     }
 
     @Override
-    public AnalysisResult getResults() throws AnalysisResultsUnavailableException {
-        if(isAnalysisComplete)
-            return quizOutputData;
-        else
-            throw new AnalysisResultsUnavailableException("Analysis has not been performed");
+    public boolean areResultsAvailable() {
+        return isAnalysisComplete;
     }
 
-    private boolean isAnalysisComplete = false;
-    private QuizAnalysisData quizOutputData;
+    private boolean isAnalysisComplete;
 }
