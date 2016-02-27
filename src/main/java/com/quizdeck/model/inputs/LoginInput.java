@@ -1,5 +1,8 @@
 package com.quizdeck.model.inputs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -7,6 +10,8 @@ import javax.validation.constraints.NotNull;
  *
  * Created by Brandon on 2/12/2016.
  */
+@Getter
+@Setter
 public class LoginInput {
     @NotNull
     private String userName;

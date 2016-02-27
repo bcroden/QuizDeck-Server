@@ -4,7 +4,6 @@ package com.quizdeck.controllers;
  *  Object created for quizzes submitted when completed
  */
 
-import com.quizdeck.model.inputs.LabelUpdate;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
 import com.quizdeck.model.database.User;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/rest/secure/quizdeck/")
+@RequestMapping("/rest/secure/quiz/")
 public class QuizSubmissionController {
 
     @Autowired
@@ -51,23 +50,4 @@ public class QuizSubmissionController {
         return new QuizSubmissionResponse();
     }
 
-    @RequestMapping(value="/quizLabelUpdate", method = RequestMethod.POST)
-    public QuizSubmissionResponse quizLabelsUpdate(@Valid @RequestBody LabelUpdate input, BindingResult result) throws InvalidJsonException{
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-
-        Quiz quiz = quizRepository.findByTitleAndOwner(input.getQuizTitle(), input.getUserName());
-        for(String label : input.getLabels()){
-            if(quiz.getLabels() == null || quiz.getLabels().isEmpty()){
-                quiz.getLabels().addAll(input.getLabels());
-                break;
-            }
-            else if(!quiz.getLabels().contains(label)){
-                quiz.getLabels().add(label);
-            }
-        }
-        quizRepository.save(quiz);
-        return new QuizSubmissionResponse();
-    }
 }

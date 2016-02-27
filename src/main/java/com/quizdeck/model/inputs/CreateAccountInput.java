@@ -1,13 +1,18 @@
 package com.quizdeck.model.inputs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * DTO containing the information that a client sends to the server to create a new account.
  *
  * Created by Brandon on 2/12/2016.
  */
+
+@Getter
+@Setter
 public class CreateAccountInput {
     @NotNull
     private String username;
@@ -25,29 +30,5 @@ public class CreateAccountInput {
         this.username = username;
         this.password = password;
         this.email = email;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
