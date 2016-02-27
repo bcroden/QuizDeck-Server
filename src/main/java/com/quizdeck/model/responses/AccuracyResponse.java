@@ -1,19 +1,18 @@
 package com.quizdeck.model.responses;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Created by Cade on 2/17/2016.
  */
+
+@Getter
+@Setter
 public class AccuracyResponse {
 
-    //I have literally no idea what we will return
+    //TODO: discuss what will be returned for analysis objects
 
     private String title;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

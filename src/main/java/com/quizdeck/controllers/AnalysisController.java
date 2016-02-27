@@ -29,7 +29,7 @@ public class AnalysisController {
     @Autowired
     CompletedQuizRepository completedQuizRepository;
 
-    @RequestMapping(value="accuracy/", method = RequestMethod.POST)
+    @RequestMapping(value="accuracy/", method = RequestMethod.GET)
     public AnalysisResult accuracyResponse (@Valid @RequestBody AccuracyInput input, BindingResult result) throws InvalidJsonException, AnalysisException {
         if(result.hasErrors()) {
             throw new InvalidJsonException();

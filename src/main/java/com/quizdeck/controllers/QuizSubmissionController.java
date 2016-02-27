@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/rest/secure/quizdeck/")
+@RequestMapping("/rest/secure/quiz/")
 public class QuizSubmissionController {
 
     @Autowired

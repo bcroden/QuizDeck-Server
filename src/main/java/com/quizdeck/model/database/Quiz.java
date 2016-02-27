@@ -1,5 +1,7 @@
 package com.quizdeck.model.database;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +13,8 @@ import java.util.List;
  *
  * Created by Cade on 2/14/2016.
  */
+@Getter
+@Setter
 @Document
 public class Quiz {
 
@@ -35,36 +39,9 @@ public class Quiz {
     @Deprecated
     public Quiz(){};
 
-    public void setOwner(String owner) {this.owner = owner;}
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public String getId() {
-        return id;
-    }
-
     @Deprecated
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getTitle() { return title; }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public List<Questions> getQuestions() {
-        return questions;
-    }
-
-    public void setQuestions(List<Questions> questions) {
-        this.questions = questions;
-    }
-
-    public List<String> getLabels() {return labels;}
-
-    public void setLabels(List<String> labels) {this.labels = labels;}
 }
