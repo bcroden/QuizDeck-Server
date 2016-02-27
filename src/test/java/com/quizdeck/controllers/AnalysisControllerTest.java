@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
@@ -85,7 +85,7 @@ public class AnalysisControllerTest {
 
     @Test
     public void testQuizAccuracyResults() throws Exception {
-        String result = mockMvc.perform(post("/rest/secure/analysis/accuracy/").content(this.json(accuracyInput))
+        String result = mockMvc.perform(get("/rest/secure/analysis/accuracy/").content(this.json(accuracyInput))
                                                 .contentType(MediaType.APPLICATION_JSON)
                                         ).andExpect(status().is2xxSuccessful())
                                         .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
