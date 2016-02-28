@@ -2,9 +2,11 @@ package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.inputs.CompleteQuizInput;
-import com.quizdeck.model.responses.CompleteQuizResponse;
 import com.quizdeck.repositories.CompletedQuizRepository;
+import com.sun.org.apache.xpath.internal.operations.String;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,7 @@ public class CompleteQuizSubmissionController {
     CompletedQuizRepository completeQuizRepository;
 
     @RequestMapping(value="/submit", method = RequestMethod.POST)
-    public CompleteQuizResponse submitQuiz(@Valid @RequestBody CompleteQuizInput input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> submitQuiz(@Valid @RequestBody CompleteQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
@@ -36,7 +38,7 @@ public class CompleteQuizSubmissionController {
 
         //completeQuizRepository.save(new CompleteQuiz());
 
-        return null;
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 
 }

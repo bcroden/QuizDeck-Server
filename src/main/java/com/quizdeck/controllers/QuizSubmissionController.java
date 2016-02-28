@@ -8,10 +8,11 @@ import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
 import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.NewQuizInput;
-import com.quizdeck.model.responses.QuizSubmissionResponse;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class QuizSubmissionController {
     UserRepository userRepository;
 
     @RequestMapping(value="/quizsubmission", method= RequestMethod.POST)
-    public QuizSubmissionResponse quizSubmissionResponse(@Valid @RequestBody NewQuizInput input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> quizSubmissionResponse(@Valid @RequestBody NewQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
@@ -47,7 +48,7 @@ public class QuizSubmissionController {
         }
         userRepository.save(user);
 
-        return new QuizSubmissionResponse();
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 
 }
