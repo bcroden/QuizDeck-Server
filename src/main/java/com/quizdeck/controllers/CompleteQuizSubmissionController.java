@@ -3,7 +3,6 @@ package com.quizdeck.controllers;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.inputs.CompleteQuizInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
-import com.sun.org.apache.xpath.internal.operations.String;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
