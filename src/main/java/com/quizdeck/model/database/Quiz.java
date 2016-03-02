@@ -3,7 +3,6 @@ package com.quizdeck.model.database;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
@@ -14,6 +13,7 @@ import java.util.List;
  *
  * Created by Cade on 2/14/2016.
  */
+
 @Getter
 @Setter
 @Document
@@ -35,16 +35,17 @@ public class Quiz {
     @NotNull
     private List<String> categories;
 
-    @PersistenceConstructor
-    public Quiz(String owner, String title, List<Questions> questions, List<String> labels) {
+    public Quiz(String owner, String title, List<Questions> questions, List<String> labels, List<String> categories) {
         this.owner = owner;
         this.title = title;
         this.questions = questions;
         this.labels = labels;
+        this.categories = categories;
     }
 
     @Deprecated
-    public Quiz(){};
+    public Quiz(){
+    }
 
     @Deprecated
     public void setId(String id) {

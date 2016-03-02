@@ -13,10 +13,12 @@ public class NewQuizInput {
 
     private String owner;
     private String title;
-    private String quizId;
+
 
     private List<Questions> questions;
 
     private List<String> labels;
+
+    private List<String> categories;
 
     }

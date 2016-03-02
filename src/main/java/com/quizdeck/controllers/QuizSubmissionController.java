@@ -37,7 +37,7 @@ public class QuizSubmissionController {
             throw new InvalidJsonException();
         }
 
-        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels()));
+        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories()));
 
         //add any new labels to the list associated with the user
         User user = userRepository.findByUserName(input.getOwner());

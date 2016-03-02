@@ -43,7 +43,7 @@ public class QuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/quizDelete", method = RequestMethod.PUT)
+    @RequestMapping(value="/quizDelete", method = RequestMethod.DELETE)
     public ResponseEntity<String> quizDelete(@Valid @RequestBody  QuizDeleteInput input, BindingResult result) throws InvalidJsonException {
         if(result.hasErrors()){
             throw new InvalidJsonException();
