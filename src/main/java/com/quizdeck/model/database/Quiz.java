@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -21,12 +22,18 @@ public class Quiz {
     @Id
     private String id;
 
+    @NotNull
     private String owner;
+
+    @NotNull
     private String title;
 
     private List<Questions> questions;
 
     private List<String> labels;
+
+    @NotNull
+    private List<String> categories;
 
     @PersistenceConstructor
     public Quiz(String owner, String title, List<Questions> questions, List<String> labels) {
@@ -34,14 +41,6 @@ public class Quiz {
         this.title = title;
         this.questions = questions;
         this.labels = labels;
-    }
-
-    @Deprecated
-    public Quiz(){};
-
-    @Deprecated
-    public void setId(String id) {
-        this.id = id;
     }
 
 }

@@ -2,16 +2,15 @@ package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
-import com.quizdeck.model.inputs.*;
+import com.quizdeck.model.inputs.QuizDeleteInput;
+import com.quizdeck.model.inputs.QuizEditInput;
 import com.quizdeck.repositories.QuizRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,27 +28,8 @@ public class QuizRequestController {
     QuizRepository quizRepository;
 
     @RequestMapping(value="/searchByOwner", method = RequestMethod.GET)
-    public List<Quiz> getQuizByOwner(@Valid @RequestBody OwnerQuizSearchInput input, BindingResult result) throws InvalidJsonException {
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-        return quizRepository.findByOwner(input.getParameter());
-    }
-
-    @RequestMapping(value="/searchByOwnerTitle", method = RequestMethod.GET)
-    public Quiz getQuizByOwnerAndTitle(@Valid @RequestBody OwnerTitleQuizSearchInput input, BindingResult result) throws InvalidJsonException{
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-        return quizRepository.findByTitleAndOwner(input.getTitle(), input.getOwner());
-    }
-
-    @RequestMapping(value="/searchByOwnerLabels", method = RequestMethod.GET)
-    public List<Quiz> getQuizByOwnerAndLabels (@Valid @RequestBody OwnerLabelsInput input, BindingResult result) throws InvalidJsonException {
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-        return quizRepository.findByOwnerAndLabelsIn(input.getOwner(), input.getLabels());
+    public List<Quiz> getQuizByOwner(@ModelAttribute("claims") Claims claims){
+        return quizRepository.findByOwner(claims.get("user").toString());
     }
 
     @RequestMapping(value="/quizEdit", method = RequestMethod.PUT)
@@ -63,23 +43,13 @@ public class QuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/quizLabelUpdate", method = RequestMethod.PUT)
-    public ResponseEntity<String> quizLabelsUpdate(@Valid @RequestBody LabelUpdate input, BindingResult result) throws InvalidJsonException {
+    @RequestMapping(value="/quizDelete", method = RequestMethod.PUT)
+    public ResponseEntity<String> quizDelete(@Valid @RequestBody  QuizDeleteInput input, BindingResult result) throws InvalidJsonException {
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
+        quizRepository.removeById(input.getId());
 
-        Quiz quiz = quizRepository.findByTitleAndOwner(input.getQuizTitle(), input.getUserName());
-        for(String label : input.getLabels()){
-            if(quiz.getLabels() == null || quiz.getLabels().isEmpty()){
-                quiz.getLabels().addAll(input.getLabels());
-                break;
-            }
-            else if(!quiz.getLabels().contains(label)){
-                quiz.getLabels().add(label);
-            }
-        }
-        quizRepository.save(quiz);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 

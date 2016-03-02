@@ -17,9 +17,6 @@ import java.util.List;
 @Document
 public class CompleteQuiz {
 
-    @Deprecated
-    private String id;
-
     private String quizId;
 
     private Quiz quiz;
@@ -32,9 +29,6 @@ public class CompleteQuiz {
 
     private List<submission> submissions;
 
-    @Deprecated
-    private List<String> labels; //labels belong to the quiz object, not completed quizzes
-
     @PersistenceConstructor
     public CompleteQuiz(Quiz quiz, Date start, Date stop, String title, String owner, List<submission> submissions) {
         this.quiz = quiz;
@@ -45,8 +39,5 @@ public class CompleteQuiz {
         this.owner = owner;
         this.submissions = submissions;
     }
-
-    @Deprecated
-    public CompleteQuiz(){};
 
 }
