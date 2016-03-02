@@ -43,4 +43,12 @@ public class Quiz {
         this.labels = labels;
     }
 
+    @Deprecated
+    public Quiz(){};
+
+    @Deprecated
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }
