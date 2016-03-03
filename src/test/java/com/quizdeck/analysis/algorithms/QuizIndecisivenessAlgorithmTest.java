@@ -65,7 +65,7 @@ public class QuizIndecisivenessAlgorithmTest {
     public void testMetaData() {
         assertThat("Data should not be null", quizAnalysisData, notNullValue());
         assertThat("Incorrect owner ID", quizAnalysisData.getOwnerID(), is(OWNER_ID));
-        assertThat("Incorrect deck ID", quizAnalysisData.getCategories(), is(CATEGORIES));
+        assertThat("Incorrect categories", quizAnalysisData.getCategories(), is(CATEGORIES));
         assertThat("Incorrect quiz ID", quizAnalysisData.getQuizID(), is(QUIZ_ID));
     }
 

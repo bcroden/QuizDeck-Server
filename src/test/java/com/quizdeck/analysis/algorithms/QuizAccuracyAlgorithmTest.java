@@ -151,7 +151,7 @@ public class QuizAccuracyAlgorithmTest {
         QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
         assertThat("Incorrect quiz owner", quizResults.getOwnerID(), is(OWNER));
         assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
-        assertThat("Incorrect deck ID", quizResults.getCategories(), is(CATEGORIES));
+        assertThat("Incorrect categories", quizResults.getCategories(), is(CATEGORIES));
     }
 
     /**
