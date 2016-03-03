@@ -1,7 +1,9 @@
 package com.quizdeck.analysis;
 
 /**
- * Created by Alex on 3/2/2016.
+ * Represents all of the group analysis algorithms available.
+ *
+ * @author Alex
  */
 public enum GroupAnalysisAlgorithm {
     ACCURACY("com.quizdeck.analysis.algorithms.group.GroupAccuracyAlgorithm");

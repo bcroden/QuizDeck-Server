@@ -1,7 +1,7 @@
 package com.quizdeck.analysis;
 
 /**
- * Represents all of the analysis algorithms available.
+ * Represents all of the quiz analysis algorithms available.
  *
  * @author Alex
  */
