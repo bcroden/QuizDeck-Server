@@ -1,5 +1,8 @@
 package com.quizdeck.model.inputs;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
@@ -7,6 +10,8 @@ import java.util.List;
  *
  * input object to add new labels to a quiz
  */
+@Getter
+@Setter
 public class LabelUpdate {
 
     private String userName;
@@ -14,27 +19,5 @@ public class LabelUpdate {
 
     private List<String> labels;
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getQuizTitle() {
-        return quizTitle;
-    }
-
-    public void setQuizTitle(String quizTitle) {
-        this.quizTitle = quizTitle;
-    }
-
-    public List<String> getLabels() {
-        return labels;
-    }
-
-    public void setLabels(List<String> labels) {
-        this.labels = labels;
-    }
 }

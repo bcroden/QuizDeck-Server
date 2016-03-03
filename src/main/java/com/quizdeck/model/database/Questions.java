@@ -3,9 +3,13 @@ package com.quizdeck.model.database;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
 public class Questions extends Question {
 
     private String question;
@@ -16,42 +20,6 @@ public class Questions extends Question {
     private List<Answers> answers;
 
     private int questionNum;
-
-    public int getQuestionNum() {
-        return questionNum;
-    }
-
-    public void setQuestionNum(int questionNum) {
-        this.questionNum = questionNum;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getQuestionFormat() {
-        return questionFormat;
-    }
-
-    public void setQuestionFormat(String questionFormat) {
-        this.questionFormat = questionFormat;
-    }
-
-    public List<Answers> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answers> answers) {
-        this.answers = answers;
-    }
-
-    public void setCorrectAnswerID(String correctAnswerID) {
-        this.correctAnswerID = correctAnswerID;
-    }
 
     @JsonIgnore
     public Selection getCorrectAnswer() {

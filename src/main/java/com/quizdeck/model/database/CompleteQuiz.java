@@ -1,5 +1,7 @@
 package com.quizdeck.model.database;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,6 +12,8 @@ import java.util.List;
  * Created by Cade on 2/16/2016.
  */
 
+@Getter
+@Setter
 @Document
 public class CompleteQuiz {
 
@@ -45,59 +49,4 @@ public class CompleteQuiz {
     @Deprecated
     public CompleteQuiz(){};
 
-    public String getQuizId() {
-        return quizId;
-    }
-
-    public void setQuizId(String quizId) {
-        this.quizId = quizId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
-        this.quiz = quiz;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public Date getStop() {
-        return stop;
-    }
-
-    public void setStop(Date stop) {
-        this.stop = stop;
-    }
-
-    public List<submission> getSubmissions() {
-        return submissions;
-    }
-
-    public void setSubmissions(List<submission> submissions) {
-        this.submissions = submissions;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
 }

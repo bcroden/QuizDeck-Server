@@ -4,15 +4,15 @@ package com.quizdeck.controllers;
  *  Object created for quizzes submitted when completed
  */
 
-import com.quizdeck.model.inputs.LabelUpdate;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
 import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.NewQuizInput;
-import com.quizdeck.model.responses.QuizSubmissionResponse;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/rest/secure/quizdeck/")
+@RequestMapping("/rest/secure/quiz/")
 public class QuizSubmissionController {
 
     @Autowired
@@ -32,12 +32,12 @@ public class QuizSubmissionController {
     UserRepository userRepository;
 
     @RequestMapping(value="/quizsubmission", method= RequestMethod.POST)
-    public QuizSubmissionResponse quizSubmissionResponse(@Valid @RequestBody NewQuizInput input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> quizSubmissionResponse(@Valid @RequestBody NewQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
 
-        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels()));
+        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories()));
 
         //add any new labels to the list associated with the user
         User user = userRepository.findByUserName(input.getOwner());
@@ -48,26 +48,7 @@ public class QuizSubmissionController {
         }
         userRepository.save(user);
 
-        return new QuizSubmissionResponse();
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/quizLabelUpdate", method = RequestMethod.POST)
-    public QuizSubmissionResponse quizLabelsUpdate(@Valid @RequestBody LabelUpdate input, BindingResult result) throws InvalidJsonException{
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-
-        Quiz quiz = quizRepository.findByTitleAndOwner(input.getQuizTitle(), input.getUserName());
-        for(String label : input.getLabels()){
-            if(quiz.getLabels() == null || quiz.getLabels().isEmpty()){
-                quiz.getLabels().addAll(input.getLabels());
-                break;
-            }
-            else if(!quiz.getLabels().contains(label)){
-                quiz.getLabels().add(label);
-            }
-        }
-        quizRepository.save(quiz);
-        return new QuizSubmissionResponse();
-    }
 }
