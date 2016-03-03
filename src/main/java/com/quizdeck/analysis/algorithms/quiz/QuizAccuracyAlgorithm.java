@@ -20,7 +20,7 @@ import java.util.*;
  *
  * @author Alex
  */
-class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
+class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, List<String> categories, String owner) {
         super(responses, questions, quizID, categories, owner);
 

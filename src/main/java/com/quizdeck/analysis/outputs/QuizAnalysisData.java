@@ -10,7 +10,7 @@ import java.util.*;
  *
  * @author Alex
  */
-public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantAnalysisData, String> {
+public class QuizAnalysisData implements QuizAnalysisResult {
 
     public QuizAnalysisData() {}
     /**

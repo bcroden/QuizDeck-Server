@@ -1,11 +1,13 @@
 package com.quizdeck.analysis.algorithms.quiz;
 
 import com.quizdeck.analysis.Analysis;
+import com.quizdeck.analysis.QuizAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.analysis.outputs.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.QuizAnalysisResult;
 import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
 
 import java.util.Collections;
@@ -16,7 +18,7 @@ import java.util.List;
  *
  * @author Alex
  */
-abstract class AbstractQuizAlgorithm implements Analysis {
+abstract class AbstractQuizAlgorithm implements QuizAnalysis {
     protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, List<String> categories, String ownerID)
     {
         this.responses = responses;
@@ -43,7 +45,7 @@ abstract class AbstractQuizAlgorithm implements Analysis {
     public abstract boolean areResultsAvailable();
 
     @Override
-    public final AnalysisResult getResults() throws AnalysisResultsUnavailableException {
+    public final QuizAnalysisResult getResults() throws AnalysisResultsUnavailableException {
         if(areResultsAvailable())
             return getQuizAnalysisData();
         throw new AnalysisResultsUnavailableException("Analysis has not been performed");
