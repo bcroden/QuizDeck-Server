@@ -32,7 +32,7 @@ public class QuizIndecisivenessAlgorithmTest {
     public static void setup() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         factory.setOwnerID(OWNER_ID);
-        factory.setDeckID(DECK_ID);
+        factory.setCategories(CATEGORIES);
         factory.setQuizID(QUIZ_ID);
 
         questions = IntStream.range(1, 4).mapToObj(i ->
@@ -65,7 +65,7 @@ public class QuizIndecisivenessAlgorithmTest {
     public void testMetaData() {
         assertThat("Data should not be null", quizAnalysisData, notNullValue());
         assertThat("Incorrect owner ID", quizAnalysisData.getOwnerID(), is(OWNER_ID));
-        assertThat("Incorrect deck ID", quizAnalysisData.getDeckID(), is(DECK_ID));
+        assertThat("Incorrect deck ID", quizAnalysisData.getCategories(), is(CATEGORIES));
         assertThat("Incorrect quiz ID", quizAnalysisData.getQuizID(), is(QUIZ_ID));
     }
 
@@ -192,6 +192,6 @@ public class QuizIndecisivenessAlgorithmTest {
                                 GINGER = new MockMember("Ginger"),
                                 MRS_HOWELL = new MockMember("Mrs. Howell");
     private static final String OWNER_ID = MRS_HOWELL.getUsername(),
-                                QUIZ_ID = "123",
-                                DECK_ID = "ABC";
+                                QUIZ_ID = "123";
+    private static final List<String> CATEGORIES = IntStream.range(0, 4).mapToObj(i -> "Category " + i).collect(Collectors.toList());
 }

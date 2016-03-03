@@ -62,7 +62,7 @@ public class QuizAnalysisFactoryTest {
     private QuizAnalysisFactory getFullFactory() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         factory.setOwnerID("Johnny Sock-o");
-        factory.setDeckID("DeckID");
+        factory.setCategories(new LinkedList<>());
         factory.setQuizID("QuizID");
         factory.setQuestions(new LinkedList<>());
         factory.setResponses(new LinkedList<>());

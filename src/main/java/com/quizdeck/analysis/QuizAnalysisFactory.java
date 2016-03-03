@@ -3,7 +3,6 @@ package com.quizdeck.analysis;
 import com.quizdeck.analysis.exceptions.AnalysisClassException;
 import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
 import com.quizdeck.analysis.exceptions.InsufficientDataException;
-import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 
@@ -43,7 +42,7 @@ public class QuizAnalysisFactory {
         try
         {
             constructor.setAccessible(true);
-            Object o = constructor.newInstance(responses, questions, quizID, deckID, ownerID);
+            Object o = constructor.newInstance(responses, questions, quizID, categories, ownerID);
             clear();
             return (Analysis) o;
         }
@@ -59,8 +58,8 @@ public class QuizAnalysisFactory {
     public void setQuizID(String quizID) {
         this.quizID = quizID;
     }
-    public void setDeckID(String deckID) {
-        this.deckID = deckID;
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
     public void setQuestions(List<? extends Question> questions) {
         this.questions = questions;
@@ -72,7 +71,7 @@ public class QuizAnalysisFactory {
     public void clear() {
         ownerID = null;
         quizID = null;
-        deckID = null;
+        categories = null;
         questions = null;
         responses = null;
     }
@@ -83,8 +82,8 @@ public class QuizAnalysisFactory {
             missing.addLast("Owner");
         if(quizID == null)
             missing.addLast("QuizID");
-        if(deckID == null)
-            missing.addLast("DeckID");
+        if(categories == null)
+            missing.addLast("Categories");
         if(questions == null)
             missing.addLast("Questions");
         if(responses == null)
@@ -102,11 +101,12 @@ public class QuizAnalysisFactory {
             throw new InsufficientDataException(sb.toString());
         }
 
-        return new Class[]{List.class, List.class, String.class, String.class, String.class};
+        return new Class[]{List.class, List.class, String.class, List.class, String.class};
     }
 
     private String ownerID;
-    private String quizID, deckID;
+    private String quizID;
+    private List<String> categories;
     private List<? extends Question> questions;
     private List<? extends Response> responses;
 }

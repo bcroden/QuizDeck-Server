@@ -14,6 +14,8 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,7 +39,7 @@ public class QuizAccuracyAlgorithmTest {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
 
         factory.setOwnerID(OWNER);
-        factory.setDeckID(DECK_ID);
+        factory.setCategories(CATEGORIES);
         factory.setQuizID(QUIZ_ID);
 
         List<Question> questions = new LinkedList<>();
@@ -149,7 +151,7 @@ public class QuizAccuracyAlgorithmTest {
         QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
         assertThat("Incorrect quiz owner", quizResults.getOwnerID(), is(OWNER));
         assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
-        assertThat("Incorrect deck ID", quizResults.getDeckID(), is(DECK_ID));
+        assertThat("Incorrect deck ID", quizResults.getCategories(), is(CATEGORIES));
     }
 
     /**
@@ -171,5 +173,6 @@ public class QuizAccuracyAlgorithmTest {
     private final Member MR_HOWELL = new MockMember("Mr. Howell");
     private final Member PROFESSOR = new MockMember("Professor");
     private final String OWNER = PROFESSOR.getUsername();
-    private final String QUIZ_ID = "123", DECK_ID = "ABC";
+    private final String QUIZ_ID = "123";
+    private final List<String> CATEGORIES = IntStream.range(0, 4).mapToObj(i -> "Category " + i).collect(Collectors.toList());
 }

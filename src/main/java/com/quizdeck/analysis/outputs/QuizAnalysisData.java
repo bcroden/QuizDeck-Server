@@ -16,14 +16,13 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
     /**
      * Initializes this dat block with the member who owns the quiz and its results along with
      * the quiz's identifier and the identifier of the deck to which it belongs
-     *
      * @param ownerID     The member who owns the deck
-     * @param deckID    The identifier of the deck to which the quiz belongs
+     * @param categories    The identifier of the deck to which the quiz belongs
      * @param quizID    The identifier of the quiz to which the analysis pertains
      */
-    public QuizAnalysisData(String ownerID, String deckID, String quizID) {
+    public QuizAnalysisData(String ownerID, List<String> categories, String quizID) {
         this.ownerID = ownerID;
-        this.deckID = deckID;
+        this.categories = categories;
         this.quizID = quizID;
     }
 
@@ -89,8 +88,8 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
      * Returns a string which represents the identifier for the deck to which this quiz belongs
      * @return  the identifier for the deck to which the quiz belongs
      */
-    public String getDeckID() {
-        return deckID;
+    public List<String> getCategories() {
+        return categories;
     }
 
     /**
@@ -115,5 +114,6 @@ public class QuizAnalysisData implements AnalysisResult<String, QuizParticipantA
     private List<Question> questions = new LinkedList<>();
 
     private String ownerID;
-    private String quizID, deckID;
+    private String quizID;
+    private List<String> categories;
 }

@@ -17,16 +17,16 @@ import java.util.List;
  * @author Alex
  */
 abstract class AbstractQuizAlgorithm implements Analysis {
-    protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, String deckID, String ownerID)
+    protected AbstractQuizAlgorithm(List<Response> responses, List<Question> questions, String quizID, List<String> categories, String ownerID)
     {
         this.responses = responses;
         Collections.sort(questions);
         this.questions = questions;
         this.quizID = quizID;
-        this.deckID = deckID;
+        this.categories = categories;
         this.ownerID = ownerID;
 
-        quizAnalysisData = new QuizAnalysisData(getOwnerID(), getDeckID(), getQuizID());
+        quizAnalysisData = new QuizAnalysisData(getOwnerID(), getCategories(), getQuizID());
         quizAnalysisData.setQuestions(getQuestions());
 
         //Populate the quiz data list of participants
@@ -61,9 +61,9 @@ abstract class AbstractQuizAlgorithm implements Analysis {
     {
         return quizID;
     }
-    public final String getDeckID()
+    public final List<String> getCategories()
     {
-        return deckID;
+        return categories;
     }
     public final List<Question> getQuestions()
     {
@@ -75,7 +75,8 @@ abstract class AbstractQuizAlgorithm implements Analysis {
     }
 
     private String ownerID;
-    private String quizID, deckID;
+    private String quizID;
+    private List<String> categories;
     private List<Question> questions;
     private List<Response> responses;
 
