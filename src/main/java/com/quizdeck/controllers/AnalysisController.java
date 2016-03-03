@@ -3,7 +3,7 @@ package com.quizdeck.controllers;
 import com.quizdeck.analysis.Analysis;
 import com.quizdeck.analysis.QuizAnalysisAlgorithm;
 import com.quizdeck.analysis.QuizAnalysisFactory;
-import com.quizdeck.analysis.exceptions.AnalysisException;
+import com.quizdeck.analysis.exceptions.*;
 import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.CompleteQuiz;
@@ -35,29 +35,7 @@ public class AnalysisController {
             throw new InvalidJsonException();
         }
 
-        /**
-         * use input object to identify and pull object from the repository
-         * then any analysis can be called
-         * only use the accuracy algorithm from this controller
-         *
-         * this returns a list of all quizzes of a particular title for a user
-         */
-
-        //findByTitleAndOwner would return a list because a completed quiz can be re-administered
-        //id will eventually become a concat of original quiz id and some determining factor
-        //TODO: decide what that is
-        CompleteQuiz quizForAnalysis = completedQuizRepository.findByQuizId(input.getId());
-
-        QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setOwnerID(quizForAnalysis.getOwner());
-        factory.setCategories(quizForAnalysis.getQuiz().getCategories());
-        factory.setQuizID(quizForAnalysis.getQuizId());
-        factory.setResponses(quizForAnalysis.getSubmissions());
-        factory.setQuestions(quizForAnalysis.getQuiz().getQuestions());
-
-        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
-        analysis.performAnalysis();
-        return analysis.getResults();
+        return processQuizWith(input.getId(), QuizAnalysisAlgorithm.ACCURACY);
     }
 
     @RequestMapping(value="indecisiveness/", method = RequestMethod.POST)
@@ -66,21 +44,17 @@ public class AnalysisController {
             throw new InvalidJsonException();
         }
 
-        QuizAnalysisFactory factory = getFullFactory(input.getId());
-        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.INDECISIVENESS);
-        analysis.performAnalysis();
-        return analysis.getResults();
+        return processQuizWith(input.getId(), QuizAnalysisAlgorithm.INDECISIVENESS);
     }
 
-    private QuizAnalysisFactory getFullFactory(String id) {
+    private AnalysisResult processQuizWith(String id, QuizAnalysisAlgorithm algorithm) throws AnalysisClassException, AnalysisConstructionException, InsufficientDataException, AnalysisResultsUnavailableException {
         CompleteQuiz completeQuiz = completedQuizRepository.findByQuizId(id);
-
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        factory.setOwnerID(completeQuiz.getOwner());
-        factory.setCategories(completeQuiz.getQuiz().getCategories());
-        factory.setQuizID(completeQuiz.getQuizId());
-        factory.setResponses(completeQuiz.getSubmissions());
-        factory.setQuestions(completeQuiz.getQuiz().getQuestions());
-        return factory;
+
+        factory.autoFillWith(completeQuiz);
+        Analysis analysis = factory.getAnalysisUsing(algorithm);
+        analysis.performAnalysis();
+
+        return analysis.getResults();
     }
 }

@@ -5,6 +5,7 @@ import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
 import com.quizdeck.analysis.exceptions.InsufficientDataException;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
+import com.quizdeck.model.database.CompleteQuiz;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -50,6 +51,14 @@ public class QuizAnalysisFactory {
         {
             throw new AnalysisConstructionException(e.getMessage(), e);
         }
+    }
+
+    public void autoFillWith(CompleteQuiz completeQuiz) {
+        setOwnerID(completeQuiz.getOwner());
+        setCategories(completeQuiz.getQuiz().getCategories());
+        setQuizID(completeQuiz.getQuizId());
+        setResponses(completeQuiz.getSubmissions());
+        setQuestions(completeQuiz.getQuiz().getQuestions());
     }
 
     public void setOwnerID(String id) {
