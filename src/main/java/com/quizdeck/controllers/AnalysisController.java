@@ -1,7 +1,7 @@
 package com.quizdeck.controllers;
 
 import com.quizdeck.analysis.Analysis;
-import com.quizdeck.analysis.QuizAlgorithm;
+import com.quizdeck.analysis.QuizAnalysisAlgorithm;
 import com.quizdeck.analysis.QuizAnalysisFactory;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.outputs.AnalysisResult;
@@ -55,7 +55,7 @@ public class AnalysisController {
         factory.setResponses(quizForAnalysis.getSubmissions());
         factory.setQuestions(quizForAnalysis.getQuiz().getQuestions());
 
-        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
         analysis.performAnalysis();
         return analysis.getResults();
     }
@@ -67,7 +67,7 @@ public class AnalysisController {
         }
 
         QuizAnalysisFactory factory = getFullFactory(input.getId());
-        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.INDECISIVENESS);
+        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.INDECISIVENESS);
         analysis.performAnalysis();
         return analysis.getResults();
     }

@@ -1,4 +1,4 @@
-package com.quizdeck.analysis.algorithms;
+package com.quizdeck.analysis.algorithms.quiz;
 
 import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.inputs.GuessArrivalComparator;

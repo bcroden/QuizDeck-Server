@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class QuizAnalysisFactory {
     @SuppressWarnings("unchecked")
-    public Analysis getAnalysisUsing(QuizAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
+    public Analysis getAnalysisUsing(QuizAnalysisAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
         Class theClass = null;
         try
         {

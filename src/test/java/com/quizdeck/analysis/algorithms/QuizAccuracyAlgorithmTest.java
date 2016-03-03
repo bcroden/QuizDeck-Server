@@ -1,7 +1,7 @@
 package com.quizdeck.analysis.algorithms;
 
 import com.quizdeck.analysis.*;
-import com.quizdeck.analysis.QuizAlgorithm;
+import com.quizdeck.analysis.QuizAnalysisAlgorithm;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test for the Quiz Accuracy Algorithm
  *
- * Note: com.quizdeck.analysis.QuizAlgorithm must be explicitly imported. Right now it
+ * Note: com.quizdeck.analysis.QuizAnalysisAlgorithm must be explicitly imported. Right now it
  *          is not being brought in by the wildcard, so I am importing it explicitly
  *          for now.
  *
@@ -58,7 +58,7 @@ public class QuizAccuracyAlgorithmTest {
             responses.add(new MockResponse(GILLIGAN, new MockSelection(Integer.toString(i).charAt(0)), questions.get(i-1), 2));
         factory.setResponses(responses);
 
-        analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
     }
 
     /**

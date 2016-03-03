@@ -53,7 +53,7 @@ public class QuizIndecisivenessAlgorithmTest {
 
         factory.setResponses(responses);
 
-        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.INDECISIVENESS);
+        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.INDECISIVENESS);
         analysis.performAnalysis();
         quizAnalysisData = (QuizAnalysisData) analysis.getResults();
     }
