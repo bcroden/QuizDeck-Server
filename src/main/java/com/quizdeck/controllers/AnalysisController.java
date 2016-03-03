@@ -50,7 +50,7 @@ public class AnalysisController {
 
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         factory.setOwnerID(quizForAnalysis.getOwner());
-        factory.setDeckID("Unknown deck ID");
+        factory.setCategories(quizForAnalysis.getQuiz().getCategories());
         factory.setQuizID(quizForAnalysis.getQuizId());
         factory.setResponses(quizForAnalysis.getSubmissions());
         factory.setQuestions(quizForAnalysis.getQuiz().getQuestions());
@@ -77,7 +77,7 @@ public class AnalysisController {
 
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
         factory.setOwnerID(completeQuiz.getOwner());
-        factory.setDeckID("Unknown deck ID");
+        factory.setCategories(completeQuiz.getQuiz().getCategories());
         factory.setQuizID(completeQuiz.getQuizId());
         factory.setResponses(completeQuiz.getSubmissions());
         factory.setQuestions(completeQuiz.getQuiz().getQuestions());
