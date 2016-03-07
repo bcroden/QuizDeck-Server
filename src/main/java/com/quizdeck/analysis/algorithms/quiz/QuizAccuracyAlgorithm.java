@@ -1,10 +1,9 @@
 package com.quizdeck.analysis.algorithms.quiz;
 
-import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.inputs.GuessArrivalComparator;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 
 import java.util.*;
 

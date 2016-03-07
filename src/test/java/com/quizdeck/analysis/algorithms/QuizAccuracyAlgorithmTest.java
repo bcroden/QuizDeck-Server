@@ -7,8 +7,8 @@ import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -58,7 +58,7 @@ public class QuizAccuracyAlgorithmTest {
             responses.add(new MockResponse(GILLIGAN, new MockSelection(Integer.toString(i).charAt(0)), questions.get(i-1), 2));
         factory.setResponses(responses);
 
-        analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
+        analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.quizdeck.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisData;
 import org.junit.Test;
 import org.springframework.http.MediaType;
 

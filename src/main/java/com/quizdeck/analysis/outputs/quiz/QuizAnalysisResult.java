@@ -1,4 +1,6 @@
-package com.quizdeck.analysis.outputs;
+package com.quizdeck.analysis.outputs.quiz;
+
+import com.quizdeck.analysis.outputs.AnalysisResult;
 
 /**
  * Marker interface for all quiz level analysis results

@@ -6,7 +6,7 @@ package com.quizdeck.analysis;
  * @author Alex
  */
 public enum GroupAnalysisAlgorithm {
-    ACCURACY("com.quizdeck.analysis.algorithms.group.GroupAccuracyAlgorithm");
+    ACCURACY("com.quizdeck.analysis.algorithms.group.GroupNetQuizAccuracyAlgorithm");
 
     protected String getFullName() {
         return NAME;

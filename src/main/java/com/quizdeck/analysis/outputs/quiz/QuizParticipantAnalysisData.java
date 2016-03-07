@@ -1,7 +1,8 @@
-package com.quizdeck.analysis.outputs;
+package com.quizdeck.analysis.outputs.quiz;
 
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Question;
+import com.quizdeck.analysis.outputs.AnalysisResult;
 
 import java.util.HashMap;
 import java.util.LinkedList;

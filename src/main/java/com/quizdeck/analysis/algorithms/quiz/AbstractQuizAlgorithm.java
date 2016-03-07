@@ -1,14 +1,12 @@
 package com.quizdeck.analysis.algorithms.quiz;
 
-import com.quizdeck.analysis.Analysis;
 import com.quizdeck.analysis.QuizAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.AnalysisResult;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
-import com.quizdeck.analysis.outputs.QuizAnalysisResult;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisResult;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 
 import java.util.Collections;
 import java.util.List;

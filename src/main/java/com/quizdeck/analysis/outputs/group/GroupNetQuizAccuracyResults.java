@@ -1,20 +1,22 @@
-package com.quizdeck.analysis.outputs;
+package com.quizdeck.analysis.outputs.group;
+
+import com.quizdeck.analysis.outputs.AnalysisResult;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Data class used to store the results of a group analysis algorithm
+ * Data class used to store the results of the group accuracy analysis algorithm
  *
  * @author Alex
  */
-public class GroupAnalysisData implements AnalysisResult<String, GroupParticipantAnalysisData, String> {
+public class GroupNetQuizAccuracyResults implements AnalysisResult<String, NetQuizData, String> {
     /**
      * Returns a mapping from user ids to an analysis of that participant's performance
      * @return  A mapping from user ids to an analysis of that participant's performance
      */
     @Override
-    public Map<String, GroupParticipantAnalysisData> getData() {
+    public Map<String, NetQuizData> getData() {
         return dataMap;
     }
 
@@ -27,6 +29,6 @@ public class GroupAnalysisData implements AnalysisResult<String, GroupParticipan
         return statMap;
     }
 
-    private Map<String, GroupParticipantAnalysisData> dataMap = new HashMap<>();
+    private Map<String, NetQuizData> dataMap = new HashMap<>();
     private Map<String, String> statMap = new HashMap<>();
 }

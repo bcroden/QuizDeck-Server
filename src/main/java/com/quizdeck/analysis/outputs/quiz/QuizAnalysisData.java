@@ -1,4 +1,4 @@
-package com.quizdeck.analysis.outputs;
+package com.quizdeck.analysis.outputs.quiz;
 
 import com.quizdeck.analysis.inputs.Question;
 
