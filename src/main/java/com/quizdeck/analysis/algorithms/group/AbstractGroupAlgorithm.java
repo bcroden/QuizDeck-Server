@@ -26,9 +26,6 @@ abstract class AbstractGroupAlgorithm implements Analysis {
         allResponses = rawCompletedQuizzes.stream().map(CompleteQuiz::getSubmissions)
                                                     .flatMap(List::stream)
                                                     .collect(Collectors.toList());
-        Set<String> userNames = allResponses.stream()
-                                            .map(Response::getUserName)
-                                            .collect(Collectors.toSet());
     }
 
     protected abstract AnalysisResult getGroupAnalysisData();
