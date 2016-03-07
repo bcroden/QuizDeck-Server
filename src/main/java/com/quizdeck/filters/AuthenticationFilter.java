@@ -4,9 +4,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 
 import javax.servlet.*;
@@ -21,6 +23,7 @@ import java.io.IOException;
  *
  * Created by Brandon on 2/10/2016.
  */
+@Slf4j
 public class AuthenticationFilter implements Filter {
     public static final String CLAIMS_ATTRIBUTE = "claims";
 
@@ -32,6 +35,12 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+
+        // Allow CORS options to pass through
+        if(request.getMethod().equals(HttpMethod.OPTIONS.name())) {
+            chain.doFilter(req, res);
+            return;
+        }
 
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -74,5 +83,4 @@ public class AuthenticationFilter implements Filter {
     }
 
     private final String secretKey;
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 }
