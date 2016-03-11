@@ -6,6 +6,7 @@ import com.quizdeck.analysis.inputs.Response;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class submission implements Response {
+public class submission implements Response, Serializable {
 
     private String userName;
 
@@ -34,5 +35,14 @@ public class submission implements Response {
     @Override
     public Question getQuestion() {
         return question;
+    }
+
+    @Override
+    public String toString() {
+        return "submission{" +
+                "userName='" + userName + '\'' +
+                ", choosenAnswers=" + choosenAnswers +
+                ", question=" + question +
+                '}';
     }
 }

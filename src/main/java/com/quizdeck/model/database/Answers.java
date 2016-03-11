@@ -4,13 +4,15 @@ import com.quizdeck.analysis.inputs.Selection;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * Created by Cade on 2/16/2016.
  */
 
 @Getter
 @Setter
-public class Answers extends Selection {
+public class Answers extends Selection implements Serializable {
 
     private String content;
     private String id;
