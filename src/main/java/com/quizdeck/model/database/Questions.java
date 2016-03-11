@@ -6,11 +6,12 @@ import com.quizdeck.analysis.inputs.Selection;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
 @Setter
-public class Questions extends Question {
+public class Questions extends Question implements Serializable {
 
     private String question;
     private String questionFormat;

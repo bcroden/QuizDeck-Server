@@ -25,4 +25,8 @@ public class RedisSubmissions {
     public void addLink(String quizId, submission sub){
         listOps.leftPush(quizId, sub);
     }
+
+    public long getSize(String quizId) {return listOps.size(quizId);}
+
+    public submission getFirst(String quizID) {return listOps.leftPop(quizID);}
 }
