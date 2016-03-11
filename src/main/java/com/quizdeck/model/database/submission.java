@@ -22,6 +22,14 @@ public class submission implements Response, Serializable {
 
     private Questions question;
 
+    public submission(String username, List<Guess> choosenAnswers, Questions question) {
+        this.userName = username;
+        this.question = question;
+        this.choosenAnswers = choosenAnswers;
+    }
+
+    public submission(){}
+
     @Override
     public String getUserName() {
         return userName;
