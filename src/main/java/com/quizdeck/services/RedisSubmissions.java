@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Cade on 3/8/2016.
@@ -29,4 +31,12 @@ public class RedisSubmissions {
     public long getSize(String quizId) {return listOps.size(quizId);}
 
     public submission getFirst(String quizID) {return listOps.leftPop(quizID);}
+
+    public List<submission> getAllSubmissions(String quizID){
+        List<submission> subs = new ArrayList<>();
+        for(int i = 0; i < listOps.size(quizID); i++){
+            subs.add(listOps.leftPop(quizID));
+        }
+        return subs;
+    }
 }
