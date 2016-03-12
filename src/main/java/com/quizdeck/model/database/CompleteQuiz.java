@@ -30,13 +30,13 @@ public class CompleteQuiz {
     private String title;
     private String owner;
 
-    private List<submission> submissions;
+    private List<? extends Submissions> submissions;
 
     @Deprecated
     private List<String> labels; //labels belong to the quiz object, not completed quizzes
 
     @PersistenceConstructor
-    public CompleteQuiz(Quiz quiz, Date start, Date stop, String title, String owner, List<submission> submissions) {
+    public CompleteQuiz(Quiz quiz, Date start, Date stop, String title, String owner, List<? extends Submissions> submissions) {
         this.quiz = quiz;
         this.quizId = quiz.getId() + new Date().toString();
         this.start = start;
