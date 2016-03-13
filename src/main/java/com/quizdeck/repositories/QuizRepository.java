@@ -15,6 +15,8 @@ public interface QuizRepository extends MongoRepository<Quiz, String> {
 
     public Quiz findByTitleAndOwner(@Param("title") String title, @Param("owner") String owner);
 
+    public Quiz findById(@Param("id") String id);
+
     public List<Quiz> findByOwnerAndLabelsIn(@Param("owner") String owner, @Param("labels") List<String> labels);
 
     public long removeById(@Param("id") String id);
