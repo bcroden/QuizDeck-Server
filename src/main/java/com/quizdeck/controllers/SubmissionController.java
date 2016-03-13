@@ -1,5 +1,6 @@
 package com.quizdeck.controllers;
 
+import com.quizdeck.exceptions.InactiveQuizException;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.submission;
@@ -32,20 +33,18 @@ public class SubmissionController {
     RedisActiveQuiz redisActiveQuiz;
 
     @RequestMapping(value="/submission", method= RequestMethod.POST)
-    public ResponseEntity<String> insertSubmission(@Valid @RequestBody SubmissionInput input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> insertSubmission(@Valid @RequestBody SubmissionInput input, BindingResult result) throws InvalidJsonException, InactiveQuizException{
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
         //add newest submission for a specific active quiz only
         ActiveQuiz temp = redisActiveQuiz.getEntry(input.getQuizID());
-        if(temp.isActive()) {
+        if(temp != null && temp.isActive()) {
             redisSubmissions.addSubmissionLink(input.getQuizID(), new submission(input.getUserName(), input.getChoosenAnswers(), input.getQuestion()));
-            redisActiveQuiz.addEntry(input.getQuizID(), temp);
+            return new ResponseEntity<String>(HttpStatus.OK);
         }
-        else{
-            redisActiveQuiz.addEntry(input.getQuizID(), temp);
-        }
-        return new ResponseEntity<String>(HttpStatus.OK);
+        else
+            throw new InactiveQuizException();
     }
 
 }

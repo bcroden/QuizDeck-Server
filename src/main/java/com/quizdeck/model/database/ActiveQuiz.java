@@ -21,4 +21,11 @@ public class ActiveQuiz implements Serializable {
 
     private boolean active;
 
+    public ActiveQuiz(Date start, boolean active){
+        this.start = start;
+        this.active = active;
+    }
+
+    public ActiveQuiz(){}
+
 }
