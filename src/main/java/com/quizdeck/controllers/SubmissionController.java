@@ -37,13 +37,13 @@ public class SubmissionController {
             throw new InvalidJsonException();
         }
         //add newest submission for a specific active quiz only
-        ActiveQuiz temp = redisActiveQuiz.getFirst(input.getQuizID());
+        ActiveQuiz temp = redisActiveQuiz.getEntry(input.getQuizID());
         if(temp.isActive()) {
             redisSubmissions.addSubmissionLink(input.getQuizID(), new submission(input.getUserName(), input.getChoosenAnswers(), input.getQuestion()));
-            redisActiveQuiz.addLink(input.getQuizID(), temp);
+            redisActiveQuiz.addEntry(input.getQuizID(), temp);
         }
         else{
-            redisActiveQuiz.addLink(input.getQuizID(), temp);
+            redisActiveQuiz.addEntry(input.getQuizID(), temp);
         }
         return new ResponseEntity<String>(HttpStatus.OK);
     }

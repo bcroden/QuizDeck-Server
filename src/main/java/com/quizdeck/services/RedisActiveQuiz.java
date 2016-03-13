@@ -3,8 +3,8 @@ package com.quizdeck.services;
 import com.quizdeck.model.database.ActiveQuiz;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,20 +18,20 @@ import javax.annotation.Resource;
 @Service
 public class RedisActiveQuiz {
 
-    public RedisTemplate<String, ActiveQuiz> redisQuizTemplate;
+    public RedisTemplate redisTemplate;
 
-    @Resource(name="redisQuizTemplate")
-    private ListOperations<String, ActiveQuiz> listOps;
+    @Resource(name="redisTemplate")
+    private ValueOperations<String, ActiveQuiz> valueOps;
 
-    public void addLink(String quizId, ActiveQuiz quiz){
-        listOps.leftPush(quizId, quiz);
-    }
+    public void addEntry(String quizId, ActiveQuiz quiz){valueOps.set(quizId, quiz);}
 
-    public ActiveQuiz getFirst(String quizId){return listOps.leftPop(quizId);}
+    public ActiveQuiz getEntry(String quizId){return valueOps.get(quizId);}
 
-    public void updateLink(String quizId, ActiveQuiz quiz) {
-        quiz.setStart(listOps.leftPop(quizId).getStart());
-        listOps.leftPush("quizId", quiz);
+    public void removeEntry(String quizId){valueOps.getOperations().delete(quizId);}
+
+    public void updateEntry(String quizId, ActiveQuiz quiz) {
+        quiz.setStart(valueOps.get(quizId).getStart());
+        valueOps.getAndSet(quizId, quiz);
     }
 
 }

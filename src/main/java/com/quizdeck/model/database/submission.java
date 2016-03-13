@@ -16,10 +16,10 @@ public class submission extends Submissions implements Response{
 
     private String userName;
 
-    public submission(String username, List<Guess> choosenAnswers, Questions question) {
+    public submission(String username, List<Guess> guesses, Questions question) {
         this.userName = username;
         this.question = question;
-        this.choosenAnswers = choosenAnswers;
+        this.guesses = guesses;
     }
 
     public submission(){}
@@ -31,7 +31,7 @@ public class submission extends Submissions implements Response{
 
     @Override
     public List<Guess> getGuesses() {
-        return choosenAnswers;
+        return guesses;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class submission extends Submissions implements Response{
     public String toString() {
         return "submission{" +
                 "userName='" + userName + '\'' +
-                ", choosenAnswers=" + choosenAnswers +
+                ", guesses=" + guesses +
                 ", question=" + question +
                 '}';
     }

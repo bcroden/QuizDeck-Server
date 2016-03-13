@@ -53,7 +53,7 @@ public class CompleteQuizSubmissionController {
         ActiveQuiz temp = new ActiveQuiz();
         temp.setStop(new Date());
         temp.setActive(false);
-        redisActiveQuiz.updateLink(input.getQuizId(), temp);
+        redisActiveQuiz.updateEntry(input.getQuizId(), temp);
         //--------------------------------------------------
         CompleteQuiz quiz = new CompleteQuiz(input.getQuiz(), temp.getStart(), temp.getStop(), input.getQuiz().getTitle(), input.getQuiz().getOwner(), subs);
 

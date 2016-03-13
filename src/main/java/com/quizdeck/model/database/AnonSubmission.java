@@ -19,10 +19,19 @@ import java.util.List;
 @Setter
 public class AnonSubmission extends Submissions {
 
-    public AnonSubmission(List<Guess> choosenAnswers, Questions question) {
+    public AnonSubmission(List<Guess> guesses, Questions question) {
         this.question = question;
-        this.choosenAnswers = choosenAnswers;
+        this.guesses = guesses;
     }
 
+    @Override
+    public String getUserName() {
+        return "anonymous";
+    }
+
+    @Override
+    public List<Guess> getGuesses() {
+        return this.guesses;
+    }
 }
 

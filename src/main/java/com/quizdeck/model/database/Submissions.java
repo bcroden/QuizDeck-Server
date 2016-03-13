@@ -1,6 +1,7 @@
 package com.quizdeck.model.database;
 
 import com.quizdeck.analysis.inputs.Guess;
+import com.quizdeck.analysis.inputs.Response;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,9 +14,9 @@ import java.util.List;
 
 @Getter
 @Setter
-public abstract class Submissions implements Serializable{
+public abstract class Submissions implements Response, Serializable{
 
-    public List<Guess> choosenAnswers;
+    public List<Guess> guesses;
 
     public Questions question;
 

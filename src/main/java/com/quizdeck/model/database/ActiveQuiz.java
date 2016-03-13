@@ -3,6 +3,7 @@ package com.quizdeck.model.database;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class ActiveQuiz {
+public class ActiveQuiz implements Serializable {
 
     private Date start;
     private Date stop;
