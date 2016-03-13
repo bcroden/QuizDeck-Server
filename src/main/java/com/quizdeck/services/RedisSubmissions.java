@@ -1,5 +1,7 @@
 package com.quizdeck.services;
 
+import com.quizdeck.model.database.AnonSubmission;
+import com.quizdeck.model.database.Submissions;
 import com.quizdeck.model.database.submission;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,18 +24,24 @@ public class RedisSubmissions {
     private RedisTemplate redisTemplate;
 
     @Resource(name="redisTemplate")
-    private ListOperations<String, submission> listOps;
+    private ListOperations<String, Submissions> listOps;
 
-    public void addLink(String quizId, submission sub){
+    public void addSubmissionLink(String quizId, submission sub){
+        listOps.leftPush(quizId, sub);
+    }
+
+    public void addAnonSubmissionLink(String quizId, AnonSubmission sub){
         listOps.leftPush(quizId, sub);
     }
 
     public long getSize(String quizId) {return listOps.size(quizId);}
 
-    public submission getFirst(String quizID) {return listOps.leftPop(quizID);}
+    public submission getFirstSubmission(String quizID) {return (submission) listOps.leftPop(quizID);}
 
-    public List<submission> getAllSubmissions(String quizID){
-        List<submission> subs = new ArrayList<>();
+    public AnonSubmission getFirstAnonSubmission(String quizID) {return (AnonSubmission) listOps.leftPop(quizID);}
+
+    public List<? extends Submissions> getAllSubmissions(String quizID){
+        List<Submissions> subs = new ArrayList<>();
         for(int i = 0; i < listOps.size(quizID); i++){
             subs.add(listOps.leftPop(quizID));
         }

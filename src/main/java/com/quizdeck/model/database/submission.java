@@ -1,12 +1,10 @@
 package com.quizdeck.model.database;
 
 import com.quizdeck.analysis.inputs.Guess;
-import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,18 +12,14 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class submission implements Response, Serializable {
+public class submission extends Submissions implements Response{
 
     private String userName;
 
-    private List<Guess> choosenAnswers;
-
-    private Questions question;
-
-    public submission(String username, List<Guess> choosenAnswers, Questions question) {
+    public submission(String username, List<Guess> guesses, Questions question) {
         this.userName = username;
         this.question = question;
-        this.choosenAnswers = choosenAnswers;
+        this.guesses = guesses;
     }
 
     public submission(){}
@@ -37,11 +31,11 @@ public class submission implements Response, Serializable {
 
     @Override
     public List<Guess> getGuesses() {
-        return choosenAnswers;
+        return guesses;
     }
 
     @Override
-    public Question getQuestion() {
+    public Questions getQuestion() {
         return question;
     }
 
@@ -49,7 +43,7 @@ public class submission implements Response, Serializable {
     public String toString() {
         return "submission{" +
                 "userName='" + userName + '\'' +
-                ", choosenAnswers=" + choosenAnswers +
+                ", guesses=" + guesses +
                 ", question=" + question +
                 '}';
     }

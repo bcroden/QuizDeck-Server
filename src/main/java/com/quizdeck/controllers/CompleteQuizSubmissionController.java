@@ -1,10 +1,12 @@
 package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
+import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.CompleteQuiz;
-import com.quizdeck.model.database.submission;
+import com.quizdeck.model.database.Submissions;
 import com.quizdeck.model.inputs.CompleteQuizInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
+import com.quizdeck.services.RedisActiveQuiz;
 import com.quizdeck.services.RedisSubmissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +35,9 @@ public class CompleteQuizSubmissionController {
     @Autowired
     RedisSubmissions redisSubmissions;
 
+    @Autowired
+    RedisActiveQuiz redisActiveQuiz;
+
     @RequestMapping(value="/submit", method = RequestMethod.POST)
     public ResponseEntity<String> submitQuiz(@Valid @RequestBody CompleteQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
@@ -42,8 +48,16 @@ public class CompleteQuizSubmissionController {
         //compile submissions from redis
 
         //will also close the quiz on redis, and add it to the database.
-        List<submission> subs = redisSubmissions.getAllSubmissions(input.getQuizId());
-        completeQuizRepository.save(new CompleteQuiz());
+        List<? extends Submissions> subs = redisSubmissions.getAllSubmissions(input.getQuizId());
+        //get active quiz information and update redis entry
+        ActiveQuiz temp = new ActiveQuiz();
+        temp.setStop(new Date());
+        temp.setActive(false);
+        redisActiveQuiz.updateEntry(input.getQuizId(), temp);
+        //--------------------------------------------------
+        CompleteQuiz quiz = new CompleteQuiz(input.getQuiz(), temp.getStart(), temp.getStop(), input.getQuiz().getTitle(), input.getQuiz().getOwner(), subs);
+
+        completeQuizRepository.save(quiz);
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
