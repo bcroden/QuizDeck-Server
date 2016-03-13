@@ -18,8 +18,8 @@ apply plugin: 'spring-boot'
 apply plugin: 'jacoco'
 
 jar {
-    baseName = 'QuizDeck-Server'
-    version = '0.7.5-SNAPSHOT'
+    baseName = 'quizdeck'
+    version = '0.0.1-SNAPSHOT'
 }
 
 sourceCompatibility = 1.8
