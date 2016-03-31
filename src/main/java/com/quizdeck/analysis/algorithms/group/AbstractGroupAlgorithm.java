@@ -1,6 +1,7 @@
 package com.quizdeck.analysis.algorithms.group;
 
 import com.quizdeck.analysis.Analysis;
+import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisClassException;
 import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
  *
  * @author Alex
  */
-abstract class AbstractGroupAlgorithm implements Analysis {
+abstract class AbstractGroupAlgorithm implements StaticAnalysis {
     protected AbstractGroupAlgorithm(String groupName, List<CompleteQuiz> completedQuizzes) throws AnalysisClassException, AnalysisConstructionException, InsufficientDataException, AnalysisResultsUnavailableException {
         this.groupName = groupName;
         rawCompletedQuizzes = new LinkedList<>(completedQuizzes);

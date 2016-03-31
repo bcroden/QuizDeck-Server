@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
 /**
  * Performs accuracy analysis on each quiz in a group and calculates overall accuracy for the entire group
  *
+ * Data:    NetQuizData:    numberOfQuestions
+ *                          netAccuracy         (Class average)
+ *
+ * Stat:    "Net Accuracy"  Unweighted average
+ *
  * @author Alex
  */
 class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
@@ -71,11 +76,11 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
             netQuizData.setNumberOfQuestions(completedQuiz.getQuiz().getQuestions().size());
             netQuizData.setNetAccuracy(numCorrect / (double) numTotal);
 
-            groupNetQuizAccuracyResults.getData().put(completedQuiz.getQuizId(), netQuizData);
+            groupNetQuizAccuracyResults.getData().put(completedQuiz.getQuiz().getTitle(), netQuizData);
         }
 
         groupNetQuizAccuracyResults.getStats().put("Net Accuracy", Double.toString(totNumCorrect / (double) totNumAvailable));
-
+        resultsAvailable = true;
         return true;
     }
 
