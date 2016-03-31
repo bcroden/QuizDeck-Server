@@ -52,7 +52,7 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
                 List<Response> responses = completedQuiz.getSubmissions()
                                                         .stream()
                                                         .filter(submission -> submission.getUserName().equals(userName))
-                                                        .collect(Collectors.toList());
+                                                        .collect(Collectors.<Response>toList());
                 for(Question question : completedQuiz.getQuiz().getQuestions()) {
                     //Was this participant's final guess correct?
                     boolean isCorrect = responses.stream()
