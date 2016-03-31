@@ -42,7 +42,7 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
         for(CompleteQuiz completedQuiz : getRawCompletedQuizzes()) {
             Set<String> userNames =  completedQuiz.getSubmissions()
                                                     .stream()
-                                                    .map(submission::getUserName)
+                                                    .map(submission -> submission.getUserName())
                                                     .collect(Collectors.toSet());
             int numTotal = completedQuiz.getQuiz().getQuestions().size() * userNames.size();
 
