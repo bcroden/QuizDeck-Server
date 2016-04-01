@@ -5,6 +5,7 @@ import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
 import com.quizdeck.analysis.exceptions.InsufficientDataException;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
+import com.quizdeck.model.database.CompleteQuiz;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class QuizAnalysisFactory {
     @SuppressWarnings("unchecked")
-    public Analysis getAnalysisUsing(QuizAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
+    public QuizAnalysis getAnalysisUsing(QuizAnalysisAlgorithm algorithm) throws AnalysisClassException, InsufficientDataException, AnalysisConstructionException {
         Class theClass = null;
         try
         {
@@ -44,12 +45,20 @@ public class QuizAnalysisFactory {
             constructor.setAccessible(true);
             Object o = constructor.newInstance(responses, questions, quizID, categories, ownerID);
             clear();
-            return (Analysis) o;
+            return (QuizAnalysis) o;
         }
         catch(InstantiationException | IllegalAccessException | InvocationTargetException e)
         {
             throw new AnalysisConstructionException(e.getMessage(), e);
         }
+    }
+
+    public void autoFillWith(CompleteQuiz completeQuiz) {
+        setOwnerID(completeQuiz.getOwner());
+        setCategories(completeQuiz.getQuiz().getCategories());
+        setQuizID(completeQuiz.getQuizId());
+        setResponses(completeQuiz.getSubmissions());
+        setQuestions(completeQuiz.getQuiz().getQuestions());
     }
 
     public void setOwnerID(String id) {

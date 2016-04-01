@@ -1,14 +1,14 @@
-package com.quizdeck.analysis.algorithms;
+package com.quizdeck.analysis.algorithms.quiz;
 
 import com.quizdeck.analysis.*;
-import com.quizdeck.analysis.QuizAlgorithm;
+import com.quizdeck.analysis.QuizAnalysisAlgorithm;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.exceptions.AnalysisResultsUnavailableException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Test for the Quiz Accuracy Algorithm
  *
- * Note: com.quizdeck.analysis.QuizAlgorithm must be explicitly imported. Right now it
+ * Note: com.quizdeck.analysis.QuizAnalysisAlgorithm must be explicitly imported. Right now it
  *          is not being brought in by the wildcard, so I am importing it explicitly
  *          for now.
  *
@@ -58,7 +58,7 @@ public class QuizAccuracyAlgorithmTest {
             responses.add(new MockResponse(GILLIGAN, new MockSelection(Integer.toString(i).charAt(0)), questions.get(i-1), 2));
         factory.setResponses(responses);
 
-        analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
     }
 
     /**
@@ -151,7 +151,7 @@ public class QuizAccuracyAlgorithmTest {
         QuizAnalysisData quizResults = (QuizAnalysisData) analysis.getResults();
         assertThat("Incorrect quiz owner", quizResults.getOwnerID(), is(OWNER));
         assertThat("Incorrect quiz ID", quizResults.getQuizID(), is(QUIZ_ID));
-        assertThat("Incorrect deck ID", quizResults.getCategories(), is(CATEGORIES));
+        assertThat("Incorrect categories", quizResults.getCategories(), is(CATEGORIES));
     }
 
     /**

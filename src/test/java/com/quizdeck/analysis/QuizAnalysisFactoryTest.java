@@ -27,7 +27,7 @@ public class QuizAnalysisFactoryTest {
     @Test(expected = InsufficientDataException.class)
     public void insufficientDataTest() throws AnalysisException {
         QuizAnalysisFactory factory = new QuizAnalysisFactory();
-        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        StaticAnalysis analysis = (StaticAnalysis) factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
     }
 
     /**
@@ -36,7 +36,7 @@ public class QuizAnalysisFactoryTest {
     @Test
     public void constructEmptyAnalysis() throws AnalysisException {
         QuizAnalysisFactory factory = getFullFactory();
-        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
+        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
     }
 
     /**
@@ -45,8 +45,8 @@ public class QuizAnalysisFactoryTest {
     @Test(expected = InsufficientDataException.class)
     public void doubleJeopardy1() throws AnalysisException {
         QuizAnalysisFactory factory = getFullFactory();
-        factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);
-        factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);   //should throw exception
+        factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);
+        factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);   //should throw exception
     }
 
     /**
@@ -56,7 +56,7 @@ public class QuizAnalysisFactoryTest {
     public void doubleJeopardy2() throws AnalysisException {
         QuizAnalysisFactory factory = getFullFactory();
         factory.clear();
-        factory.getAnalysisUsing(QuizAlgorithm.ACCURACY);   //should throw exception
+        factory.getAnalysisUsing(QuizAnalysisAlgorithm.ACCURACY);   //should throw exception
     }
 
     private QuizAnalysisFactory getFullFactory() throws AnalysisException {

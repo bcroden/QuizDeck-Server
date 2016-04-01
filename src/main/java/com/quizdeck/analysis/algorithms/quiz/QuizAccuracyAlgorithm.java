@@ -1,10 +1,9 @@
-package com.quizdeck.analysis.algorithms;
+package com.quizdeck.analysis.algorithms.quiz;
 
-import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.inputs.GuessArrivalComparator;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 
 import java.util.*;
 
@@ -20,7 +19,7 @@ import java.util.*;
  *
  * @author Alex
  */
-class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm implements StaticAnalysis {
+class QuizAccuracyAlgorithm extends AbstractQuizAlgorithm {
     protected QuizAccuracyAlgorithm(List<Response> responses, List<Question> questions, String quizID, List<String> categories, String owner) {
         super(responses, questions, quizID, categories, owner);
 

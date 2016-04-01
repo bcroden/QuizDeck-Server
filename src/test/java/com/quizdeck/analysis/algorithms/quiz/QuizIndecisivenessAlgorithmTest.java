@@ -1,12 +1,12 @@
-package com.quizdeck.analysis.algorithms;
+package com.quizdeck.analysis.algorithms.quiz;
 
 import com.quizdeck.analysis.*;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
-import com.quizdeck.analysis.outputs.QuizAnalysisData;
-import com.quizdeck.analysis.outputs.QuizParticipantAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizAnalysisData;
+import com.quizdeck.analysis.outputs.quiz.QuizParticipantAnalysisData;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class QuizIndecisivenessAlgorithmTest {
 
         factory.setResponses(responses);
 
-        Analysis analysis = factory.getAnalysisUsing(QuizAlgorithm.INDECISIVENESS);
+        Analysis analysis = factory.getAnalysisUsing(QuizAnalysisAlgorithm.INDECISIVENESS);
         analysis.performAnalysis();
         quizAnalysisData = (QuizAnalysisData) analysis.getResults();
     }
@@ -65,7 +65,7 @@ public class QuizIndecisivenessAlgorithmTest {
     public void testMetaData() {
         assertThat("Data should not be null", quizAnalysisData, notNullValue());
         assertThat("Incorrect owner ID", quizAnalysisData.getOwnerID(), is(OWNER_ID));
-        assertThat("Incorrect deck ID", quizAnalysisData.getCategories(), is(CATEGORIES));
+        assertThat("Incorrect categories", quizAnalysisData.getCategories(), is(CATEGORIES));
         assertThat("Incorrect quiz ID", quizAnalysisData.getQuizID(), is(QUIZ_ID));
     }
 
