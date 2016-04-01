@@ -19,10 +19,14 @@ public class CompleteQuizInput {
     private Quiz quiz;
 
     @NotNull
+    private String quizId;
+
+    @NotNull
     private List<submission> submissions;
 
 
-    public CompleteQuizInput(Quiz quiz, List<submission> submissions) {
+    public CompleteQuizInput(String quizId, Quiz quiz, List<submission> submissions) {
+        this.quizId = quizId;
         this.quiz = quiz;
         this.submissions = submissions;
     }

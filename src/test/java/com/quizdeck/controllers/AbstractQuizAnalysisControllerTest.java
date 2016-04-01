@@ -73,7 +73,7 @@ public abstract class AbstractQuizAnalysisControllerTest {
         for(Questions question : quiz.getQuestions()) {
             submission sub = new submission();
             sub.setUserName("User #1");
-            sub.setChoosenAnswers(getGuessesTo(question));
+            sub.setGuesses(getGuessesTo(question));
             sub.setQuestion(question);
             submissions.add(sub);
         }

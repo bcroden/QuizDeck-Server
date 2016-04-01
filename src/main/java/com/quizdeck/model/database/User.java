@@ -30,6 +30,12 @@ public class User{
 
     private List<String> labels;
 
+    private List<String> categories;
+
+    private List<String> subscriptions;
+
+    private int numSubscribed;
+
     @PersistenceConstructor
     public User(String userName, String hashedPassword, String email, Date signUp) {
         this.userName = userName;

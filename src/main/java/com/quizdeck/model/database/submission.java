@@ -1,7 +1,6 @@
 package com.quizdeck.model.database;
 
 import com.quizdeck.analysis.inputs.Guess;
-import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Response;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,13 +12,17 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class submission implements Response {
+public class submission extends Submissions implements Response{
 
     private String userName;
 
-    private List<Guess> choosenAnswers;
+    public submission(String username, List<Guess> guesses, Questions question) {
+        this.userName = username;
+        this.question = question;
+        this.guesses = guesses;
+    }
 
-    private Questions question;
+    public submission(){}
 
     @Override
     public String getUserName() {
@@ -28,11 +31,20 @@ public class submission implements Response {
 
     @Override
     public List<Guess> getGuesses() {
-        return choosenAnswers;
+        return guesses;
     }
 
     @Override
-    public Question getQuestion() {
+    public Questions getQuestion() {
         return question;
+    }
+
+    @Override
+    public String toString() {
+        return "submission{" +
+                "userName='" + userName + '\'' +
+                ", guesses=" + guesses +
+                ", question=" + question +
+                '}';
     }
 }
