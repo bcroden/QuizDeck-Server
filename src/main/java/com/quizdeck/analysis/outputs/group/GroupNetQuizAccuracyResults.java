@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class GroupNetQuizAccuracyResults implements AnalysisResult<String, NetQuizData, String> {
 
+    public GroupNetQuizAccuracyResults() {}
     public GroupNetQuizAccuracyResults(List<String> labels) {
         this.labels = labels;
     }

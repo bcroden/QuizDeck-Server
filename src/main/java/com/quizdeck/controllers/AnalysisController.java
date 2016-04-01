@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -59,6 +58,7 @@ public class AnalysisController {
         return analysis.getResults();
     }
 
+    @RequestMapping(value="label/net-accuracy/", method = RequestMethod.POST)
     public AnalysisResult groupNetAccuracyResponse(@Valid @RequestBody OwnerLabelsInput input, BindingResult result) throws InvalidJsonException, InsufficientDataException, AnalysisClassException, AnalysisConstructionException, AnalysisResultsUnavailableException {
         if(result.hasErrors())
             throw new InvalidJsonException();
