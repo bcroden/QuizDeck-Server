@@ -100,13 +100,13 @@ public class GroupNetQuizAccuracyAlgorithmTest {
         for(Questions question : quiz.getQuestions()) {
             submission bilboSub = new submission();
             bilboSub.setQuestion(question);
-            bilboSub.setChoosenAnswers(getCorrectGuessesFor(question));
+            bilboSub.setGuesses(getCorrectGuessesFor(question));
             bilboSub.setUserName(BILBO.getUsername());
             submissions.add(bilboSub);
 
             submission gimliSub = new submission();
             gimliSub.setQuestion(question);
-            gimliSub.setChoosenAnswers(getIncorrectGuessFor(question));
+            gimliSub.setGuesses(getIncorrectGuessFor(question));
             gimliSub.setUserName(GIMLI.getUsername());
             submissions.add(gimliSub);
         }
