@@ -1,6 +1,5 @@
 package com.quizdeck.analysis.algorithms.group;
 
-import com.quizdeck.analysis.Analysis;
 import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisClassException;
 import com.quizdeck.analysis.exceptions.AnalysisConstructionException;
@@ -12,7 +11,6 @@ import com.quizdeck.model.database.CompleteQuiz;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -21,8 +19,8 @@ import java.util.stream.Collectors;
  * @author Alex
  */
 abstract class AbstractGroupAlgorithm implements StaticAnalysis {
-    protected AbstractGroupAlgorithm(String groupName, List<CompleteQuiz> completedQuizzes) throws AnalysisClassException, AnalysisConstructionException, InsufficientDataException, AnalysisResultsUnavailableException {
-        this.groupName = groupName;
+    protected AbstractGroupAlgorithm(List<String> labels, List<CompleteQuiz> completedQuizzes) throws AnalysisClassException, AnalysisConstructionException, InsufficientDataException, AnalysisResultsUnavailableException {
+        this.labels.addAll(labels);
         rawCompletedQuizzes = new LinkedList<>(completedQuizzes);
         allResponses = rawCompletedQuizzes.stream().map(CompleteQuiz::getSubmissions)
                                                     .flatMap(List::stream)
@@ -42,14 +40,14 @@ abstract class AbstractGroupAlgorithm implements StaticAnalysis {
     protected List<Response> getAllResponses() {
         return allResponses;
     }
-    protected String getGroupName() {
-        return groupName;
+    protected List<String> getLabels() {
+        return labels;
     }
     protected List<CompleteQuiz> getRawCompletedQuizzes() {
         return rawCompletedQuizzes;
     }
 
-    private String groupName;
+    private List<String> labels = new LinkedList<>();
     private List<CompleteQuiz> rawCompletedQuizzes;
     private List<Response> allResponses;
 }

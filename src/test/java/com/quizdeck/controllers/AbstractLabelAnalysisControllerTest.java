@@ -1,72 +1,68 @@
-package com.quizdeck.analysis.algorithms.group;
+package com.quizdeck.controllers;
 
-import com.quizdeck.analysis.GroupAnalysisAlgorithm;
-import com.quizdeck.analysis.GroupAnalysisFactory;
+import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.MockMember;
-import com.quizdeck.analysis.StaticAnalysis;
-import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Selection;
-import com.quizdeck.analysis.outputs.group.GroupNetQuizAccuracyResults;
 import com.quizdeck.model.database.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import com.quizdeck.model.inputs.AccuracyInput;
+import com.quizdeck.model.inputs.OwnerLabelsInput;
+import com.quizdeck.repositories.CompletedQuizRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.http.MockHttpOutputMessage;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
- * Unit test for the GroupNetQuizAccuracyAlgorithm
+ * Test the analysis controller
+ *
+ * @author Alex
  */
-public class GroupNetQuizAccuracyAlgorithmTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = QuizDeckApplication.class)
+@WebAppConfiguration
+public abstract class AbstractLabelAnalysisControllerTest {
 
-    @BeforeClass
-    public static void setup() throws AnalysisException {
+    @Before
+    public void setup() {
+        mockMvc = webAppContextSetup(webApplicationContext).build();
+    }
 
+    @Before
+    public void seedCompletedQuizRepository() {
         LABELS.add("Label1");
         LABELS.add("Label2");
 
-        List<CompleteQuiz> completeQuizzes = new LinkedList<>();
         for(int i = 0; i < QUIZ_TITLE.length; i++)
             completeQuizzes.add(getCompleteQuiz(QUIZ_TITLE[i], NUM_QUESTIONS_IN_QUIZ[i]));
 
-        GroupAnalysisFactory factory = new GroupAnalysisFactory();
-        factory.setLabels(LABELS);
-        factory.setCompletedQuizzes(completeQuizzes);
-        StaticAnalysis analysis = factory.getAnalysisUsing(GroupAnalysisAlgorithm.ACCURACY);
-        analysis.performAnalysis();
-        results = (GroupNetQuizAccuracyResults) analysis.getResults();
+        completedQuizRepository.save(completeQuizzes);
+        input.setOwner(completeQuizzes.get(0).getOwner());
+        input.setLabels(LABELS);
     }
 
-    @Test
-    public void testLabels() {
-        List<String> resultLabels = results.getLabels();
-
-        assertThat("Incorrect number of labels", resultLabels.size(), is(LABELS.size()));
-
-        LABELS.forEach(label -> assertTrue("Result label list is missing " + label, resultLabels.contains(label)));
-    }
-
-    @Test
-    public void testNumberOfQuestions() {
-        for(int i = 0; i < QUIZ_TITLE.length; i++)
-            assertThat("Incorrect number of questions", results.getData().get(QUIZ_TITLE[i]).getNumberOfQuestions(), is(NUM_QUESTIONS_IN_QUIZ[i]));
-
-    }
-
-    @Test
-    public void testIndividualQuizAccuracy() {
-        for(int i = 0; i  < QUIZ_TITLE.length; i++)
-            assertThat("Incorrect individual net accuracy for quiz #" + i, results.getData().get(QUIZ_TITLE[i]).getNetAccuracy(), is(INDIVIDUAL_NET_ACCURACY_FOR_QUIZ[i]));
-    }
-
-    @Test
-    public void testOverallAccuracy() {
-        assertThat("Incorrect overall accuracy", results.getStats().get("Net Accuracy"), is(OVERALL_ACCURACY));
+    @After
+    public void cleanCompletedQuizRepository() {
+        completedQuizRepository.delete(completeQuizzes);
     }
 
     private static CompleteQuiz getCompleteQuiz(String title, int numQuestions) {
@@ -140,12 +136,44 @@ public class GroupNetQuizAccuracyAlgorithmTest {
         return guesses;
     }
 
-    private static final String OVERALL_ACCURACY = "0.5";
-    private static final double[] INDIVIDUAL_NET_ACCURACY_FOR_QUIZ = new double[]{0.5, 0.5, 0.5};
+    protected List<String> getLabels() {
+        return LABELS;
+    }
+    protected OwnerLabelsInput getInput() {
+        return input;
+    }
+
+    private static final OwnerLabelsInput input = new OwnerLabelsInput();
+    private static final List<CompleteQuiz> completeQuizzes = new LinkedList<>();
     private static final String[] QUIZ_TITLE = new String[]{"Quiz1Title", "Quiz2Title", "Quiz3Title"};
     private static final int[] NUM_QUESTIONS_IN_QUIZ = {3, 3, 3};
     private static final List<String> LABELS = new LinkedList<>();
     private static final Member BILBO = new MockMember("Bilbo"),
                                 GIMLI = new MockMember("Gimli");
-    private static GroupNetQuizAccuracyResults results;
+
+    /*** Mocking out the controller ***/
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private CompletedQuizRepository completedQuizRepository;
+
+    @Autowired
+    void setConverters(HttpMessageConverter<?>[] converters) {
+        mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
+                .filter(hmc -> hmc instanceof MappingJackson2HttpMessageConverter)
+                .findAny()
+                .get();
+        assertThat("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter, is(notNullValue()));
+    }
+
+    protected String json(Object o) throws Exception {
+        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+        mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+        return mockHttpOutputMessage.getBodyAsString();
+    }
+
+    protected MockMvc mockMvc;
+    private HttpMessageConverter mappingJackson2HttpMessageConverter;
 }

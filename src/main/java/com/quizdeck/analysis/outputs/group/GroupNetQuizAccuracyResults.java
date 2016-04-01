@@ -3,6 +3,7 @@ package com.quizdeck.analysis.outputs.group;
 import com.quizdeck.analysis.outputs.AnalysisResult;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,6 +12,16 @@ import java.util.Map;
  * @author Alex
  */
 public class GroupNetQuizAccuracyResults implements AnalysisResult<String, NetQuizData, String> {
+
+    public GroupNetQuizAccuracyResults() {}
+    public GroupNetQuizAccuracyResults(List<String> labels) {
+        this.labels = labels;
+    }
+
+    public List<String> getLabels() {
+        return labels;
+    }
+
     /**
      * Returns a mapping from user ids to an analysis of that participant's performance
      * @return  A mapping from user ids to an analysis of that participant's performance
@@ -31,4 +42,6 @@ public class GroupNetQuizAccuracyResults implements AnalysisResult<String, NetQu
 
     private Map<String, NetQuizData> dataMap = new HashMap<>();
     private Map<String, String> statMap = new HashMap<>();
+
+    private List<String> labels;
 }

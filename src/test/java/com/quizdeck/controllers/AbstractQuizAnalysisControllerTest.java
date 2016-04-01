@@ -63,7 +63,7 @@ public abstract class AbstractQuizAnalysisControllerTest {
 
     @After
     public void cleanCompletedQuizRepository() {
-        completedQuizRepository.removeById(completeQuiz.getQuizId());
+        completedQuizRepository.delete(completeQuiz);
     }
 
 
