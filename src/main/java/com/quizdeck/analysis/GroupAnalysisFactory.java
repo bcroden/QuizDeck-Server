@@ -11,7 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Alex on 3/30/2016.
+ * Uses a modified Factory pattern to allow access to group/label level analysis algorithms.
+ *
+ * @author Alex
  */
 public class GroupAnalysisFactory {
 
@@ -39,7 +41,7 @@ public class GroupAnalysisFactory {
         try
         {
             constructor.setAccessible(true);
-            Object o = constructor.newInstance(groupName, completedQuizzes);
+            Object o = constructor.newInstance(labels, completedQuizzes);
             clear();
             return (StaticAnalysis) o;
         }
@@ -50,8 +52,9 @@ public class GroupAnalysisFactory {
     }
 
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setLabels(List<String> labels) {
+        this.labels.clear();
+        this.labels.addAll(labels);
     }
     public void setCompletedQuizzes(List<CompleteQuiz> completedQuizzes) {
         this.completedQuizzes.clear();
@@ -59,14 +62,14 @@ public class GroupAnalysisFactory {
     }
 
     public void clear() {
-        groupName = null;
+        labels.clear();
         completedQuizzes.clear();
     }
 
     private Class[] getConstructorParameters() throws InsufficientDataException {
         LinkedList<String> missing = new LinkedList<>();
-        if(groupName == null)
-            missing.addLast("groupName");
+        if(labels.isEmpty())
+            missing.addLast("labels");
         if(completedQuizzes.isEmpty())
             missing.addLast("completedQuizzes");
 
@@ -82,9 +85,9 @@ public class GroupAnalysisFactory {
             throw new InsufficientDataException(sb.toString());
         }
 
-        return new Class[]{String.class, List.class};
+        return new Class[]{List.class, List.class};
     }
 
-    private String groupName;
+    private List<String> labels = new LinkedList<>();
     private List<CompleteQuiz> completedQuizzes = new LinkedList<>();
 }

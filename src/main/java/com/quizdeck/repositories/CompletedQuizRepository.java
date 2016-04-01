@@ -17,6 +17,6 @@ public interface CompletedQuizRepository extends MongoRepository<CompleteQuiz, S
 
     public List<CompleteQuiz> findByTitleAndOwner(@Param("title") String title, @Param("owner") String owner);
 
-    public List<CompleteQuiz> findByTitleAndOwnerAndLabelsIn(@Param("title") String title, @Param("owner") String owner, @Param("labels") List<String> labels);
+    public List<CompleteQuiz> findByOwnerAndLabelsIn(@Param("owner") String owner, @Param("labels") List<String> labels);
 
 }

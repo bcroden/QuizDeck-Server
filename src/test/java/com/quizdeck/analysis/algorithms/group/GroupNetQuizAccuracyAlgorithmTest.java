@@ -15,11 +15,9 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Unit test for the GroupNetQuizAccuracyAlgorithm
@@ -29,16 +27,28 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     @BeforeClass
     public static void setup() throws AnalysisException {
 
+        LABELS.add("Label1");
+        LABELS.add("Label2");
+
         List<CompleteQuiz> completeQuizzes = new LinkedList<>();
         for(int i = 0; i < QUIZ_TITLE.length; i++)
             completeQuizzes.add(getCompleteQuiz(QUIZ_TITLE[i], NUM_QUESTIONS_IN_QUIZ[i]));
 
         GroupAnalysisFactory factory = new GroupAnalysisFactory();
-        factory.setGroupName(LABEL);
+        factory.setLabels(LABELS);
         factory.setCompletedQuizzes(completeQuizzes);
         StaticAnalysis analysis = factory.getAnalysisUsing(GroupAnalysisAlgorithm.ACCURACY);
         analysis.performAnalysis();
         results = (GroupNetQuizAccuracyResults) analysis.getResults();
+    }
+
+    @Test
+    public void testLabels() {
+        List<String> resultLabels = results.getLabels();
+
+        assertThat("Incorrect number of labels", resultLabels.size(), is(LABELS.size()));
+
+        LABELS.forEach(label -> assertTrue("Result label list is missing " + label, resultLabels.contains(label)));
     }
 
     @Test
@@ -62,7 +72,7 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     private static CompleteQuiz getCompleteQuiz(String title, int numQuestions) {
         List<Questions> questions = getNQuestions(numQuestions);
         List<String> categories = Collections.singletonList("Category1");
-        Quiz quiz = new Quiz("owner", title, questions, Collections.singletonList(LABEL), categories);
+        Quiz quiz = new Quiz("owner", title, questions, LABELS, categories);
         List<submission> submissions = getSubmissionsForQuiz(quiz);
         return new CompleteQuiz(quiz, new Date(), new Date(), title, "owner", submissions);
     }
@@ -134,7 +144,7 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     private static final double[] INDIVIDUAL_NET_ACCURACY_FOR_QUIZ = new double[]{0.5, 0.5, 0.5};
     private static final String[] QUIZ_TITLE = new String[]{"Quiz1Title", "Quiz2Title", "Quiz3Title"};
     private static final int[] NUM_QUESTIONS_IN_QUIZ = {3, 3, 3};
-    private static final String LABEL = "The Label";
+    private static final List<String> LABELS = new LinkedList<>();
     private static final Member BILBO = new MockMember("Bilbo"),
                                 GIMLI = new MockMember("Gimli");
     private static GroupNetQuizAccuracyResults results;

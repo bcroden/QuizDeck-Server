@@ -11,7 +11,6 @@ import com.quizdeck.analysis.outputs.AnalysisResult;
 import com.quizdeck.analysis.outputs.group.GroupNetQuizAccuracyResults;
 import com.quizdeck.analysis.outputs.group.NetQuizData;
 import com.quizdeck.model.database.CompleteQuiz;
-import com.quizdeck.model.database.submission;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,11 +28,11 @@ import java.util.stream.Collectors;
  * @author Alex
  */
 class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
-    protected GroupNetQuizAccuracyAlgorithm(String groupName, List<CompleteQuiz> completedQuizzes) throws InsufficientDataException, AnalysisClassException, AnalysisConstructionException, AnalysisResultsUnavailableException {
-        super(groupName, completedQuizzes);
+    protected GroupNetQuizAccuracyAlgorithm(List<String> labels, List<CompleteQuiz> completedQuizzes) throws InsufficientDataException, AnalysisClassException, AnalysisConstructionException, AnalysisResultsUnavailableException {
+        super(labels, completedQuizzes);
 
         resultsAvailable = false;
-        groupNetQuizAccuracyResults = new GroupNetQuizAccuracyResults();
+        groupNetQuizAccuracyResults = new GroupNetQuizAccuracyResults(getLabels());
     }
 
     @Override
@@ -80,6 +79,8 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
         }
 
         groupNetQuizAccuracyResults.getStats().put("Net Accuracy", Double.toString(totNumCorrect / (double) totNumAvailable));
+
+
         resultsAvailable = true;
         return true;
     }
