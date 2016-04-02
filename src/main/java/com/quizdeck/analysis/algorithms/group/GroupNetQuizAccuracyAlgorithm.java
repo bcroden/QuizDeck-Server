@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * Data:    NetQuizData:    numberOfQuestions
  *                          netAccuracy         (Class average)
  *
- * Stat:    "Net Accuracy"  Unweighted average
+ * Stat:    "Net Accuracy"  Unweighted average of individual quiz accuracy scores
  *
  * @author Alex
  */
@@ -37,7 +37,6 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
 
     @Override
     public boolean performAnalysis() {
-        long totNumAvailable = 0, totNumCorrect = 0;
         for(CompleteQuiz completedQuiz : getRawCompletedQuizzes()) {
             Set<String> userNames =  completedQuiz.getSubmissions()
                                                     .stream()
@@ -68,9 +67,6 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
                 }
             }
 
-            totNumAvailable += numTotal;
-            totNumCorrect += numCorrect;
-
             NetQuizData netQuizData = new NetQuizData();
             netQuizData.setNumberOfQuestions(completedQuiz.getQuiz().getQuestions().size());
             netQuizData.setNetAccuracy(numCorrect / (double) numTotal);
@@ -78,8 +74,11 @@ class GroupNetQuizAccuracyAlgorithm extends AbstractGroupAlgorithm {
             groupNetQuizAccuracyResults.getData().put(completedQuiz.getQuiz().getTitle(), netQuizData);
         }
 
-        groupNetQuizAccuracyResults.getStats().put("Net Accuracy", Double.toString(totNumCorrect / (double) totNumAvailable));
-
+        int numQuizzes = groupNetQuizAccuracyResults.getData().entrySet().size();
+        double netAccuracy = groupNetQuizAccuracyResults.getData().values().stream()
+                .mapToDouble(netQuizData -> netQuizData.getNetAccuracy())
+                .sum() / numQuizzes;
+        groupNetQuizAccuracyResults.getStats().put("Net Accuracy", Double.toString(netAccuracy));
 
         resultsAvailable = true;
         return true;
