@@ -56,4 +56,15 @@ public class ActivateQuizController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.GET)
+    public ResponseEntity<String> deactivateQuiz(@PathVariable String quizId){
+
+        //update redis entry
+        ActiveQuiz temp = new ActiveQuiz();
+        temp.setStop(new Date());
+        temp.setActive(false);
+        redisActiveQuiz.updateEntry(quizId, temp);
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
 }

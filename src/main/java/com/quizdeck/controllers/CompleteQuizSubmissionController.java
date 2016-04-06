@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,15 +48,16 @@ public class CompleteQuizSubmissionController {
 
         //will also close the quiz on redis, and add it to the database.
         List<? extends Submissions> subs = redisSubmissions.getAllSubmissions(input.getQuizId());
-        //get active quiz information and update redis entry
-        ActiveQuiz temp = new ActiveQuiz();
-        temp.setStop(new Date());
-        temp.setActive(false);
-        redisActiveQuiz.updateEntry(input.getQuizId(), temp);
+        //get active quiz information
+        ActiveQuiz temp = redisActiveQuiz.getEntry(input.getQuizId());
+
         //--------------------------------------------------
         CompleteQuiz quiz = new CompleteQuiz(input.getQuiz(), temp.getStart(), temp.getStop(), input.getQuiz().getTitle(), input.getQuiz().getOwner(), subs);
 
         completeQuizRepository.save(quiz);
+
+        //remove the active quiz entry from redis
+        redisActiveQuiz.removeEntry(input.getQuizId());
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
