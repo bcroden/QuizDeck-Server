@@ -20,13 +20,12 @@ public class QuizAccuracyAnalysisControllerTest extends AbstractQuizAnalysisCont
 
     @Test
     public void testQuizAccuracyResults() throws Exception {
-        String result = mockMvc.perform(get("/rest/secure/analysis/accuracy/").content(this.json(accuracyInput))
-                                                .contentType(MediaType.APPLICATION_JSON)
-                                        ).andExpect(status().is2xxSuccessful())
-                                        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                                        .andReturn()
-                                        .getResponse()
-                                        .getContentAsString();
+        String result = mockMvc.perform(get("/rest/secure/analysis/accuracy/" + this.completeQuiz.getQuizId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
 
         ObjectMapper mapper = new ObjectMapper();
         QuizAnalysisData data = mapper.readValue(result, QuizAnalysisData.class);

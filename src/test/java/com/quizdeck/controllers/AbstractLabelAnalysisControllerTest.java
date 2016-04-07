@@ -6,7 +6,6 @@ import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Member;
 import com.quizdeck.analysis.inputs.Selection;
 import com.quizdeck.model.database.*;
-import com.quizdeck.model.inputs.AccuracyInput;
 import com.quizdeck.model.inputs.OwnerLabelsInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import org.junit.After;
@@ -24,8 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
