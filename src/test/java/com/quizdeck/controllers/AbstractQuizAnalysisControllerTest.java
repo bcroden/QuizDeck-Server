@@ -3,7 +3,6 @@ package com.quizdeck.controllers;
 import com.quizdeck.QuizDeckApplication;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.model.database.*;
-import com.quizdeck.model.inputs.AccuracyInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -53,12 +52,6 @@ public abstract class AbstractQuizAnalysisControllerTest {
         completeQuiz = new CompleteQuiz(quiz, new Date(), new Date(), quiz.getTitle(), quiz.getOwner(), getSubmissionsFor(quiz));
 
         completedQuizRepository.save(completeQuiz);
-
-        //create the input object which will be passed to the controller
-        accuracyInput = new AccuracyInput();
-        accuracyInput.setOwner(completeQuiz.getOwner());
-        accuracyInput.setTitle(completeQuiz.getTitle());
-        accuracyInput.setId(completeQuiz.getQuizId());
     }
 
     @After
@@ -118,7 +111,6 @@ public abstract class AbstractQuizAnalysisControllerTest {
     }
 
     protected CompleteQuiz completeQuiz;
-    protected AccuracyInput accuracyInput;
 
     /*** Mocking out the controller ***/
 
