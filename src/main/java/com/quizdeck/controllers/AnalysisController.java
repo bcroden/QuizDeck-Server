@@ -10,10 +10,7 @@ import com.quizdeck.model.inputs.OwnerLabelsInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -29,13 +26,10 @@ public class AnalysisController {
     @Autowired
     CompletedQuizRepository completedQuizRepository;
 
-    @RequestMapping(value="accuracy/", method = RequestMethod.GET)
-    public AnalysisResult accuracyResponse (@Valid @RequestBody AccuracyInput input, BindingResult result) throws InvalidJsonException, AnalysisException {
-        if(result.hasErrors()) {
-            throw new InvalidJsonException();
-        }
+    @RequestMapping(value="accuracy/{quizId}", method = RequestMethod.GET)
+    public AnalysisResult accuracyResponse (@PathVariable String quizId) throws AnalysisException{
 
-        return processQuizWith(input.getId(), QuizAnalysisAlgorithm.ACCURACY);
+        return processQuizWith(quizId, QuizAnalysisAlgorithm.ACCURACY);
     }
 
     @RequestMapping(value="indecisiveness/", method = RequestMethod.POST)
