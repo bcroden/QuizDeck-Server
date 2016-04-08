@@ -1,16 +1,11 @@
 package com.quizdeck.analysis.inputs;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.quizdeck.model.database.Questions;
-
 /**
  * Represents a question within a quiz.
  *
  * @author Alex
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({@JsonSubTypes.Type(value = Questions.class, name = "Questions")})
+
 public abstract class Question implements Comparable<Question> {
     /**
      * Indicates the question's location within its quiz.
