@@ -41,7 +41,7 @@ public class QuizSubmissionController {
 
         //add any new labels to the list associated with the user
         User user = userRepository.findByUserName(input.getOwner());
-        if(user.getLabels() != null || user.getLabels().size() > 0) {
+        if(user.getLabels() != null && user.getLabels().size() > 0) {
             for (String label : input.getLabels()) {
                 if (!user.getLabels().contains(label)) {
                     user.getLabels().add(label);
