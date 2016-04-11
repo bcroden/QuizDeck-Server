@@ -7,6 +7,7 @@ import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Member;
+import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 import com.quizdeck.analysis.outputs.group.GroupNetQuizAccuracyResults;
 import com.quizdeck.model.database.*;
@@ -27,15 +28,18 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     @BeforeClass
     public static void setup() throws AnalysisException {
 
-        LABELS.add("Label1");
-        LABELS.add("Label2");
+        List<String> allLabels = new LinkedList<>();
+        allLabels.add("Label1");
+        allLabels.add("Label2");
+
+        TARGET_LABELS.add(allLabels.get(0));
 
         List<CompleteQuiz> completeQuizzes = new LinkedList<>();
         for(int i = 0; i < QUIZ_TITLE.length; i++)
-            completeQuizzes.add(getCompleteQuiz(QUIZ_TITLE[i], NUM_QUESTIONS_IN_QUIZ[i]));
+            completeQuizzes.add(getCompleteQuiz(QUIZ_TITLE[i], NUM_QUESTIONS_IN_QUIZ[i], allLabels, INDIVIDUAL_NET_ACCURACY_FOR_QUIZ[i]));
 
         GroupAnalysisFactory factory = new GroupAnalysisFactory();
-        factory.setLabels(LABELS);
+        factory.setLabels(TARGET_LABELS);
         factory.setCompletedQuizzes(completeQuizzes);
         StaticAnalysis analysis = factory.getAnalysisUsing(GroupAnalysisAlgorithm.ACCURACY);
         analysis.performAnalysis();
@@ -46,9 +50,9 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     public void testLabels() {
         List<String> resultLabels = results.getLabels();
 
-        assertThat("Incorrect number of labels", resultLabels.size(), is(LABELS.size()));
+        assertThat("Incorrect number of labels in result", resultLabels.size(), is(TARGET_LABELS.size()));
 
-        LABELS.forEach(label -> assertTrue("Result label list is missing " + label, resultLabels.contains(label)));
+        TARGET_LABELS.forEach(label -> assertTrue("Results label list is missing " + label, resultLabels.contains(label)));
     }
 
     @Test
@@ -69,11 +73,11 @@ public class GroupNetQuizAccuracyAlgorithmTest {
         assertThat("Incorrect overall accuracy", results.getStats().get("Net Accuracy"), is(OVERALL_ACCURACY));
     }
 
-    private static CompleteQuiz getCompleteQuiz(String title, int numQuestions) {
+    private static CompleteQuiz getCompleteQuiz(String title, int numQuestions, List<String> labels, double accuracy) {
         List<Questions> questions = getNQuestions(numQuestions);
         List<String> categories = Collections.singletonList("Category1");
-        Quiz quiz = new Quiz("owner", title, questions, LABELS, categories);
-        List<submission> submissions = getSubmissionsForQuiz(quiz);
+        Quiz quiz = new Quiz("owner", title, questions, labels, categories);
+        List<submission> submissions = getSubmissionsForQuizWithAccuracyOf(quiz, accuracy);
         return new CompleteQuiz(quiz, new Date(), new Date(), title, "owner", submissions);
     }
 
@@ -104,21 +108,23 @@ public class GroupNetQuizAccuracyAlgorithmTest {
         return answers;
     }
 
-    private static List<submission> getSubmissionsForQuiz(Quiz quiz) {
+    private static List<submission> getSubmissionsForQuizWithAccuracyOf(Quiz quiz, double accuracy) {
         List<submission> submissions = new LinkedList<>();
 
-        for(Questions question : quiz.getQuestions()) {
-            submission bilboSub = new submission();
-            bilboSub.setQuestion(question);
-            bilboSub.setGuesses(getCorrectGuessesFor(question));
-            bilboSub.setUserName(BILBO.getUsername());
-            submissions.add(bilboSub);
+        int numQuestions = quiz.getQuestions().size();
+        double numCorrectNeededExact = accuracy * numQuestions * MEMBERS.length;
+        assertThat("Unattainable accuracy for " + quiz.getTitle() + " given number of questions and participants", Math.floor(numCorrectNeededExact), is(Math.ceil(numCorrectNeededExact)));
+        int numCorrectNeeded = (int) numCorrectNeededExact;
 
-            submission gimliSub = new submission();
-            gimliSub.setQuestion(question);
-            gimliSub.setGuesses(getIncorrectGuessFor(question));
-            gimliSub.setUserName(GIMLI.getUsername());
-            submissions.add(gimliSub);
+        for(Questions question : quiz.getQuestions()) {
+            for(Member member : MEMBERS) {
+                List<Guess> guesses = (numCorrectNeeded-- > 0) ? getCorrectGuessesFor(question) : getIncorrectGuessFor(question);
+                submission sub = new submission();
+                sub.setQuestion(question);
+                sub.setGuesses(guesses);
+                sub.setUserName(member.getUsername());
+                submissions.add(sub);
+            }
         }
 
         return submissions;
@@ -141,11 +147,10 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     }
 
     private static final String OVERALL_ACCURACY = "0.5";
-    private static final double[] INDIVIDUAL_NET_ACCURACY_FOR_QUIZ = new double[]{0.5, 0.5, 0.5};
+    private static final double[] INDIVIDUAL_NET_ACCURACY_FOR_QUIZ = new double[]{0.25, 0.5, 0.75};
     private static final String[] QUIZ_TITLE = new String[]{"Quiz1Title", "Quiz2Title", "Quiz3Title"};
-    private static final int[] NUM_QUESTIONS_IN_QUIZ = {3, 3, 3};
-    private static final List<String> LABELS = new LinkedList<>();
-    private static final Member BILBO = new MockMember("Bilbo"),
-                                GIMLI = new MockMember("Gimli");
+    private static final int[] NUM_QUESTIONS_IN_QUIZ = {6, 2, 4};
+    private static final List<String> TARGET_LABELS = new LinkedList<>();
+    private static final Member[] MEMBERS = new Member[]{new MockMember("Bilbo"), new MockMember("Gimli")};
     private static GroupNetQuizAccuracyResults results;
 }
