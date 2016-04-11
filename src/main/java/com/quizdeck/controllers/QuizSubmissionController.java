@@ -37,17 +37,19 @@ public class QuizSubmissionController {
             throw new InvalidJsonException();
         }
 
-        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories()));
+        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories(), input.isPublicAvailable()));
 
         //add any new labels to the list associated with the user
         User user = userRepository.findByUserName(input.getOwner());
-        if(user.getLabels() != null && user.getLabels().size() > 0) {
-            for (String label : input.getLabels()) {
-                if (!user.getLabels().contains(label)) {
-                    user.getLabels().add(label);
+        if(user != null) {
+            if (user.getLabels() != null && user.getLabels().size() > 0 && input.getLabels() != null && input.getLabels().size() > 0) {
+                for (String label : input.getLabels()) {
+                    if (!user.getLabels().contains(label)) {
+                        user.getLabels().add(label);
+                    }
                 }
+                userRepository.save(user);
             }
-            userRepository.save(user);
         }
 
         return new ResponseEntity<String>(HttpStatus.OK);

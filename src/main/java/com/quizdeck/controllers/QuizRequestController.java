@@ -27,9 +27,14 @@ public class QuizRequestController {
     @Autowired
     QuizRepository quizRepository;
 
-    @RequestMapping(value="/searchByOwner", method = RequestMethod.GET)
-    public List<Quiz> getQuizByOwner(@ModelAttribute("claims") Claims claims){
+    @RequestMapping(value="/searchBySelf", method = RequestMethod.GET)
+    public List<Quiz> getQuizBySelf(@ModelAttribute("claims") Claims claims){
         return quizRepository.findByOwner(claims.get("user").toString());
+    }
+
+    @RequestMapping(value="/searchByOwner/{owner}", method=RequestMethod.GET)
+    public List<Quiz> getQuizByOwner(@PathVariable String owner){
+        return quizRepository.findByOwner(owner);
     }
 
     @RequestMapping(value="/quizEdit", method = RequestMethod.PUT)

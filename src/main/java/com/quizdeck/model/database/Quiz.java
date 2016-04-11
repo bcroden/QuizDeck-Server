@@ -12,6 +12,8 @@ import java.util.List;
  * Storage object for a quiz that has not been active yet
  *
  * Created by Cade on 2/14/2016.
+ *
+ * @param publicAvailable will be used to determine if a user can see another users quiz.
  */
 
 @Getter
@@ -35,12 +37,15 @@ public class Quiz {
     @NotNull
     private List<String> categories;
 
-    public Quiz(String owner, String title, List<Questions> questions, List<String> labels, List<String> categories) {
+    private boolean publicAvailable;
+
+    public Quiz(String owner, String title, List<Questions> questions, List<String> labels, List<String> categories, boolean publicAvailable) {
         this.owner = owner;
         this.title = title;
         this.questions = questions;
         this.labels = labels;
         this.categories = categories;
+        this.publicAvailable = publicAvailable;
     }
 
     @Deprecated

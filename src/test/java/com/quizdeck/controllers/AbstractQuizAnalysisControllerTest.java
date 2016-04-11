@@ -47,7 +47,7 @@ public abstract class AbstractQuizAnalysisControllerTest {
 
     @Before
     public void seedCompletedQuizRepository() {
-        Quiz quiz = new Quiz("Owner ID", "Quiz Title", getQuestions(), new LinkedList<>(), new LinkedList<>());
+        Quiz quiz = new Quiz("Owner ID", "Quiz Title", getQuestions(), new LinkedList<>(), new LinkedList<>(), true);
 
         completeQuiz = new CompleteQuiz(quiz, new Date(), new Date(), quiz.getTitle(), quiz.getOwner(), getSubmissionsFor(quiz));
 
