@@ -65,7 +65,7 @@ public abstract class AbstractLabelAnalysisControllerTest {
     private static CompleteQuiz getCompleteQuiz(String title, int numQuestions) {
         List<Questions> questions = getNQuestions(numQuestions);
         List<String> categories = Collections.singletonList("Category1");
-        Quiz quiz = new Quiz("owner", title, questions, LABELS, categories);
+        Quiz quiz = new Quiz("owner", title, questions, LABELS, categories, true);
         List<submission> submissions = getSubmissionsForQuiz(quiz);
         return new CompleteQuiz(quiz, new Date(), new Date(), title, "owner", submissions);
     }

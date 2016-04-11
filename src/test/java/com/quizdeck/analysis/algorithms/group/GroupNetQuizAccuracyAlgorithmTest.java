@@ -7,18 +7,20 @@ import com.quizdeck.analysis.StaticAnalysis;
 import com.quizdeck.analysis.exceptions.AnalysisException;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.analysis.inputs.Member;
-import com.quizdeck.analysis.inputs.Question;
 import com.quizdeck.analysis.inputs.Selection;
 import com.quizdeck.analysis.outputs.group.GroupNetQuizAccuracyResults;
 import com.quizdeck.model.database.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-
-import java.util.*;
 
 /**
  * Unit test for the GroupNetQuizAccuracyAlgorithm
@@ -76,7 +78,7 @@ public class GroupNetQuizAccuracyAlgorithmTest {
     private static CompleteQuiz getCompleteQuiz(String title, int numQuestions, List<String> labels, double accuracy) {
         List<Questions> questions = getNQuestions(numQuestions);
         List<String> categories = Collections.singletonList("Category1");
-        Quiz quiz = new Quiz("owner", title, questions, labels, categories);
+        Quiz quiz = new Quiz("owner", title, questions, labels, categories, true);
         List<submission> submissions = getSubmissionsForQuizWithAccuracyOf(quiz, accuracy);
         return new CompleteQuiz(quiz, new Date(), new Date(), title, "owner", submissions);
     }

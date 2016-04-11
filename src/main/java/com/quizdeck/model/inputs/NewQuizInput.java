@@ -21,4 +21,6 @@ public class NewQuizInput {
 
     private List<String> categories;
 
+    private boolean publicAvailable;
+
     }
