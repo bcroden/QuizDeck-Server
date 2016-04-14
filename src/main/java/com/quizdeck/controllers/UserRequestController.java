@@ -44,7 +44,7 @@ public class UserRequestController {
     }
 
 
-    @RequestMapping(value="/findUser", method = RequestMethod.GET)
+    @RequestMapping(value="/findUser/{userName}", method = RequestMethod.GET)
     public User findUser(@PathVariable String userName){
         return userRepository.findByUserName(userName);
     }
