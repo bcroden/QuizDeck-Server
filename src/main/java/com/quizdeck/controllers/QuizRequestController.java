@@ -4,8 +4,6 @@ import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
 import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.NewQuizInput;
-import com.quizdeck.model.inputs.QuizDeleteInput;
-import com.quizdeck.model.inputs.QuizEditInput;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -42,23 +40,19 @@ public class QuizRequestController {
     public Quiz getQuizById(@PathVariable String quizId){ return quizRepository.findById(quizId); }
 
     @RequestMapping(value="/quizEdit", method = RequestMethod.PUT)
-    public ResponseEntity<String> quizLabelsUpdate(@Valid @RequestBody QuizEditInput input, BindingResult result) throws InvalidJsonException {
+    public ResponseEntity<String> quizLabelsUpdate(@Valid @RequestBody Quiz input, BindingResult result) throws InvalidJsonException {
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
         //blanket update for the quiz that was previously saved
-        quizRepository.save(input.getEditedQuiz());
+        quizRepository.save(input);
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/quizDelete", method = RequestMethod.DELETE)
-    public ResponseEntity<String> quizDelete(@Valid @RequestBody  QuizDeleteInput input, BindingResult result) throws InvalidJsonException {
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-        quizRepository.removeById(input.getId());
-
+    public ResponseEntity<String> quizDelete(@PathVariable String quizId) {
+        quizRepository.removeById(quizId);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
