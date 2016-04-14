@@ -50,7 +50,7 @@ public class QuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/quizDelete", method = RequestMethod.DELETE)
+    @RequestMapping(value="/quizDelete/{quizId}", method = RequestMethod.DELETE)
     public ResponseEntity<String> quizDelete(@PathVariable String quizId) {
         quizRepository.removeById(quizId);
         return new ResponseEntity<String>(HttpStatus.OK);
