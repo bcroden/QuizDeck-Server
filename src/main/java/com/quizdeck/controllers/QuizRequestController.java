@@ -38,11 +38,6 @@ public class QuizRequestController {
         return quizRepository.findByOwner(claims.get("user").toString());
     }
 
-    @RequestMapping(value="/searchByOwner/{owner}", method=RequestMethod.GET)
-    public List<Quiz> getQuizByOwner(@PathVariable String owner){
-        return quizRepository.findByOwner(owner);
-    }
-
     @RequestMapping(value="/searchById/{quizId}", method=RequestMethod.GET)
     public Quiz getQuizById(@PathVariable String quizId){ return quizRepository.findById(quizId); }
 
