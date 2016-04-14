@@ -2,9 +2,12 @@ package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
+import com.quizdeck.model.database.User;
+import com.quizdeck.model.inputs.NewQuizInput;
 import com.quizdeck.model.inputs.QuizDeleteInput;
 import com.quizdeck.model.inputs.QuizEditInput;
 import com.quizdeck.repositories.QuizRepository;
+import com.quizdeck.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,9 @@ public class QuizRequestController {
     @Autowired
     QuizRepository quizRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
     @RequestMapping(value="/searchBySelf", method = RequestMethod.GET)
     public List<Quiz> getQuizBySelf(@ModelAttribute("claims") Claims claims){
         return quizRepository.findByOwner(claims.get("user").toString());
@@ -36,6 +42,9 @@ public class QuizRequestController {
     public List<Quiz> getQuizByOwner(@PathVariable String owner){
         return quizRepository.findByOwner(owner);
     }
+
+    @RequestMapping(value="/searchById/{quizId}", method=RequestMethod.GET)
+    public Quiz getQuizById(@PathVariable String quizId){ return quizRepository.findById(quizId); }
 
     @RequestMapping(value="/quizEdit", method = RequestMethod.PUT)
     public ResponseEntity<String> quizLabelsUpdate(@Valid @RequestBody QuizEditInput input, BindingResult result) throws InvalidJsonException {
@@ -58,4 +67,27 @@ public class QuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/quizsubmission", method= RequestMethod.POST)
+    public ResponseEntity<String> quizSubmissionResponse(@Valid @RequestBody NewQuizInput input, BindingResult result) throws InvalidJsonException{
+        if(result.hasErrors()) {
+            throw new InvalidJsonException();
+        }
+
+        quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories(), input.isPublicAvailable()));
+
+        //add any new labels to the list associated with the user
+        User user = userRepository.findByUserName(input.getOwner().trim());
+        if(user != null) {
+            if (user.getLabels() != null && user.getLabels().size() > 0 && input.getLabels() != null && input.getLabels().size() > 0) {
+                for (String label : input.getLabels()) {
+                    if (!user.getLabels().contains(label)) {
+                        user.getLabels().add(label);
+                    }
+                }
+                userRepository.save(user);
+            }
+        }
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
 }

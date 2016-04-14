@@ -41,8 +41,8 @@ public class NonSecureSubmissionController {
             throw new InvalidJsonException();
         }
         //add newest submission for a specific active quiz only
-        ActiveQuiz temp = redisActiveQuiz.getEntry(input.getQuizID());
-        if(temp != null && temp.isActive()) {
+        ActiveQuiz aQuiz = redisActiveQuiz.getEntry(input.getQuizID());
+        if(aQuiz != null && aQuiz.isActive()) {
             redisSubmissions.addAnonSubmissionLink(input.getQuizID(), new AnonSubmission(input.getChoosenAnswers(), input.getQuestion()));
             return new ResponseEntity<String>(HttpStatus.OK);
         }

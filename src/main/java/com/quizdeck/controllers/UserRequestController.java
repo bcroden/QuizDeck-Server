@@ -1,6 +1,7 @@
 package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
+import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.UserDeleteInput;
 import com.quizdeck.model.inputs.UserEditInput;
 import com.quizdeck.repositories.UserRepository;
@@ -8,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -43,6 +41,12 @@ public class UserRequestController {
 
         userRepository.delete(input.getId());
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/findUser", method = RequestMethod.GET)
+    public User findUser(@PathVariable String userName){
+        return userRepository.findByUserName(userName);
     }
 
 }
