@@ -2,8 +2,6 @@ package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.User;
-import com.quizdeck.model.inputs.UserDeleteInput;
-import com.quizdeck.model.inputs.UserEditInput;
 import com.quizdeck.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,22 +22,18 @@ public class UserRequestController {
     UserRepository userRepository;
 
     @RequestMapping(value="/edit", method= RequestMethod.PUT)
-    public ResponseEntity<String> editUser(@Valid @RequestBody UserEditInput input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> editUser(@Valid @RequestBody User input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
 
-        userRepository.save(input.getEditedUser());
+        userRepository.save(input);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @RequestMapping(value="/deleteUser", method=RequestMethod.DELETE)
-    public ResponseEntity<String> deleteUser(@Valid @RequestBody UserDeleteInput input, BindingResult result) throws InvalidJsonException{
-        if(result.hasErrors()){
-            throw new InvalidJsonException();
-        }
-
-        userRepository.delete(input.getId());
+    public ResponseEntity<String> deleteUser(@PathVariable String userId){
+        userRepository.delete(userId);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
