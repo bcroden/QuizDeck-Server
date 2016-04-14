@@ -41,7 +41,8 @@ public class QuizDeckApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry
 						.addMapping("/rest/**")
-						.allowedOrigins("*");
+						.allowedOrigins("*")
+						.allowedMethods("GET", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "PATCH");
 			}
 		};
 	}
