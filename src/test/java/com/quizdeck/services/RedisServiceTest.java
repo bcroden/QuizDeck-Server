@@ -40,6 +40,8 @@ public class RedisServiceTest {
 
         redisSubmissions.addSubmissionLink("quizID", sub);
 
+        assertThat(((submission)redisSubmissions.getAllSubmissions("quizID").get(0)).getUserName(), is(equalTo("User2")));
+
         assertThat(redisSubmissions.getFirstSubmission("quizID").getUserName(), is(equalTo("User2")));
     }
 }

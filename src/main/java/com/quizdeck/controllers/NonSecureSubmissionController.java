@@ -6,6 +6,7 @@ import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.AnonSubmission;
 import com.quizdeck.model.inputs.AnonSubmissionInput;
 import com.quizdeck.services.RedisActiveQuiz;
+import com.quizdeck.services.RedisQuestion;
 import com.quizdeck.services.RedisSubmissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,11 +36,16 @@ public class NonSecureSubmissionController {
     @Autowired
     RedisActiveQuiz redisActiveQuiz;
 
+    @Autowired
+    RedisQuestion redisQuestion;
+
     @RequestMapping(value="/submission", method= RequestMethod.POST)
     public ResponseEntity<String> insertSubmission(@Valid @RequestBody AnonSubmissionInput input, BindingResult result) throws InvalidJsonException, InactiveQuizException {
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
+
+        input.getQuestion().setQuestionNum(redisQuestion.getEntry(input.getQuizID()));
         //add newest submission for a specific active quiz only
         ActiveQuiz aQuiz = redisActiveQuiz.getEntry(input.getQuizID());
         if(aQuiz != null && aQuiz.isActive()) {
