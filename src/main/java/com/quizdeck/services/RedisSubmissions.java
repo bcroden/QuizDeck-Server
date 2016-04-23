@@ -40,11 +40,15 @@ public class RedisSubmissions {
 
     public AnonSubmission getFirstAnonSubmission(String quizID) {return (AnonSubmission) listOps.leftPop(quizID);}
 
-    public List<? extends Submissions> getAllSubmissions(String quizID){
+    public List<? extends Submissions> getAllSubmissionsAndRemove(String quizID){
         List<Submissions> subs = new ArrayList<>();
         for(int i = 0; i < listOps.size(quizID); i++){
             subs.add(listOps.leftPop(quizID));
         }
         return subs;
+    }
+
+    public List<? extends Submissions> getAllSubmissions(String quizID){
+        return listOps.range(quizID, 0, (listOps.size(quizID)-1));
     }
 }

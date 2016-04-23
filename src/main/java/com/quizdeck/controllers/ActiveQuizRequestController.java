@@ -7,6 +7,7 @@ import com.quizdeck.repositories.CompletedQuizRepository;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.RedisActiveQuiz;
+import com.quizdeck.services.RedisQuestion;
 import com.quizdeck.services.RedisSubmissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/secure/quiz/")
-public class CompleteQuizSubmissionController {
+public class ActiveQuizRequestController {
 
     @Autowired
     CompletedQuizRepository completeQuizRepository;
@@ -41,6 +42,9 @@ public class CompleteQuizSubmissionController {
     @Autowired
     RedisActiveQuiz redisActiveQuiz;
 
+    @Autowired
+    RedisQuestion redisQuestion;
+
     @RequestMapping(value="/submit", method = RequestMethod.POST)
     public ResponseEntity<String> submitQuiz(@Valid @RequestBody CompleteQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
@@ -51,7 +55,7 @@ public class CompleteQuizSubmissionController {
         //compile submissions from redis
 
         //will also close the quiz on redis, and add it to the database.
-        List<? extends Submissions> subs = redisSubmissions.getAllSubmissions(input.getQuizId());
+        List<? extends Submissions> subs = redisSubmissions.getAllSubmissionsAndRemove(input.getQuizId());
         //get active quiz information
         ActiveQuiz temp = redisActiveQuiz.getEntry(input.getQuizId());
 
@@ -62,6 +66,7 @@ public class CompleteQuizSubmissionController {
 
         //remove the active quiz entry from redis
         redisActiveQuiz.removeEntry(input.getQuizId());
+        redisQuestion.removeEntry(input.getQuizId());
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
@@ -76,6 +81,7 @@ public class CompleteQuizSubmissionController {
         List<String> subscribedUsers = owner.getSubscriptions();
         //notify everyone on list? idk
 
+        //set the question being answered to the first
 
 
         //enables submissions to this quizId
@@ -97,4 +103,34 @@ public class CompleteQuizSubmissionController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
+    @RequestMapping(value="/questionIncrement", method = RequestMethod.GET)
+    public ResponseEntity<String> questionIncrement(@PathVariable String quizId){
+        int questionNum = 0;
+
+        if(redisQuestion.getEntry(quizId)==null){
+            redisQuestion.addEntry(quizId, 1);
+        }
+        else{
+            questionNum = redisQuestion.getEntry(quizId);
+            redisQuestion.updateEntry(quizId, ++questionNum);
+        }
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/questionDecrement/{quizId}", method=RequestMethod.GET)
+    public ResponseEntity<String> questionDecrement(@PathVariable String quizId){
+        int questionNum = 0;
+
+        if(redisQuestion.getEntry(quizId)==null){
+            redisQuestion.addEntry(quizId, 1);
+        }
+        else{
+            if(redisQuestion.getEntry(quizId) > 1)
+                questionNum = redisQuestion.getEntry(quizId);
+                redisQuestion.updateEntry(quizId, --questionNum);
+        }
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
 }
