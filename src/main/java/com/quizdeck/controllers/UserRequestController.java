@@ -2,17 +2,18 @@ package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.ForbiddenAccessException;
 import com.quizdeck.exceptions.InvalidJsonException;
+import com.quizdeck.exceptions.UserDoesNotExistException;
 import com.quizdeck.model.database.User;
 import com.quizdeck.model.responses.UserSearchOutput;
 import com.quizdeck.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -47,6 +48,26 @@ public class UserRequestController {
         }
         userRepository.delete(userId);
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/subcribe/{userName}", method=RequestMethod.GET)
+    public ResponseEntity<String> subscribe(@ModelAttribute("claims") Claims claims, @PathVariable String userName)throws UserDoesNotExistException{
+        User you = userRepository.findByUserName(claims.get("user").toString());
+        User them = userRepository.findByUserName(userName);
+        if(you != null && them != null) {
+            ArrayList<String> subscribed = new ArrayList<>();
+            subscribed.addAll(you.getSubscriptions());
+            subscribed.add(userName);
+
+            you.setSubscriptions(subscribed);
+
+            userRepository.save(you);
+
+            return new ResponseEntity<String>(HttpStatus.OK);
+        }
+        else{
+            throw new UserDoesNotExistException();
+        }
     }
 
     @RequestMapping(value="/findUser/{userName}", method = RequestMethod.GET)
