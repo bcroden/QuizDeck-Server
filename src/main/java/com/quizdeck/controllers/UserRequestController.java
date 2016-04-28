@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Cade on 3/11/2016.
@@ -40,24 +41,29 @@ public class UserRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/deleteUser", method=RequestMethod.DELETE)
+    @RequestMapping(value="/deleteUser/{userId}", method=RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(@ModelAttribute("claims") Claims claims, @PathVariable String userId)throws ForbiddenAccessException{
         User temp = userRepository.findByUserName(claims.get("user").toString());
-        if(temp.getId() != userId) {
-            throw new ForbiddenAccessException();
+        if(claims.get("user").toString().equals(temp.getUserName()) || claims.get("role").equals("Admin")) {
+            userRepository.delete(userId);
+            return new ResponseEntity<String>(HttpStatus.OK);
         }
-        userRepository.delete(userId);
-        return new ResponseEntity<String>(HttpStatus.OK);
+        throw new ForbiddenAccessException();
     }
 
-    @RequestMapping(value="/subcribe/{userName}", method=RequestMethod.GET)
+    @RequestMapping(value="/subscribe/{userName}", method=RequestMethod.PUT)
     public ResponseEntity<String> subscribe(@ModelAttribute("claims") Claims claims, @PathVariable String userName)throws UserDoesNotExistException{
         User you = userRepository.findByUserName(claims.get("user").toString());
         User them = userRepository.findByUserName(userName);
         if(you != null && them != null) {
             ArrayList<String> subscribed = new ArrayList<>();
-            subscribed.addAll(you.getSubscriptions());
-            subscribed.add(userName);
+            if(you.getSubscriptions() != null && you.getSubscriptions().size() > 0) {
+                subscribed.addAll(you.getSubscriptions());
+            }
+            if(!subscribed.contains(userName)) {
+                subscribed.add(userName);
+                you.setNumSubscribed(you.getNumSubscribed()+1);
+            }
 
             you.setSubscriptions(subscribed);
 
@@ -68,6 +74,17 @@ public class UserRequestController {
         else{
             throw new UserDoesNotExistException();
         }
+    }
+
+    @RequestMapping(value="/getsubscriptions/", method = RequestMethod.GET)
+    public List<String> subscriptions(@ModelAttribute("claims") Claims claims){
+
+        return userRepository.findByUserName(claims.get("user").toString()).getSubscriptions();
+    }
+
+    @RequestMapping(value="/findSelf", method = RequestMethod.GET)
+    public User findSelf(@ModelAttribute("claims") Claims claims){
+        return userRepository.findByUserName(claims.get("user").toString());
     }
 
     @RequestMapping(value="/findUser/{userName}", method = RequestMethod.GET)
