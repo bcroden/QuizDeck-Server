@@ -76,11 +76,37 @@ public class UserRequestController {
         }
     }
 
-    @RequestMapping(value="/getsubscriptions/", method = RequestMethod.GET)
-    public List<String> subscriptions(@ModelAttribute("claims") Claims claims){
+    @RequestMapping(value="/unSubscribe/{userName}", method=RequestMethod.PUT)
+    public ResponseEntity<String> unSubscribe(@ModelAttribute("claims") Claims claims, @PathVariable String userName) throws UserDoesNotExistException{
 
+        User you = userRepository.findByUserName(claims.get("user").toString());
+        if(you == null){
+            throw new UserDoesNotExistException();
+        }
+
+        if(you.getSubscriptions().contains(userName)){
+            for(String user : you.getSubscriptions()){
+                if(user.equals(userName)){
+                    log.info("in if");
+                    List<String> newSubsList = new ArrayList<>(you.getSubscriptions());
+                    newSubsList.remove(userName);
+                    log.info("Removed " + userName + " from new list");
+                    you.setSubscriptions(newSubsList);
+                    you.setNumSubscribed((you.getNumSubscribed()-1));
+                }
+            }
+        }
+
+        userRepository.save(you);
+
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/getSubscriptions/", method = RequestMethod.GET)
+    public List<String> subscriptions(@ModelAttribute("claims") Claims claims){
         return userRepository.findByUserName(claims.get("user").toString()).getSubscriptions();
     }
+
 
     @RequestMapping(value="/findSelf", method = RequestMethod.GET)
     public User findSelf(@ModelAttribute("claims") Claims claims){
