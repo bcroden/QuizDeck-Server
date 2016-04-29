@@ -36,6 +36,14 @@ public class RedisSubmissions {
 
     public long getSize(String quizId) {return listOps.size(quizId);}
 
+    public Submissions getSubmission(String quizId, long index) {
+       return listOps.index(quizId, index);
+    }
+
+    public void removeIndex(String quizId, long index, Submissions sub){
+        listOps.remove(quizId, index, sub);
+    }
+
     public submission getFirstSubmission(String quizID) {return (submission) listOps.leftPop(quizID);}
 
     public AnonSubmission getFirstAnonSubmission(String quizID) {return (AnonSubmission) listOps.leftPop(quizID);}

@@ -40,6 +40,10 @@ public class Guess {
         return timeStamp;
     }
 
+    public void setTimeStamp(long timeStamp){
+        this.timeStamp = timeStamp;
+    }
+
     /**
      * Indicates the question number to which the guess was registered
      * @return The question number to which the guess was registered

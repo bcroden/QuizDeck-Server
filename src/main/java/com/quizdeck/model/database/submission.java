@@ -44,7 +44,7 @@ public class submission extends Submissions implements Response{
         return "submission{" +
                 "userName='" + userName + '\'' +
                 ", guesses=" + guesses +
-                ", question=" + question +
+                ", question=" + questionNum + " " + question +
                 '}';
     }
 }
