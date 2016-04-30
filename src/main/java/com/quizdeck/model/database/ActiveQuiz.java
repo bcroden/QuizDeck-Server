@@ -28,4 +28,9 @@ public class ActiveQuiz implements Serializable {
 
     public ActiveQuiz(){}
 
+    @Override
+    public String toString(){
+        return start.toString() + "|" + active;
+    }
+
 }

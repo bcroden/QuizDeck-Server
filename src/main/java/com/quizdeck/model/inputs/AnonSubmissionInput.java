@@ -1,6 +1,5 @@
 package com.quizdeck.model.inputs;
 
-import com.quizdeck.analysis.inputs.Guess;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,8 +12,9 @@ import lombok.Setter;
 public class AnonSubmissionInput {
     private String quizID;
 
-    private Guess choosenAnswer;
+    private String chosenAnswer;
+
+    private String chosenAnswerContent;
 
     private int questionNum;
-
 }

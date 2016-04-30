@@ -17,6 +17,14 @@ public class Answers extends Selection implements Serializable {
     private String content;
     private String id;
 
+    public Answers(String content, String id){
+        this.content = content;
+        this.id = id;
+    }
+
+    public Answers() {
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

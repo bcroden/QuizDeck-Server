@@ -19,19 +19,27 @@ import javax.annotation.Resource;
 public class RedisActiveQuiz {
 
     public RedisTemplate redisTemplate;
+    
+    private String keyIdentifier = "AQ";
 
     @Resource(name="redisTemplate")
-    private ValueOperations<String, ActiveQuiz> valueOps;
+    private ValueOperations<String, ActiveQuiz> valueOperations;
 
-    public void addEntry(String quizId, ActiveQuiz quiz){valueOps.set(quizId, quiz);}
+    public void addEntry(String quizId, ActiveQuiz quiz){
+        valueOperations.set(quizId+keyIdentifier, quiz);
+    }
 
-    public ActiveQuiz getEntry(String quizId){return valueOps.get(quizId);}
+    public ActiveQuiz getEntry(String quizId){
+        ActiveQuiz aq = valueOperations.get(quizId+keyIdentifier); //returns an integer somehow
+        return aq;
+    }
 
-    public void removeEntry(String quizId){valueOps.getOperations().delete(quizId);}
+    public void removeEntry(String quizId){
+        valueOperations.getOperations().delete(quizId+keyIdentifier);}
 
     public void updateEntry(String quizId, ActiveQuiz quiz) {
-        quiz.setStart(valueOps.get(quizId).getStart());
-        valueOps.getAndSet(quizId, quiz);
+        quiz.setStart(valueOperations.get(quizId+keyIdentifier).getStart());
+        valueOperations.getAndSet(quizId+keyIdentifier, quiz);
     }
 
 }

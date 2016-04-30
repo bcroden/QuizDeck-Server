@@ -3,9 +3,7 @@ package com.quizdeck.controllers;
 import com.quizdeck.analysis.inputs.Guess;
 import com.quizdeck.exceptions.InactiveQuizException;
 import com.quizdeck.exceptions.InvalidJsonException;
-import com.quizdeck.model.database.ActiveQuiz;
-import com.quizdeck.model.database.Submissions;
-import com.quizdeck.model.database.submission;
+import com.quizdeck.model.database.*;
 import com.quizdeck.model.inputs.AnonSubmissionInput;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.services.RedisActiveQuiz;
@@ -49,56 +47,61 @@ public class NonSecureSubmissionController {
 
     @RequestMapping(value="/submission", method= RequestMethod.POST)
     public ResponseEntity<String> insertSubmission(@Valid @RequestBody AnonSubmissionInput input, BindingResult result) throws InvalidJsonException, InactiveQuizException {
-        if (result.hasErrors()) {
+        if(result.hasErrors()){
             throw new InvalidJsonException();
         }
 
-        input.setQuestionNum(redisQuestion.getEntry(input.getQuizID()));
+        int currQuestionNum = redisQuestion.getEntry(input.getQuizID());
+        input.setQuestionNum(currQuestionNum);
         //add newest submission for a specific active quiz only
         ActiveQuiz aQuiz = redisActiveQuiz.getEntry(input.getQuizID());
-        if (aQuiz != null && aQuiz.isActive()) {
-            List<? extends Submissions> submissions = new ArrayList<>();
-            submissions = redisSubmissions.getAllSubmissions(input.getQuizID());
-            int counter = 0;
-            for (Submissions sub : submissions) {
-                long index = submissions.indexOf(sub);
-                submission editEntry = (submission) redisSubmissions.getSubmission(input.getQuizID(), index);
-                //remove sub from redis
-                redisSubmissions.removeIndex(input.getQuizID(), index, editEntry);
-                counter++;
-                if (sub.getQuestionNum() == input.getQuestionNum()) {
-                    List<Guess> guesses = editEntry.getGuesses();
-                    guesses.add(input.getChoosenAnswer());
-                    editEntry.setGuesses(guesses);
-                    redisSubmissions.addSubmissionLink(input.getQuizID(), editEntry);
-                    break;
-                } else {
-                    //manipulate object and return to redis
-                    List<Guess> guesses = editEntry.getGuesses();
-                    guesses.add(input.getChoosenAnswer());
-                    editEntry.setGuesses(guesses);
-
-                    //TODO: test this line well because it sure seems like magic
-                    editEntry.setQuestion(quizRepository.findById(input.getQuizID()).getQuestions().get(input.getQuestionNum() - 1)); //minus one because quiz has normal counting and lists have 0 base
-
-                    break;
-                }
+        if(aQuiz != null && aQuiz.isActive()) {
+            List<submission> submissions = new ArrayList<>();
+            for(int i = 0; i < redisSubmissions.getSize(input.getQuizID()); i++){
+                submissions.add(((submission)(redisSubmissions.getAllSubmissions(input.getQuizID())).get(i)));
             }
-            if (counter == redisSubmissions.getSize(input.getQuizID())) {
-                submission newEntry = new submission();
+            int counter = 0;
+            for(Submissions sub : submissions) {
+                    if(sub.getQuestionNum() == input.getQuestionNum()){
+                        long index = submissions.indexOf(sub);
+                        AnonSubmission editEntry = (AnonSubmission) redisSubmissions.getAnonSubmission(input.getQuizID(), index);
+                        //remove sub from redis
+                        redisSubmissions.removeIndex(input.getQuizID(), index, editEntry);
+                        //add guess to entry
+                        List<Guess> guesses = editEntry.getGuesses();
+                        Guess newGuess = new Guess();
+                        newGuess.setTimeStamp(System.currentTimeMillis());
+                        newGuess.setQuestionNum(input.getQuestionNum());
+                        newGuess.setSelection(new Answers(input.getChosenAnswerContent(), input.getChosenAnswer()));
+                        guesses.add(newGuess);
+                        editEntry.setGuesses(guesses);
+                        redisSubmissions.addAnonSubmissionLink(input.getQuizID(), editEntry);
+                        break;
+                }
+                counter++;
+            }
+            if(counter == redisSubmissions.getSize(input.getQuizID())){
+                AnonSubmission newEntry = new AnonSubmission();
+                Guess newGuess = new Guess();
+                newGuess.setTimeStamp(System.currentTimeMillis());
+                newGuess.setQuestionNum(input.getQuestionNum());
+                newGuess.setSelection(new Answers(input.getChosenAnswerContent(), input.getChosenAnswer()));
                 List<Guess> guesses = new ArrayList<>();
-                guesses.add(input.getChoosenAnswer());
+                guesses.add(newGuess);
                 newEntry.setGuesses(guesses);
-                newEntry.setQuestion(quizRepository.findById(input.getQuizID()).getQuestions().get(input.getQuestionNum() - 1));
+                if(quizRepository.findById(input.getQuizID())==null){
+                    throw new InactiveQuizException();
+                }
                 newEntry.setQuestionNum(redisQuestion.getEntry(input.getQuizID()));
+                newEntry.setQuestion(quizRepository.findById(input.getQuizID()).getQuestions().get(newEntry.getQuestionNum()));
 
-                redisSubmissions.addSubmissionLink(input.getQuizID(), newEntry);
+                redisSubmissions.addAnonSubmissionLink(input.getQuizID(), newEntry);
             }
 
             return new ResponseEntity<String>(HttpStatus.OK);
-        } else
+        }
+        else
             throw new InactiveQuizException();
-
     }
 
 }

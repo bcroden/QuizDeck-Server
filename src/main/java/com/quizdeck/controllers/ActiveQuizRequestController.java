@@ -71,7 +71,7 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/activate/{quizId}", method= RequestMethod.GET)
+    @RequestMapping(value="/activate/{quizId}", method= RequestMethod.PUT)
     public ResponseEntity<String> activateQuiz(@PathVariable String quizId){
 
         Quiz newQuiz = quizRepository.findById(quizId);
@@ -91,7 +91,7 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.GET)
+    @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.PUT)
     public ResponseEntity<String> deactivateQuiz(@PathVariable String quizId){
 
         //update redis entry
@@ -103,12 +103,12 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/questionIncrement", method = RequestMethod.GET)
+    @RequestMapping(value="/questionIncrement/{quizId}", method = RequestMethod.PUT)
     public ResponseEntity<String> questionIncrement(@PathVariable String quizId){
         int questionNum = 0;
 
         if(redisQuestion.getEntry(quizId)==null){
-            redisQuestion.addEntry(quizId, 1);
+            redisQuestion.addEntry(quizId, 0);
         }
         else{
             questionNum = redisQuestion.getEntry(quizId);
@@ -118,19 +118,24 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/questionDecrement/{quizId}", method=RequestMethod.GET)
+    @RequestMapping(value="/questionDecrement/{quizId}", method=RequestMethod.PUT)
     public ResponseEntity<String> questionDecrement(@PathVariable String quizId){
         int questionNum = 0;
 
         if(redisQuestion.getEntry(quizId)==null){
-            redisQuestion.addEntry(quizId, 1);
+            redisQuestion.addEntry(quizId, 0);
         }
         else{
-            if(redisQuestion.getEntry(quizId) > 1)
+            if(redisQuestion.getEntry(quizId) > 0)
                 questionNum = redisQuestion.getEntry(quizId);
                 redisQuestion.updateEntry(quizId, --questionNum);
         }
 
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/getQuestionNum/{quizId}", method = RequestMethod.GET)
+    public int getQuestion(@PathVariable String quizId){
+        return redisQuestion.getEntry(quizId);
     }
 }

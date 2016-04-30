@@ -6,6 +6,7 @@ import com.quizdeck.model.database.*;
 import com.quizdeck.model.inputs.SubmissionInput;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.services.RedisActiveQuiz;
+import com.quizdeck.services.RedisQuestion;
 import com.quizdeck.services.RedisSubmissions;
 import org.junit.Assert;
 import org.junit.Before;
@@ -33,9 +34,8 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 /**
  * Created by Cade on 4/28/2016.
  */
@@ -62,6 +62,9 @@ public class SubmissionControllerTest {
     @Autowired
     RedisSubmissions redisSubmissions;
 
+    @Autowired
+    RedisQuestion redisQuestion;
+
     @Resource
     void setConverters(HttpMessageConverter<?>[] converters) {
         this.mappingJackson2HttpMessageConverter = Arrays.asList(converters).stream()
@@ -79,57 +82,62 @@ public class SubmissionControllerTest {
     @Test
     public void testSubmit() throws Exception{
 
-        SubmissionInput sub = new SubmissionInput();
-        sub.setUserName("user");
-        Guess guess = new Guess();
-        guess.setTimeStamp(System.currentTimeMillis());
-        sub.setChoosenAnswer(guess);
-        sub.setQuestionNum(1);
-
-        Quiz quiz = new Quiz();
-        quiz.setOwner("user2");
         List<Questions> questions = new ArrayList<>();
         List<Answers> answers = new ArrayList<>();
         for(int i = 1; i < 5; i++){
-            Answers answer = new Answers();
-            answer.setContent("this");
-            answer.setId(i+"");
+            Answers answer = new Answers("this", i+"");
         }
         Questions question1 = new Questions();
         question1.setQuestion("What?");
-        question1.setQuestionNum(1);
+        question1.setQuestionNum(0);
         question1.setAnswers(answers);
+        question1.setCorrectAnswerID("A");
         Questions questions2 = new Questions();
         questions2.setQuestion("How?");
-        questions2.setQuestionNum(2);
+        questions2.setQuestionNum(1);
         questions2.setAnswers(answers);
+        questions2.setCorrectAnswerID("b");
         questions.add(question1);
         questions.add(questions2);
 
+        Quiz quiz = new Quiz();
+        quiz.setOwner("user2");
         quiz.setQuestions(questions);
         quiz.setTitle("Test Quiz");
-        quiz.setId("1234");
+        quiz.setId("abc1234");
+        ArrayList<String> cats = new ArrayList<>();
+        cats.add("beans");
+        quiz.setCategories(cats);
 
         ActiveQuiz activeQuiz = new ActiveQuiz(new Date(), true);
 
         redisActiveQuiz.addEntry(quiz.getId(), activeQuiz);
+        redisQuestion.addEntry(quiz.getId(), 0);
 
-        String result = mockMvc.perform(post("/rest/secure/quiz/submission")
+        assertThat(redisQuestion.getEntry(quiz.getId()), is(equalTo(0)));
+
+        SubmissionInput sub = new SubmissionInput();
+        sub.setUserName("user");
+        Guess guess = new Guess();
+        guess.setTimeStamp(System.currentTimeMillis());
+        sub.setChosenAnswer("A");
+        sub.setChosenAnswerContent("this");
+        sub.setQuestionNum(1);
+        sub.setQuizID(quiz.getId());
+
+        mockMvc.perform(post("/rest/secure/quiz/submission")
                 .content(this.json(sub))
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andReturn()
-                    .getResponse()
-                    .getContentAsString();
+                .andExpect(status().is2xxSuccessful());
 
 
-        assertThat(((submission)redisSubmissions.getAllSubmissions(quiz.getId())).getUserName(), is(equalTo("user")));
+        assertThat((redisSubmissions.getAllSubmissions(quiz.getId()).get(0)).getUserName(), is(equalTo("user")));
 
 
-
+        quizRepository.removeById(quiz.getId());
         redisSubmissions.getAllSubmissionsAndRemove(quiz.getId());
         redisActiveQuiz.removeEntry(quiz.getId());
+        redisQuestion.removeEntry(quiz.getId());
     }
 
     private String json(Object o) throws IOException {

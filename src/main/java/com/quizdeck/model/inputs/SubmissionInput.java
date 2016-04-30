@@ -1,6 +1,5 @@
 package com.quizdeck.model.inputs;
 
-import com.quizdeck.analysis.inputs.Guess;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +13,9 @@ public class SubmissionInput {
 
     private String userName;
 
-    private Guess choosenAnswer;
+    private String chosenAnswer;
+
+    private String chosenAnswerContent;
 
     private int questionNum;
 }

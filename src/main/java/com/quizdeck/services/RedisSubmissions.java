@@ -23,40 +23,46 @@ public class RedisSubmissions {
 
     private RedisTemplate redisTemplate;
 
+    private String keyIdentifier = "S";
+
     @Resource(name="redisTemplate")
     private ListOperations<String, Submissions> listOps;
 
     public void addSubmissionLink(String quizId, submission sub){
-        listOps.leftPush(quizId, sub);
+        listOps.leftPush(quizId+keyIdentifier, sub);
     }
 
     public void addAnonSubmissionLink(String quizId, AnonSubmission sub){
-        listOps.leftPush(quizId, sub);
+        listOps.leftPush(quizId+keyIdentifier, sub);
     }
 
-    public long getSize(String quizId) {return listOps.size(quizId);}
+    public long getSize(String quizId) {return listOps.size(quizId+keyIdentifier);}
 
     public Submissions getSubmission(String quizId, long index) {
-       return listOps.index(quizId, index);
+       return listOps.index(quizId+keyIdentifier, index);
+    }
+
+    public Submissions getAnonSubmission(String quizId, long index) {
+        return listOps.index(quizId+keyIdentifier, index);
     }
 
     public void removeIndex(String quizId, long index, Submissions sub){
-        listOps.remove(quizId, index, sub);
+        listOps.remove(quizId+keyIdentifier, index, sub);
     }
 
-    public submission getFirstSubmission(String quizID) {return (submission) listOps.leftPop(quizID);}
+    public submission getFirstSubmission(String quizId) {return (submission) listOps.leftPop(quizId+keyIdentifier);}
 
-    public AnonSubmission getFirstAnonSubmission(String quizID) {return (AnonSubmission) listOps.leftPop(quizID);}
+    public AnonSubmission getFirstAnonSubmission(String quizId) {return (AnonSubmission) listOps.leftPop(quizId+keyIdentifier);}
 
-    public List<? extends Submissions> getAllSubmissionsAndRemove(String quizID){
+    public List<? extends Submissions> getAllSubmissionsAndRemove(String quizId){
         List<Submissions> subs = new ArrayList<>();
-        for(int i = 0; i < listOps.size(quizID); i++){
-            subs.add(listOps.leftPop(quizID));
+        for(int i = 0; i < listOps.size(quizId+keyIdentifier); i++){
+            subs.add(listOps.leftPop(quizId+keyIdentifier));
         }
         return subs;
     }
 
-    public List<? extends Submissions> getAllSubmissions(String quizID){
-        return listOps.range(quizID, 0, (listOps.size(quizID)-1));
+    public List<? extends Submissions> getAllSubmissions(String quizId){
+        return listOps.range(quizId+keyIdentifier, 0, listOps.size(quizId+keyIdentifier));
     }
 }

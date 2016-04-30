@@ -1,11 +1,18 @@
 package com.quizdeck.analysis.inputs;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.io.Serializable;
+
 /**
  * Represents a guess submitted by a participant to a question at a particular time.
  *
  * @author Alex
  */
-public class Guess {
+@Getter
+@Setter
+public class Guess implements Serializable{
     /**
      * Default constructor to allow Jackson to deserialize Guess objects for unit tests
      */
@@ -22,34 +29,6 @@ public class Guess {
         this.selection = selection;
         this.timeStamp = timeStamp;
         this.questionNum = questionNum;
-    }
-
-    /**
-     * Indicates the member's guess at the question's answer.
-     * @return The member's guess at the question's answer
-     */
-    public Selection getSelection() {
-        return selection;
-    }
-
-    /**
-     * Indicates the time at which the member submitted its guess.
-     * @return The time at which the member submitted its guess
-     */
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(long timeStamp){
-        this.timeStamp = timeStamp;
-    }
-
-    /**
-     * Indicates the question number to which the guess was registered
-     * @return The question number to which the guess was registered
-     */
-    public int getQuestionNum() {
-        return questionNum;
     }
 
     private Selection selection;
