@@ -107,6 +107,7 @@ public class UserRequestController {
         return userRepository.findByUserName(claims.get("user").toString()).getSubscriptions();
     }
 
+
     @RequestMapping(value="/findSelf", method = RequestMethod.GET)
     public User findSelf(@ModelAttribute("claims") Claims claims){
         return userRepository.findByUserName(claims.get("user").toString());
