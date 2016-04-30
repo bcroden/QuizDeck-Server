@@ -38,6 +38,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 /**
  * Created by Cade on 4/28/2016.
  */
@@ -115,6 +116,7 @@ public class SubmissionControllerTest {
 
         redisActiveQuiz.addEntry(quiz.getId(), activeQuiz);
         redisQuestion.addEntry(quiz.getId(), 0);
+        quizRepository.save(quiz);
 
         assertThat(redisQuestion.getEntry(quiz.getId()), is(equalTo(0)));
 
@@ -129,8 +131,8 @@ public class SubmissionControllerTest {
 
         mockMvc.perform(post("/rest/secure/quiz/submission")
                 .content(this.json(sub))
-                .contentType(MediaType.APPLICATION_JSON));
-                //.andExpect(status().is2xxSuccessful());
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful());
 
 
         assertThat((redisSubmissions.getAllSubmissions(quiz.getId()).get(0)).getUserName(), is(equalTo("user")));
