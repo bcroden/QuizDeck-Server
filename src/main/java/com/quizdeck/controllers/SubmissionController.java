@@ -69,6 +69,8 @@ public class SubmissionController {
                     if(sub.getQuestionNum() == input.getQuestionNum()){
                         long index = submissions.indexOf(sub);
                         submission editEntry = (submission) redisSubmissions.getSubmission(input.getQuizID(), index);
+                        //remove sub from redis
+                        redisSubmissions.removeIndex(input.getQuizID(), index, editEntry);
                         //add guess to entry
                         List<Guess> guesses = editEntry.getGuesses();
 
@@ -78,8 +80,7 @@ public class SubmissionController {
                         newGuess.setSelection(new Answers(input.getChosenAnswerContent(), input.getChosenAnswer()));
                         guesses.add(newGuess);
                         editEntry.setGuesses(guesses);
-                        //remove sub from redis
-                        redisSubmissions.removeIndex(input.getQuizID(), index, editEntry);
+
                         redisSubmissions.addSubmissionLink(input.getQuizID(), editEntry);
                         break;
                     }
