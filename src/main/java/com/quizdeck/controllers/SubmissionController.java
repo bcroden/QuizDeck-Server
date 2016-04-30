@@ -71,6 +71,7 @@ public class SubmissionController {
                         submission editEntry = (submission) redisSubmissions.getSubmission(input.getQuizID(), index);
                         //add guess to entry
                         List<Guess> guesses = editEntry.getGuesses();
+
                         Guess newGuess = new Guess();
                         newGuess.setTimeStamp(System.currentTimeMillis());
                         newGuess.setQuestionNum(input.getQuestionNum());
@@ -86,9 +87,6 @@ public class SubmissionController {
                 counter++;
             }
             if(counter == redisSubmissions.getSize(input.getQuizID())){
-                if(quizRepository.findById(input.getQuizID())==null){
-                    throw new InactiveQuizException();
-                }
                 submission newEntry = new submission();
                 newEntry.setUserName(input.getUserName());
                 Guess newGuess = new Guess();
@@ -98,6 +96,9 @@ public class SubmissionController {
                 List<Guess> guesses = new ArrayList<>();
                 guesses.add(newGuess);
                 newEntry.setGuesses(guesses);
+                if(quizRepository.findById(input.getQuizID())==null){
+                    throw new InactiveQuizException();
+                }
                 newEntry.setQuestionNum(redisQuestion.getEntry(input.getQuizID()));
                 newEntry.setQuestion(quizRepository.findById(input.getQuizID()).getQuestions().get(newEntry.getQuestionNum()));
 
