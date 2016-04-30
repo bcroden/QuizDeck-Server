@@ -9,6 +9,8 @@ import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.RedisActiveQuiz;
 import com.quizdeck.services.RedisQuestion;
 import com.quizdeck.services.RedisSubmissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,8 @@ public class ActiveQuizRequestController {
     @Autowired
     RedisQuestion redisQuestion;
 
+    private Logger log = LoggerFactory.getLogger(ActiveQuizRequestController.class);
+
     @RequestMapping(value="/submit", method = RequestMethod.POST)
     public ResponseEntity<String> submitQuiz(@Valid @RequestBody CompleteQuizInput input, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
@@ -74,17 +78,6 @@ public class ActiveQuizRequestController {
     @RequestMapping(value="/activate/{quizId}", method= RequestMethod.PUT)
     public ResponseEntity<String> activateQuiz(@PathVariable String quizId){
 
-        Quiz newQuiz = quizRepository.findById(quizId);
-
-        //TODO: Figure out if we are sending notifications, and how
-        User owner = userRepository.findByUserName(newQuiz.getOwner());
-        List<String> subscribedUsers = owner.getSubscriptions();
-        //notify everyone on list? idk
-
-        //set the question being answered to the first
-
-
-        //enables submissions to this quizId
         ActiveQuiz activeQuiz = new ActiveQuiz(new Date(), true);
         redisActiveQuiz.addEntry(quizId, activeQuiz);
 
@@ -101,6 +94,15 @@ public class ActiveQuizRequestController {
         redisActiveQuiz.updateEntry(quizId, temp);
 
         return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/getActiveQuiz/{quizId}", method = RequestMethod.GET)
+    public ActiveQuiz getActive(@PathVariable String quizId){
+        ActiveQuiz returned = redisActiveQuiz.getEntry(quizId);
+        if(returned==null){
+            log.info("quiz is not active");
+        }
+        return returned;
     }
 
     @RequestMapping(value="/questionIncrement/{quizId}", method = RequestMethod.PUT)

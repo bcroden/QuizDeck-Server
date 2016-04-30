@@ -77,7 +77,7 @@ public class SubmissionController {
                         Guess newGuess = new Guess();
                         newGuess.setTimeStamp(System.currentTimeMillis());
                         newGuess.setQuestionNum(input.getQuestionNum());
-                        newGuess.setSelection(new Answers(input.getChosenAnswerContent(), input.getChosenAnswer()));
+                        newGuess.setSelection(new Answers(input.getChosenAnswerContent()==null ? "" : input.getChosenAnswerContent(), input.getChosenAnswer()));
                         guesses.add(newGuess);
                         editEntry.setGuesses(guesses);
 
