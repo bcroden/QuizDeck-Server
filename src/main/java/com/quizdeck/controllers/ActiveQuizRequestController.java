@@ -103,7 +103,7 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/questionIncrement", method = RequestMethod.GET)
+    @RequestMapping(value="/questionIncrement/{quizId}", method = RequestMethod.GET)
     public ResponseEntity<String> questionIncrement(@PathVariable String quizId){
         int questionNum = 0;
 
