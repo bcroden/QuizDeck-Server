@@ -18,15 +18,17 @@ public class RedisQuestion {
 
     public RedisTemplate redisTemplate;
 
+    private String keyIdentifier = "Q";
+
     @Resource(name="redisTemplate")
     private ValueOperations<String, Integer> valOps;
 
-    public void addEntry(String quizId, int questionNum){valOps.set(quizId, questionNum);}
+    public void addEntry(String quizId, int questionNum){valOps.set(quizId+keyIdentifier, questionNum);}
 
-    public Integer getEntry(String quizId){return valOps.get(quizId);}
+    public Integer getEntry(String quizId){return valOps.get(quizId+keyIdentifier);}
 
-    public void updateEntry(String quizId, int questionNum){valOps.set(quizId, questionNum);}
+    public void updateEntry(String quizId, int questionNum){valOps.set(quizId+keyIdentifier, questionNum);}
 
-    public void removeEntry(String quizId){valOps.getOperations().delete(quizId);}
+    public void removeEntry(String quizId){valOps.getOperations().delete(quizId+keyIdentifier);}
 
 }

@@ -43,5 +43,7 @@ public class RedisServiceTest {
         assertThat(((submission)redisSubmissions.getAllSubmissions("quizID").get(0)).getUserName(), is(equalTo("User2")));
 
         assertThat(redisSubmissions.getFirstSubmission("quizID").getUserName(), is(equalTo("User2")));
+
+        redisSubmissions.getAllSubmissionsAndRemove("quizID");
     }
 }

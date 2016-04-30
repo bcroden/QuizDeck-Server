@@ -20,4 +20,6 @@ public abstract class Submissions implements Response, Serializable{
 
     public Questions question;
 
+    public int questionNum;
+
 }

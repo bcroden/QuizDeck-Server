@@ -24,6 +24,9 @@ public class AnonSubmission extends Submissions {
         this.guesses = guesses;
     }
 
+    public AnonSubmission() {
+    }
+
     @Override
     public String getUserName() {
         return "anonymous";
