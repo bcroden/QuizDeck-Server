@@ -80,6 +80,7 @@ public class ActiveQuizRequestController {
 
         ActiveQuiz activeQuiz = new ActiveQuiz(new Date(), true);
         redisActiveQuiz.addEntry(quizId, activeQuiz);
+        redisQuestion.addEntry(quizId, 0);
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
