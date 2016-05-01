@@ -1,13 +1,17 @@
 package com.quizdeck.services;
 
 import com.quizdeck.model.database.ActiveQuiz;
+import com.quizdeck.model.database.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Cade on 3/12/2016.
@@ -18,28 +22,41 @@ import javax.annotation.Resource;
 @Service
 public class RedisActiveQuiz {
 
+    @Autowired
     public RedisTemplate redisTemplate;
-    
-    private String keyIdentifier = "AQ";
 
+    private String ClassKey ="ActiveQuiz";
+    private String prefix = "AQ";
+    
     @Resource(name="redisTemplate")
-    private ValueOperations<String, ActiveQuiz> valueOperations;
+    private HashOperations<String, String,ActiveQuiz> hashOperations;
 
     public void addEntry(String quizId, ActiveQuiz quiz){
-        valueOperations.set(quizId+keyIdentifier, quiz);
+        hashOperations.put(ClassKey, prefix+quizId, quiz);
     }
 
     public ActiveQuiz getEntry(String quizId){
-        ActiveQuiz aq = valueOperations.get(quizId+keyIdentifier); //returns an integer somehow
+        ActiveQuiz aq = hashOperations.get(ClassKey, prefix+quizId);
         return aq;
     }
 
     public void removeEntry(String quizId){
-        valueOperations.getOperations().delete(quizId+keyIdentifier);}
+        hashOperations.delete(ClassKey, prefix+quizId);
+    }
+
+    public List<ActiveQuiz> getAllActiveQuizzes(User user){
+        List<ActiveQuiz> activeQuizzes = new ArrayList<>();
+
+        return activeQuizzes;
+    }
+
+    public long getKeySize(){
+        return hashOperations.size(ClassKey);
+    }
 
     public void updateEntry(String quizId, ActiveQuiz quiz) {
-        quiz.setStart(valueOperations.get(quizId+keyIdentifier).getStart());
-        valueOperations.getAndSet(quizId+keyIdentifier, quiz);
+        quiz.setStart(hashOperations.get(ClassKey, prefix+quizId).getStart());
+        hashOperations.put(ClassKey, prefix+quizId, quiz);
     }
 
 }

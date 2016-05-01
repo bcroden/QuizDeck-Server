@@ -1,5 +1,6 @@
 package com.quizdeck.controllers;
 
+import com.quizdeck.exceptions.ForbiddenAccessException;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
 import com.quizdeck.model.database.User;
@@ -51,8 +52,13 @@ public class QuizRequestController {
     }
 
     @RequestMapping(value="/quizDelete/{quizId}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> quizDelete(@PathVariable String quizId) {
+    public ResponseEntity<String> quizDelete(@ModelAttribute("claims") Claims claims, @PathVariable String quizId) throws ForbiddenAccessException{
+        if(!quizRepository.findById(quizId).getOwner().equals(claims.get("user"))) {
+            throw new ForbiddenAccessException();
+        }
+
         quizRepository.removeById(quizId);
+
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
