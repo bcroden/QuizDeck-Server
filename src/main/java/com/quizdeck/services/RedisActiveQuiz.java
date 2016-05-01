@@ -4,6 +4,8 @@ import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Cade on 3/12/2016.
@@ -27,7 +30,9 @@ public class RedisActiveQuiz {
 
     private String ClassKey ="ActiveQuiz";
     private String prefix = "AQ";
-    
+
+    private Logger log = LoggerFactory.getLogger(RedisActiveQuiz.class);
+
     @Resource(name="redisTemplate")
     private HashOperations<String, String,ActiveQuiz> hashOperations;
 
@@ -46,6 +51,13 @@ public class RedisActiveQuiz {
 
     public List<ActiveQuiz> getAllActiveQuizzes(User user){
         List<ActiveQuiz> activeQuizzes = new ArrayList<>();
+        log.info("Looking for quizzes for: " + user.getUserName());
+        Map<String, ActiveQuiz> quizzes = hashOperations.entries(ClassKey);
+        for(Map.Entry<String, ActiveQuiz> entry : quizzes.entrySet()){
+            if(user.getSubscriptions().contains(entry.getValue().getOwner()) && entry.getValue().isPubliclyAvailable()){
+                activeQuizzes.add(entry.getValue());
+            }
+        }
 
         return activeQuizzes;
     }
