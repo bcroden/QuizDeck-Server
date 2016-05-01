@@ -24,6 +24,7 @@ public class CompleteQuizInput {
     @NotNull
     private List<submission> submissions;
 
+    public CompleteQuizInput() {}
 
     public CompleteQuizInput(String quizId, Quiz quiz, List<submission> submissions) {
         this.quizId = quizId;
