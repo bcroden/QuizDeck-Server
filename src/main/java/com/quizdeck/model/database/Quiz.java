@@ -12,8 +12,6 @@ import java.util.List;
  * Storage object for a quiz that has not been active yet
  *
  * Created by Cade on 2/14/2016.
- *
- * @param publicAvailable will be used to determine if a user can see another users quiz.
  */
 
 @Getter

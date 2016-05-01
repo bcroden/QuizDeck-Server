@@ -159,4 +159,9 @@ public class ActiveQuizRequestController {
     public List<ActiveQuiz> pollForQuizzes(@ModelAttribute("claims") Claims claims){
         return redisActiveQuiz.getAllActiveQuizzes(userRepository.findByUserName(claims.get("user").toString()));
     }
+
+    @RequestMapping(value="/getCompleteQuizzes", method = RequestMethod.GET)
+    public List<CompleteQuiz> getCompleteQuizzes(@ModelAttribute("claims") Claims claims){
+        return completeQuizRepository.findByOwner(claims.get("user").toString());
+    }
 }
