@@ -4,6 +4,7 @@ import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.CompleteQuiz;
 import com.quizdeck.model.database.Submissions;
+import com.quizdeck.model.inputs.ActiveQuizInput;
 import com.quizdeck.model.inputs.CompleteQuizInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import com.quizdeck.repositories.QuizRepository;
@@ -76,14 +77,14 @@ public class ActiveQuizRequestController {
     }
 
     @RequestMapping(value="/activate/", method= RequestMethod.PUT)
-    public ResponseEntity<String> activateQuiz(@Valid @RequestBody ActiveQuiz input, @ModelAttribute("claims") Claims claims, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> activateQuiz(@Valid @RequestBody ActiveQuizInput input, @ModelAttribute("claims") Claims claims, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
         ActiveQuiz activeQuiz = new ActiveQuiz();
         activeQuiz.setOwner(claims.get("user").toString());
         activeQuiz.setQuizId(input.getQuizId());
-        activeQuiz.setPubliclyAvailable(input.isPubliclyAvailable());
+        activeQuiz.setPubliclyAvailable(input.isPublicAvailable());
         activeQuiz.setStart(new Date());
         activeQuiz.setActive(true);
         redisActiveQuiz.addEntry(input.getQuizId(), activeQuiz);
