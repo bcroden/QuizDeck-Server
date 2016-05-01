@@ -1,7 +1,9 @@
 package com.quizdeck.controllers;
 
 import com.quizdeck.exceptions.InvalidJsonException;
-import com.quizdeck.model.database.*;
+import com.quizdeck.model.database.ActiveQuiz;
+import com.quizdeck.model.database.CompleteQuiz;
+import com.quizdeck.model.database.Submissions;
 import com.quizdeck.model.inputs.CompleteQuizInput;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import com.quizdeck.repositories.QuizRepository;
@@ -9,6 +11,7 @@ import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.RedisActiveQuiz;
 import com.quizdeck.services.RedisQuestion;
 import com.quizdeck.services.RedisSubmissions;
+import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +58,6 @@ public class ActiveQuizRequestController {
             throw new InvalidJsonException();
         }
 
-        //submissions and start/stop time will have to be gathered from redis and assembled here, so only the quiz title, owner, and users taking it will be necessary
-        //compile submissions from redis
-
         //will also close the quiz on redis, and add it to the database.
         List<? extends Submissions> subs = redisSubmissions.getAllSubmissionsAndRemove(input.getQuizId());
         //get active quiz information
@@ -75,12 +75,19 @@ public class ActiveQuizRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/activate/{quizId}", method= RequestMethod.PUT)
-    public ResponseEntity<String> activateQuiz(@PathVariable String quizId){
-
-        ActiveQuiz activeQuiz = new ActiveQuiz(new Date(), true);
-        redisActiveQuiz.addEntry(quizId, activeQuiz);
-        redisQuestion.addEntry(quizId, 0);
+    @RequestMapping(value="/activate/", method= RequestMethod.PUT)
+    public ResponseEntity<String> activateQuiz(@Valid @RequestBody ActiveQuiz input, @ModelAttribute("claims") Claims claims, BindingResult result) throws InvalidJsonException{
+        if(result.hasErrors()) {
+            throw new InvalidJsonException();
+        }
+        ActiveQuiz activeQuiz = new ActiveQuiz();
+        activeQuiz.setOwner(claims.get("user").toString());
+        activeQuiz.setQuizId(input.getQuizId());
+        activeQuiz.setPubliclyAvailable(input.isPubliclyAvailable());
+        activeQuiz.setStart(new Date());
+        activeQuiz.setActive(true);
+        redisActiveQuiz.addEntry(input.getQuizId(), activeQuiz);
+        redisQuestion.addEntry(input.getQuizId(), 0);
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
@@ -140,5 +147,15 @@ public class ActiveQuizRequestController {
     @RequestMapping(value="/getQuestionNum/{quizId}", method = RequestMethod.GET)
     public int getQuestion(@PathVariable String quizId){
         return redisQuestion.getEntry(quizId);
+    }
+
+    @RequestMapping(value="/numActiveQuiz/", method = RequestMethod.GET)
+    public long getActiveQuizNum(){
+        return redisActiveQuiz.getKeySize();
+    }
+
+    @RequestMapping(value="/pollingQuizzes", method = RequestMethod.GET)
+    public List<ActiveQuiz> pollForQuizzes(@ModelAttribute("claims") Claims claims){
+        return redisActiveQuiz.getAllActiveQuizzes(userRepository.findByUserName(claims.get("user").toString()));
     }
 }

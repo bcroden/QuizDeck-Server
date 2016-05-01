@@ -19,7 +19,11 @@ public class ActiveQuiz implements Serializable {
     private Date start;
     private Date stop;
 
+    private String owner;
+    private String quizId;
+
     private boolean active;
+    private boolean publiclyAvailable;
 
     public ActiveQuiz(Date start, boolean active){
         this.start = start;
