@@ -13,6 +13,8 @@ public interface CompletedQuizRepository extends MongoRepository<CompleteQuiz, S
 
     public CompleteQuiz findByQuizId(@Param("quizId") String quizId);
 
+    public CompleteQuiz findById(@Param("Id") String Id);
+
     public long removeById(@Param("id") String id);
 
     public List<CompleteQuiz> findByOwner(@Param("owner") String owner);
