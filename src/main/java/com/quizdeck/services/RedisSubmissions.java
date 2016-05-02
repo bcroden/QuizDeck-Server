@@ -47,7 +47,8 @@ public class RedisSubmissions {
 
     public List<? extends Submissions> getAllSubmissionsAndRemove(String quizId){
         List<Submissions> subs = new ArrayList<>();
-        for(int i = 0; i < listOps.size(prefix+quizId); i++){
+        long length = listOps.size(prefix+quizId);
+        for(int i = 0; i < length; i++){
             subs.add(listOps.leftPop(prefix+quizId));
         }
         return subs;
