@@ -200,6 +200,7 @@ public class ActiveQuizRequestController {
     public void delete(@ModelAttribute("claims") Claims claims){
         if(claims.get("user").toString().equalsIgnoreCase("cade")){
             redisActiveQuiz.deleteAll();
+            redisShortCodes.deleteAll();
         }
     }
 }

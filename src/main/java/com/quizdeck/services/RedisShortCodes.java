@@ -46,4 +46,11 @@ public class RedisShortCodes {
     public void removeEntry(String shortCode){
         hashOperations.delete(ClassKey, shortCode);
     }
+
+    public void deleteAll(){
+        Set<String> keys = hashOperations.keys(ClassKey);
+        for(String key : keys){
+            hashOperations.delete(ClassKey, key);
+        }
+    }
 }
