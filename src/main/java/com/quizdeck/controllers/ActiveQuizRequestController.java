@@ -199,6 +199,12 @@ public class ActiveQuizRequestController {
     @RequestMapping(value="/delete", method = RequestMethod.PUT)
     public void delete(@ModelAttribute("claims") Claims claims){
         if(claims.get("user").toString().equalsIgnoreCase("cade")){
+            List<ActiveQuiz> quizzes = redisActiveQuiz.getAll();
+
+            for(int i = 0; i < quizzes.size(); i++){
+                redisSubmissions.getAllSubmissionsAndRemove(quizzes.get(i).getQuizId());
+                redisQuestion.removeEntry(quizzes.get(i).getQuizId());
+            }
             redisActiveQuiz.deleteAll();
             redisShortCodes.deleteAll();
         }

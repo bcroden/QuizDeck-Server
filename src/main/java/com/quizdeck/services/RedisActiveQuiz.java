@@ -74,6 +74,16 @@ public class RedisActiveQuiz {
         hashOperations.put(ClassKey, prefix+quizId, quiz);
     }
 
+    public List<ActiveQuiz> getAll(){
+        Map<String, ActiveQuiz> quizzes = hashOperations.entries(ClassKey);
+        List<ActiveQuiz> activeQuizzes = new ArrayList<>();
+        for(Map.Entry<String, ActiveQuiz> entry : quizzes.entrySet()) {
+            activeQuizzes.add(entry.getValue());
+
+        }
+        return activeQuizzes;
+    }
+
     public void deleteAll(){
         Set<String> keys = hashOperations.keys(ClassKey);
         for(String key : keys){
