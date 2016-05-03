@@ -42,4 +42,8 @@ public class RedisShortCodes {
     public String getEntry(String shortCode){
         return hashOperations.get(ClassKey, shortCode);
     }
+
+    public void removeEntry(String shortCode){
+        hashOperations.delete(ClassKey, shortCode);
+    }
 }

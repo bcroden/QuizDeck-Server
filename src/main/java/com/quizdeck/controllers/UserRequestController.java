@@ -9,8 +9,6 @@ import com.quizdeck.model.responses.UserSearchOutput;
 import com.quizdeck.repositories.UserRepository;
 import com.quizdeck.services.PasswordHashingService;
 import io.jsonwebtoken.Claims;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +25,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/rest/secure/user")
 public class UserRequestController {
-
-    private Logger log = LoggerFactory.getLogger(UserRequestController.class);
 
     @Autowired
     UserRepository userRepository;
@@ -99,10 +95,8 @@ public class UserRequestController {
         if(you.getSubscriptions().contains(userName)){
             for(String user : you.getSubscriptions()){
                 if(user.equals(userName)){
-                    log.info("in if");
                     List<String> newSubsList = new ArrayList<>(you.getSubscriptions());
                     newSubsList.remove(userName);
-                    log.info("Removed " + userName + " from new list");
                     you.setSubscriptions(newSubsList);
                     you.setNumSubscribed((you.getNumSubscribed()-1));
                 }
@@ -130,9 +124,7 @@ public class UserRequestController {
 
         ArrayList<User> users = userRepository.findByUserNameLike(userName);
         ArrayList<UserSearchOutput> out = new ArrayList<>();
-        if(users == null || users.size() == 0) {
-            log.info("query returned nothing");
-        }
+        if(users == null || users.size() == 0) {}
         else{
             for (User user : users) {
                 out.add(new UserSearchOutput(user.getUserName()));
