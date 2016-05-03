@@ -46,6 +46,10 @@ public class NonSecureSubmissionController {
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
+        StringBuilder anonName = new StringBuilder();
+        anonName.append("Anon:");
+        anonName.append(input.getUserName());
+        input.setUserName(anonName.toString());
         return submissionBuilding.buildSubmission(input);
     }
 
