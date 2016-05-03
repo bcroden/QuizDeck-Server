@@ -104,7 +104,7 @@ public class ActiveQuizRequestController {
         redisActiveQuiz.addEntry(input.getQuizId(), activeQuiz);
         redisQuestion.addEntry(input.getQuizId(), 0);
 
-        return shortCode;
+        return "\"" + shortCode + "\"";
     }
 
     @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.PUT)
@@ -189,6 +189,6 @@ public class ActiveQuizRequestController {
 
     @RequestMapping(value="/shortConvert/{shortCode}", method = RequestMethod.GET)
     public String convertShortCode(@PathVariable String shortCode){
-        return redisShortCodes.getEntry(shortCode);
+        return "\"" + redisShortCodes.getEntry(shortCode) + "\"";
     }
 }
