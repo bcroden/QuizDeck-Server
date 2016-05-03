@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Cade on 3/12/2016.
@@ -71,6 +72,13 @@ public class RedisActiveQuiz {
     public void updateEntry(String quizId, ActiveQuiz quiz) {
         quiz.setStart(hashOperations.get(ClassKey, prefix+quizId).getStart());
         hashOperations.put(ClassKey, prefix+quizId, quiz);
+    }
+
+    public void deleteAll(){
+        Set<String> keys = hashOperations.keys(ClassKey);
+        for(String key : keys){
+            hashOperations.delete(ClassKey, key);
+        }
     }
 
 }
