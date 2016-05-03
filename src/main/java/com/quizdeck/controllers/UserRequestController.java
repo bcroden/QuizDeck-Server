@@ -41,9 +41,8 @@ public class UserRequestController {
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
-        if(claims.get("user").toString().equals(input.getUserName()) || claims.get("role").equals("Admin")) {
-
-            User editUser = userRepository.findByUserName(input.getUserName());
+        User editUser = userRepository.findByUserName(claims.get("user").toString());
+        if(claims.get("user").toString().equals(editUser.getUserName()) || claims.get("role").equals("Admin")) {
             editUser.setUserName(input.getUserName());
             editUser.setEmail(input.getEmail());
             editUser.setHashedPassword(hashingService.hashPassword(input.getPassword()));
