@@ -4,8 +4,10 @@ import com.quizdeck.exceptions.ForbiddenAccessException;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.exceptions.UserDoesNotExistException;
 import com.quizdeck.model.database.User;
+import com.quizdeck.model.inputs.UserInput;
 import com.quizdeck.model.responses.UserSearchOutput;
 import com.quizdeck.repositories.UserRepository;
+import com.quizdeck.services.PasswordHashingService;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,14 +33,24 @@ public class UserRequestController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private PasswordHashingService hashingService;
+
     @RequestMapping(value="/edit", method= RequestMethod.PUT)
-    public ResponseEntity<String> editUser(@Valid @RequestBody User input, BindingResult result) throws InvalidJsonException{
+    public ResponseEntity<String> editUser(@ModelAttribute("claims") Claims claims, @Valid @RequestBody UserInput input, BindingResult result) throws InvalidJsonException, ForbiddenAccessException{
         if(result.hasErrors()){
             throw new InvalidJsonException();
         }
+        User editUser = userRepository.findByUserName(claims.get("user").toString());
+        if(claims.get("user").toString().equals(editUser.getUserName()) || claims.get("role").equals("Admin")) {
+            editUser.setUserName(input.getUserName());
+            editUser.setEmail(input.getEmail());
+            editUser.setHashedPassword(hashingService.hashPassword(input.getPassword()));
+            userRepository.save(editUser);
+            return new ResponseEntity<String>(HttpStatus.OK);
 
-        userRepository.save(input);
-        return new ResponseEntity<String>(HttpStatus.OK);
+        }
+        throw new ForbiddenAccessException();
     }
 
     @RequestMapping(value="/deleteUser/{userId}", method=RequestMethod.DELETE)
@@ -102,7 +114,7 @@ public class UserRequestController {
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @RequestMapping(value="/getSubscriptions/", method = RequestMethod.GET)
+    @RequestMapping(value="/getSubscriptions", method = RequestMethod.GET)
     public List<String> subscriptions(@ModelAttribute("claims") Claims claims){
         return userRepository.findByUserName(claims.get("user").toString()).getSubscriptions();
     }
@@ -129,5 +141,4 @@ public class UserRequestController {
 
         return out;
     }
-
 }
