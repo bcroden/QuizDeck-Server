@@ -1,5 +1,6 @@
 package com.quizdeck.controllers;
 
+import com.quizdeck.exceptions.InactiveQuizException;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.CompleteQuiz;
@@ -75,6 +76,7 @@ public class ActiveQuizRequestController {
         //remove the active quiz entry from redis
         redisActiveQuiz.removeEntry(input.getQuizId());
         redisQuestion.removeEntry(input.getQuizId());
+        redisShortCodes.removeEntry(temp.getShortId());
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
@@ -108,15 +110,17 @@ public class ActiveQuizRequestController {
     }
 
     @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.PUT)
-    public ResponseEntity<String> deactivateQuiz(@PathVariable String quizId){
+    public ResponseEntity<String> deactivateQuiz(@PathVariable String quizId) throws InactiveQuizException{
 
         //update redis entry
-        ActiveQuiz temp = new ActiveQuiz();
-        temp.setStop(new Date());
-        temp.setActive(false);
-        redisActiveQuiz.updateEntry(quizId, temp);
-
-        return new ResponseEntity<String>(HttpStatus.OK);
+        ActiveQuiz temp = redisActiveQuiz.getEntry(quizId);
+        if(temp != null) {
+            temp.setStop(new Date());
+            temp.setActive(false);
+            redisActiveQuiz.updateEntry(quizId, temp);
+            return new ResponseEntity<String>(HttpStatus.OK);
+        }
+        throw new InactiveQuizException();
     }
 
     @RequestMapping(value="/getActiveQuiz/{quizId}", method = RequestMethod.GET)
@@ -187,4 +191,8 @@ public class ActiveQuizRequestController {
         return new QuestionResponse(question.getQuestion(), question.getQuestionFormat(), question.getAnswers());
     }
 
+    @RequestMapping(value="/getIsActive/{quizId}", method = RequestMethod.GET)
+    public boolean getIsActive(@PathVariable String quizId){
+        return redisActiveQuiz.getEntry(quizId)==null ? false : true;
+    }
 }
