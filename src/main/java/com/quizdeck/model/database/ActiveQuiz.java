@@ -22,6 +22,8 @@ public class ActiveQuiz implements Serializable {
     private String owner;
     private String quizId;
 
+    private String shortId;
+
     private boolean active;
     private boolean publiclyAvailable;
 
