@@ -187,8 +187,4 @@ public class ActiveQuizRequestController {
         return new QuestionResponse(question.getQuestion(), question.getQuestionFormat(), question.getAnswers());
     }
 
-    @RequestMapping(value="/shortConvert/{shortCode}", method = RequestMethod.GET)
-    public String convertShortCode(@PathVariable String shortCode){
-        return "\"" + redisShortCodes.getEntry(shortCode) + "\"";
-    }
 }
