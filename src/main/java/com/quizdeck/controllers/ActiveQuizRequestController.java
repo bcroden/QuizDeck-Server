@@ -3,9 +3,11 @@ package com.quizdeck.controllers;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.ActiveQuiz;
 import com.quizdeck.model.database.CompleteQuiz;
+import com.quizdeck.model.database.Questions;
 import com.quizdeck.model.database.Submissions;
 import com.quizdeck.model.inputs.ActiveQuizInput;
 import com.quizdeck.model.inputs.CompleteQuizInput;
+import com.quizdeck.model.responses.QuestionResponse;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
@@ -163,5 +165,13 @@ public class ActiveQuizRequestController {
     @RequestMapping(value="/getCompleteQuizzes", method = RequestMethod.GET)
     public List<CompleteQuiz> getCompleteQuizzes(@ModelAttribute("claims") Claims claims){
         return completeQuizRepository.findByOwner(claims.get("user").toString());
+    }
+
+    @RequestMapping(value="/getQuestionInfo/{quizId}", method = RequestMethod.GET)
+    public QuestionResponse getQuestionInfo(@PathVariable String quizId){
+        int num = redisQuestion.getEntry(quizId);
+        Questions question = quizRepository.findById(quizId).getQuestions().get(num);
+
+        return new QuestionResponse(question.getQuestion(), question.getQuestionFormat(), question.getAnswers());
     }
 }

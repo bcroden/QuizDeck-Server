@@ -54,8 +54,10 @@ public class RedisActiveQuiz {
         log.info("Looking for quizzes for: " + user.getUserName());
         Map<String, ActiveQuiz> quizzes = hashOperations.entries(ClassKey);
         for(Map.Entry<String, ActiveQuiz> entry : quizzes.entrySet()){
-            if(user.getSubscriptions().contains(entry.getValue().getOwner()) && entry.getValue().isPubliclyAvailable()){
-                activeQuizzes.add(entry.getValue());
+            if(user.getSubscriptions() != null && user.getSubscriptions().size() > 0) {
+                if (user.getSubscriptions().contains(entry.getValue().getOwner()) && entry.getValue().isPubliclyAvailable()) {
+                    activeQuizzes.add(entry.getValue());
+                }
             }
         }
 
