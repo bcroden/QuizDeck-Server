@@ -11,9 +11,7 @@ import com.quizdeck.model.responses.QuestionResponse;
 import com.quizdeck.repositories.CompletedQuizRepository;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
-import com.quizdeck.services.RedisActiveQuiz;
-import com.quizdeck.services.RedisQuestion;
-import com.quizdeck.services.RedisSubmissions;
+import com.quizdeck.services.*;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +51,9 @@ public class ActiveQuizRequestController {
     @Autowired
     RedisQuestion redisQuestion;
 
+    @Autowired
+    RedisShortCodes redisShortCodes;
+
     private Logger log = LoggerFactory.getLogger(ActiveQuizRequestController.class);
 
     @RequestMapping(value="/submit", method = RequestMethod.POST)
@@ -79,20 +80,31 @@ public class ActiveQuizRequestController {
     }
 
     @RequestMapping(value="/activate/", method= RequestMethod.PUT)
-    public ResponseEntity<String> activateQuiz(@Valid @RequestBody ActiveQuizInput input, @ModelAttribute("claims") Claims claims, BindingResult result) throws InvalidJsonException{
+    public String activateQuiz(@Valid @RequestBody ActiveQuizInput input, @ModelAttribute("claims") Claims claims, BindingResult result) throws InvalidJsonException{
         if(result.hasErrors()) {
             throw new InvalidJsonException();
         }
+
+        //generate shortcode
+        String shortCode = "";
+        ShortCodeGenerator shortCodeGenerator = new ShortCodeGenerator();
+
+        do{
+            shortCode = shortCodeGenerator.generate();
+        }while(redisShortCodes.takenShortCode(shortCode));
+
         ActiveQuiz activeQuiz = new ActiveQuiz();
         activeQuiz.setOwner(claims.get("user").toString());
         activeQuiz.setQuizId(input.getQuizId());
+        activeQuiz.setShortId(shortCode);
         activeQuiz.setPubliclyAvailable(input.isPublicAvailable());
         activeQuiz.setStart(new Date());
         activeQuiz.setActive(true);
+        redisShortCodes.addEntry(shortCode, input.getQuizId());
         redisActiveQuiz.addEntry(input.getQuizId(), activeQuiz);
         redisQuestion.addEntry(input.getQuizId(), 0);
 
-        return new ResponseEntity<String>(HttpStatus.OK);
+        return shortCode;
     }
 
     @RequestMapping(value="/deactivate/{quizId}", method= RequestMethod.PUT)
@@ -173,5 +185,10 @@ public class ActiveQuizRequestController {
         Questions question = quizRepository.findById(quizId).getQuestions().get(num);
 
         return new QuestionResponse(question.getQuestion(), question.getQuestionFormat(), question.getAnswers());
+    }
+
+    @RequestMapping(value="/shortConvert/{shortCode}", method = RequestMethod.GET)
+    public String convertShortCode(@PathVariable String shortCode){
+        return redisShortCodes.getEntry(shortCode);
     }
 }
