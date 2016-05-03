@@ -3,7 +3,6 @@ package com.quizdeck.controllers;
 import com.quizdeck.exceptions.ForbiddenAccessException;
 import com.quizdeck.exceptions.InvalidJsonException;
 import com.quizdeck.model.database.Quiz;
-import com.quizdeck.model.database.User;
 import com.quizdeck.model.inputs.NewQuizInput;
 import com.quizdeck.repositories.QuizRepository;
 import com.quizdeck.repositories.UserRepository;
@@ -70,18 +69,6 @@ public class QuizRequestController {
 
         quizRepository.save(new Quiz(input.getOwner(), input.getTitle(), input.getQuestions(), input.getLabels(), input.getCategories(), input.isPublicAvailable()));
 
-        //add any new labels to the list associated with the user
-        User user = userRepository.findByUserName(input.getOwner().trim());
-        if(user != null) {
-            if (user.getLabels() != null && user.getLabels().size() > 0 && input.getLabels() != null && input.getLabels().size() > 0) {
-                for (String label : input.getLabels()) {
-                    if (!user.getLabels().contains(label)) {
-                        user.getLabels().add(label);
-                    }
-                }
-                userRepository.save(user);
-            }
-        }
 
         return new ResponseEntity<String>(HttpStatus.OK);
     }
