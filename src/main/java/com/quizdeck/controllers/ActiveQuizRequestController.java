@@ -195,4 +195,11 @@ public class ActiveQuizRequestController {
     public boolean getIsActive(@PathVariable String quizId){
         return redisActiveQuiz.getEntry(quizId)==null ? false : true;
     }
+
+    @RequestMapping(value="/delete", method = RequestMethod.PUT)
+    public void delete(@ModelAttribute("claims") Claims claims){
+        if(claims.get("user").toString().equalsIgnoreCase("cade")){
+            redisActiveQuiz.deleteAll();
+        }
+    }
 }
